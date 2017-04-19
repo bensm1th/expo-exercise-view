@@ -17,15 +17,25 @@ const AddSetsListItem = props => {
                         reps={set.reps}
                         id={set.id}
                         changeSetTextMethod={props.changeSetTextMethod}
+                        deleteSetMethod={props.deleteSetMethod}
                         exerciseId={props.exerciseInfo._id}
+                        {...props}
                     />
                 </View>
             )
         });
     }
+
     return (
         <View style={styles.container}>
             <View style={styles.containerTop}>
+                {props.setsSaved &&
+                <Icon
+                    size={30}
+                    name='check'
+                    type='font-awesome'
+                />
+                }
                 <Text style={styles.name}>{props.exerciseInfo.name}</Text>
                 <Button
                     title='ADD SET'
@@ -34,7 +44,16 @@ const AddSetsListItem = props => {
                 />
             </View>
             <View style={styles.setListContainer}>
-                {renderSets()}
+            {props.setsVisibility && 
+                <View>
+                    {renderSets()}
+                    <Button
+                        title='SAVE'
+                        onPress={() => props.saveSets(props.exerciseInfo._id)}
+                        backgroundColor='#8f9bff'
+                    />
+                </View>
+            }
             </View>
         </View>
     );

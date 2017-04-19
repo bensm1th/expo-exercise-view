@@ -1,6 +1,31 @@
 import axios from 'axios';
 import * as types from './types';
 
+export const saveWorkout = (props) => {
+    console.log('----------- props in action creator -------------------');
+    console.log(props);
+    //just send everything and reconfigure the backend to recieve it.
+    //workout model:
+    //name, description, exercises, user
+    const { exercises, createForm: { name, description } } = props;
+    return {
+        type: types.SAVE_WORKOUT
+    }
+}
+
+export const deleteSet = (props) => {
+    return {
+        type: types.DELETE_SET,
+        payload: props
+    }
+}
+export const toggleSetsView = exerciseId => {
+    return {
+        type: types.TOGGLE_SETS_VIEW,
+        payload: exerciseId
+    }
+}
+
 export const toggleExerciseCheck = (id) => {
     return {
         type: types.TOGGLE_EXERCISE_CHECK,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 import * as types from '../../actions/types';
 
@@ -23,11 +23,15 @@ class Sets extends Component {
                 style={styles.inputStyle} 
                 onChangeText={text => this.props.changeSetTextMethod(text, types.CHANGE_SET_REPS_TEXT, id, exerciseId)}
             />
-            <Icon 
-                name="cancel"
-                size={30}
-                color={'#f44330'}
-            />
+            <TouchableOpacity
+                onPress={() => this.props.deleteSetMethod(exerciseId, id)}
+            >  
+                <Icon 
+                    name="cancel"
+                    size={30}
+                    color={'#f44330'}
+                />
+            </TouchableOpacity>
         </View>
         )
     }

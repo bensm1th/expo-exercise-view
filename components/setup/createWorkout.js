@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions, ListView } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions, ListView, ScrollView } from 'react-native';
 import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
 import ListTitle from '../foundation/listTitle';
 import StepOne from '../foundation/createWorkout/StepOne';
 import StepTwo from '../foundation/createWorkout/StepTwo';
+import StepThree from '../foundation/createWorkout/StepThree';
+import StepFour from '../foundation/createWorkout/StepFour';
 import AddSetsListItem from '../foundation/createWorkout/AddSetsListItem'
 import * as actions from '../../actions';
 import * as types from '../../actions/types';
@@ -79,6 +81,7 @@ class _CreateWorkout extends Component {
             <AddSetsListItem
                 {...exercise}
                 changeSetTextMethod={this.changeSetTextMethod}
+                deleteSetMethod={this.deleteSetMethod}
                 addSet={this.addSet}
                 saveSets={this.saveSets}
                 {...this.props}
@@ -89,15 +92,53 @@ class _CreateWorkout extends Component {
         //id is the _id of the exerciseInfo that the set is associated with
         this.props.addSetToExerciseModel(id);
     }
-    saveSet = () => {
-
+    deleteSetMethod = (exerciseId, setId) => {
+        this.props.deleteSet({ exerciseId, setId });
+    }
+    saveSets = (exerciseId) => {
+        this.props.toggleSetsView(exerciseId);
     }
 
     changeSetTextMethod = (text, type, id, exerciseId) => {
         this.props.changeSetText({ type, text, id, exerciseId });
     }
+
+    renderSets = sets => {
+        return sets.map((set, i) => {
+            return (
+                <View key={set.id}>
+                    <Text>Set {i + 1}: </Text>
+                    <Text>weight: {set.weight}</Text>
+                    <Text>reps: {set.reps}</Text>
+                </View>
+            );
+        });
+    }
+
+    renderFinalExercises = () => {
+        const { populatedExercises } = this.props.setup_workouts;
+        return populatedExercises.map((exercise, i) => {
+            const { name, description, type, points, _id } = exercise.exerciseInfo;
+            return (
+                <View key={_id} style={styles.exerciseContainer}>
+                    <Text>Exercise {i + 1}: {name}</Text>
+                    <Text>Description: {description}</Text>
+                    <Text>Type: {type}</Text>
+                    <Text>Points per set: {points}</Text>
+                    {this.renderSets(exercise.sets)}
+                </View>
+            );
+        });
+    }
+    
+    saveWorkoutMethod = () => {
+        const { createForm, populatedExercises } = this.props.setup_workouts;
+        this.props.saveWorkout({ createForm, exercises: populatedExercises });
+        this.props.navigation.navigate('setup');
+    }
+
     render() {
-        const { exercises, createStep, createForm: { name, description } } = this.props.setup_workouts;
+        const { createStep } = this.props.setup_workouts;
         return (
             <View style={styles.container}>
                 <ListTitle title='CREATE WORKOUT' />
@@ -119,32 +160,19 @@ class _CreateWorkout extends Component {
                 />
                 }
                 {createStep === 3 &&
-                <View>
-                    <View style={styles.directions}>
-                        <Text style={styles.directionsText}>Step 3: Add sets to each exercise you chose.</Text>
-                    </View>
-                    {this.renderSelectedExercises()}
-                    <Button 
-                        title='FORWARD'
-                        onPress={this.incrementStep}
-                        backgroundColor='#8f9bff'
-                    />
-                    <Button 
-                        title='BACK'
-                        onPress={this.decrementStep}
-                        backgroundColor='#0043cb'
-                    />
-                </View>
+                <StepThree
+                    incrementStep={this.incrementStep}
+                    decrementStep={this.decrementStep}
+                    renderSelectedExercises={this.renderSelectedExercises}
+                />
                 }
                 {createStep === 4 &&
-                <View>
-                    <Text>STEP 4</Text>
-                    <Button 
-                        title='BACK'
-                        onPress={this.decrementStep}
-                        backgroundColor='#0043cb'
-                    />
-                </View>
+                <StepFour
+                    {...this.props}
+                    saveWorkoutMethod={this.saveWorkoutMethod}
+                    renderFinalExercises={this.renderFinalExercises}
+                    decrementStep={this.decrementStep}
+                />
                 }
             </View>
         );
@@ -163,6 +191,12 @@ mapStateToProps = state => {
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'space-between'
+    },
+    exerciseContainer: {
+        borderWidth: 1,
+        borderColor: 'silver',
+        marginLeft: SCREEN_WIDTH *.036,
+        marginRight: SCREEN_WIDTH * .036
     },
     buttonContainer: {
         width: 200,

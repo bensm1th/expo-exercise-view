@@ -1,20 +1,6 @@
 import * as types from '../actions/types';
 import { v4 } from 'uuid';
 
-const initialState = {
-    createForm: {
-        name: "",
-        description: ""
-    },
-    setsForm: {
-        weight: '',
-        reps: ''
-    },
-    setsQuantity: '',
-    createStep: 1,
-    exercises: [],
-    populatedExercises: [],
-}
 const changeSetText = (props, field, state) => {
     const { text, id, exerciseId } = props;
         const findRep = state.populatedExercises.map(_exercise => {
@@ -41,7 +27,8 @@ const addSet = (props, state) => {
     return updatedExercises1 = state.populatedExercises.map(exerciseModel => {
         if (exerciseModel.exerciseInfo._id === props) {
             const id = v4();
-            exerciseModel.sets = [...exerciseModel.sets, { weight: '', reps: '', id }]
+            exerciseModel.sets = [...exerciseModel.sets, { weight: '', reps: '', id }];
+            exerciseModel.setsVisibility = true;
         }
         return exerciseModel;
     });
@@ -61,8 +48,61 @@ const toggleExerciseCheck = (props, state) => {
         }
 }
 
+const toggleSetsView = (props, exercises) => {
+    return exercises.map(exercise => {
+        if (exercise.exerciseInfo._id === props) {
+            exercise.setsVisibility = !exercise.setsVisibility;
+            exercise.setsSaved = true;
+        }
+        return exercise;
+    });
+}
+
+const deleteSet = (props, exercises) => {
+    return exercises.map(exercise => {
+        if (exercise.exerciseInfo._id === props.exerciseId) {
+            exercise.sets = exercise.sets.filter(set => {
+                return set.id !== props.setId
+            });
+            if (exercise.sets.length === 0) {
+                exercise.setsVisibility = false;
+                exercise.setsSaved = false;
+            }
+        }
+        return exercise;
+    });
+}
+
+const initialState = {
+    createForm: {
+        name: "",
+        description: ""
+    },
+    createStep: 1,
+    exercises: [],
+    populatedExercises: [],
+}
+
 const setupWorkoutsReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.SAVE_WORKOUT:
+            return initialState;
+        case types.DELETE_SET:
+            const deletedSet = deleteSet(action.payload, [...state.populatedExercises]);
+            return {
+                ...state,
+                populatedExercises: [
+                    ...deletedSet
+                ]
+            }
+        case types.TOGGLE_SETS_VIEW:
+            const toggledSets = toggleSetsView(action.payload, [...state.populatedExercises]);
+            return {
+                ...state,
+                populatedExercises: [
+                    ...toggledSets
+                ]
+            }
         case types.CHANGE_SET_REPS_TEXT:
             const changeReps = changeSetText(action.payload, 'reps', state);
             return {
