@@ -28,7 +28,7 @@ class _EditExercise extends Component {
 
     onBack = () => {
         this.props.toggleExerciseVisibility();
-        this.props.navigation.navigate('setup');
+        this.props.exerciseInfoClose();
     }
 
     onBackListVisible = () => {
@@ -37,12 +37,7 @@ class _EditExercise extends Component {
     }
 
     rightIcon = () => {
-        return (
-            <Icon 
-                name="chevron-right"
-                size={40}
-            />
-        )
+        return <Icon name="chevron-right" size={40} />
     }
 
     render() {
@@ -112,7 +107,7 @@ class _EditExercise extends Component {
                             />
                             <Button 
                                 title="BACK"
-                                onPress={this.props.toggleExerciseVisibility}
+                                onPress={this.onBack}
                                 backgroundColor="#0043cb"
                             />
                         </View>

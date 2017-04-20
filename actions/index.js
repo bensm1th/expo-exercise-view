@@ -1,15 +1,52 @@
 import axios from 'axios';
 import * as types from './types';
 
-export const saveWorkout = (props) => {
-    console.log('----------- props in action creator -------------------');
-    console.log(props);
-    //just send everything and reconfigure the backend to recieve it.
-    //workout model:
-    //name, description, exercises, user
-    const { exercises, createForm: { name, description } } = props;
+export const exerciseToDelete = id => {
     return {
-        type: types.SAVE_WORKOUT
+        type: types.PUSH_TO_DELETE_ARRAY,
+        payload: id
+    }
+}
+
+
+export const toggleDeleteInfo = id => {
+    return {
+        type: types.TOGGLE_DELETE_INFO,
+        payload: id
+    }
+}
+
+export const fetchExercises = () => async dispatch => {
+    let response = await axios.get('http://192.168.1.109:3000/exerciseInfo');
+    dispatch({
+        type: types.FETCH_EXERCISES,
+        payload: response.data
+    });
+}
+
+export const saveWorkout = (props) => {
+    return function(dispatch) {
+        axios.post('http://192.168.1.109:3000/createworkout', props)
+            .then(response => {
+                dispatch( {
+                    type: types.SAVE_WORKOUT
+                })
+            })
+            .catch(err => console.log(err));
+        
+    }
+}
+
+export const fetchWorkouts = () => {
+    return function(dispatch) {
+        axios.get('http://192.168.1.109:3000/workout')
+            .then(({data}) => {
+                dispatch({
+                    type: types.FETCH_WORKOUTS,
+                    payload: data
+                })
+            })
+            .catch(err => console.log(err));
     }
 }
 
@@ -46,15 +83,34 @@ export const createWorkoutStepInc = () => {
     }
 }
 
+export const incrementEditStep = () => {
+    return {
+        type: types.INCREMENT_EDIT_STEP,
+    }
+}
+
+export const decrementEditStep = () => {
+    return {
+        type: types.DECREMENT_EDIT_STEP
+    }
+}
+
 export const createWorkoutStepDec = () => {
     return {
         type: types.DECREMENT_CREATE_WORKOUT_STEP
     }
 }
 
-export const setupChoice = (choice) => {
+export const setupChoice = choice => {
     return {
         type: types.SETUP_CHOICE,
+        payload: choice
+    }
+}
+
+export const exerciseEditOption = choice => {
+    return {
+        type: types.EXERCISE_EDIT_OPTION,
         payload: choice
     }
 }
@@ -111,19 +167,6 @@ export const exerciseInfoSaved = ({ exerciseName, exerciseDescription, exerciseT
         }
 }
 
-export const fetchExercises = () => {
-    return function(dispatch) {
-        axios.get('http://192.168.1.109:3000/exerciseInfo')
-            .then(exercises => {
-                dispatch({
-                    type: types.FETCH_EXERCISES,
-                    payload: exercises.data
-                });
-            })
-            .catch(err => console.log(err));
-    }
-}
-
 export const exerciseEditVisibility = (id) => {
     return function(dispatch) {
         axios.get('http://192.168.1.109:3000/exerciseInfo')
@@ -139,6 +182,13 @@ export const exerciseEditVisibility = (id) => {
             .catch(err => {
                 console.log(err);
             });
+    }
+}
+
+export const workoutEditVisibility = id => {
+    return {
+        type: types.TOGGLE_WORKOUT_VISIBILITY,
+        payload: id
     }
 }
 
@@ -201,6 +251,13 @@ export const toggleExerciseVisibility = () => {
 export const exerciseInfoVisibility = (id) => {
     return {
         type: types.TOGGLE_EDIT_INFO,
+        payload: id
+    }
+}
+
+export const workoutInfoVisibility = (id) => {
+    return {
+        type: types.TOGGLE_WORKOUT_INFO,
         payload: id
     }
 }

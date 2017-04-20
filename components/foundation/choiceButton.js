@@ -38,33 +38,24 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 5,
-        borderBottomRightRadius : 5,
-        borderTopRightRadius: 5
     },
     selectedChoiceTextContainerR: {
         backgroundColor: "#536dff",
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomRightRadius : 5,
-        borderTopRightRadius: 5
     },
     choiceTextContainerL: {
         backgroundColor: "#f7f7f7",
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomLeftRadius : 5,
-        borderTopLeftRadius: 5
     },
     selectedChoiceTextContainerL: {
         backgroundColor: "#536dff",
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomLeftRadius : 5,
-        borderTopLeftRadius: 5
     },
     choiceText: {
         fontSize: 20,
@@ -83,6 +74,7 @@ const styles = StyleSheet.create({
         width: ScreenWidth * .9,
         justifyContent: 'space-around',
         height: ScreenHeight * .06,
-        borderRadius: 5
+        borderRadius: 5,
+        overflow: 'hidden'
     }
 })

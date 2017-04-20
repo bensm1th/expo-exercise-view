@@ -16,52 +16,30 @@ let SCREEN_WIDTH = Dimensions.get("window").width;
 
 class _CreateWorkout extends Component {
 
-    onBack = () => {
-        this.props.navigation.navigate('setup');
-    }
+    onBack = () => this.props.navigation.navigate('setup');
+    
+    incrementStep = () => this.props.createWorkoutStepInc();
+    
+    decrementStep = () => this.props.createWorkoutStepDec();
+    
+    changeText = (type, text) => this.props.createWorkoutText({type, text});
+    
+    fetchSelectedExercises = () => this.props.fetchExercisesById(this.props.setup_workouts.exercises);
 
-    incrementStep = () => {
-        this.props.createWorkoutStepInc();
-    }
+    addSet = exerciseInfoId => this.props.addSetToExerciseModel(exerciseInfoId);
+    
+    deleteSetMethod = (exerciseId, setId) => this.props.deleteSet({ exerciseId, setId });
+    
+    saveSets = exerciseId => this.props.toggleSetsView(exerciseId);
+    
+    changeSetTextMethod = (text, type, id, exerciseId) => this.props.changeSetText({ type, text, id, exerciseId });
 
-    decrementStep = () => {
-        this.props.createWorkoutStepDec();
-    }
-
-    changeText = (type, text) => {
-        this.props.createWorkoutText({type, text});
-    }
-
-    fetchSelectedExercises = () => {
-        const { exercises } = this.props.setup_workouts;
-        this.props.fetchExercisesById(exercises);
-    }
-
-    rightIcon = (id) => {
-        const checked = this.props.setup_workouts.exercises.filter(exercise => {
-            return exercise === id;
-        }).length;
-        
-        if (checked) {
-            return (
-                <Icon
-                    size={40}
-                    name='square'
-                    type='font-awesome'
-                />
-            )
-        }
-        return (
-            <Icon
-                size={40}
-                name='square-o'
-                type='font-awesome'
-            />
-        )
-    }
-
-    onExerciseSelect = (id) => {
-        this.props.toggleExerciseCheck(id);
+    onExerciseSelect = id => this.props.toggleExerciseCheck(id);
+    
+    rightIcon = id => {
+        const checked = this.props.setup_workouts.exercises.filter(exercise => exercise === id).length;
+        const iconProp = checked ? 'square' : 'square-o';
+        return <Icon size={40} name={iconProp} type='font-awesome' />
     }
 
     renderSelectedExercises = () => {
@@ -88,25 +66,11 @@ class _CreateWorkout extends Component {
             />
         );
     }
-    addSet = (id) => {
-        //id is the _id of the exerciseInfo that the set is associated with
-        this.props.addSetToExerciseModel(id);
-    }
-    deleteSetMethod = (exerciseId, setId) => {
-        this.props.deleteSet({ exerciseId, setId });
-    }
-    saveSets = (exerciseId) => {
-        this.props.toggleSetsView(exerciseId);
-    }
-
-    changeSetTextMethod = (text, type, id, exerciseId) => {
-        this.props.changeSetText({ type, text, id, exerciseId });
-    }
-
+    
     renderSets = sets => {
         return sets.map((set, i) => {
             return (
-                <View key={set.id}>
+                <View key={set._id}>
                     <Text>Set {i + 1}: </Text>
                     <Text>weight: {set.weight}</Text>
                     <Text>reps: {set.reps}</Text>

@@ -3,10 +3,10 @@ import { v4 } from 'uuid';
 
 const changeSetText = (props, field, state) => {
     const { text, id, exerciseId } = props;
-        const findRep = state.populatedExercises.map(_exercise => {
+        const findField = state.populatedExercises.map(_exercise => {
             if (_exercise.exerciseInfo._id === exerciseId) {
                 const newSets = _exercise.sets.map(set => {
-                    if (set.id === id) {
+                    if (set._id === id) {
                         if (field === 'reps') {
                             set.reps = text;
                         }
@@ -20,15 +20,16 @@ const changeSetText = (props, field, state) => {
             }
             return _exercise;
         });
-        return findRep;
+        return findField;
 }
 
 const addSet = (props, state) => {
     return updatedExercises1 = state.populatedExercises.map(exerciseModel => {
         if (exerciseModel.exerciseInfo._id === props) {
-            const id = v4();
-            exerciseModel.sets = [...exerciseModel.sets, { weight: '', reps: '', id }];
+            const _id = v4();
+            exerciseModel.sets = [...exerciseModel.sets, { weight: '', reps: '', _id }];
             exerciseModel.setsVisibility = true;
+            exerciseModel.setsSaved = false;
         }
         return exerciseModel;
     });
@@ -36,16 +37,16 @@ const addSet = (props, state) => {
 
 const toggleExerciseCheck = (props, state) => {
     let updatedExercises;
-        const { exercises } = state;
-        const filteredExercises = exercises.filter(exercise => {
-            return exercise !== props;
-        });
-        if (exercises.length !== filteredExercises.length) {
-            return updatedExercises = filteredExercises;
-        }
-        else {
-            return updatedExercises = [...exercises, props];
-        }
+    const { exercises } = state;
+    const filteredExercises = exercises.filter(exercise => {
+        return exercise !== props;
+    });
+    if (exercises.length !== filteredExercises.length) {
+        return updatedExercises = filteredExercises;
+    }
+    else {
+        return updatedExercises = [...exercises, props];
+    }
 }
 
 const toggleSetsView = (props, exercises) => {
@@ -62,7 +63,7 @@ const deleteSet = (props, exercises) => {
     return exercises.map(exercise => {
         if (exercise.exerciseInfo._id === props.exerciseId) {
             exercise.sets = exercise.sets.filter(set => {
-                return set.id !== props.setId
+                return set._id !== props.setId
             });
             if (exercise.sets.length === 0) {
                 exercise.setsVisibility = false;

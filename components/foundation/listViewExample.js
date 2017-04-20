@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         borderColor: 'silver',
         borderRadius: 3
     }
-})
+});
 
 const mapStateToProps = (state) => {
     const { setup_exercises } = state;

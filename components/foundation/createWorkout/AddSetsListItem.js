@@ -11,11 +11,11 @@ const AddSetsListItem = props => {
     const renderSets = () => {
         return props.sets.map(set => {
             return (
-                <View style={styles.addSetContainer} key={set.id}>
+                <View style={styles.addSetContainer} key={set._id}>
                     <Sets 
                         weight={set.weight}
                         reps={set.reps}
-                        id={set.id}
+                        _id={set._id}
                         changeSetTextMethod={props.changeSetTextMethod}
                         deleteSetMethod={props.deleteSetMethod}
                         exerciseId={props.exerciseInfo._id}

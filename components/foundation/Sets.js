@@ -8,23 +8,23 @@ let SCREEN_WIDTH = Dimensions.get("window").width;
 
 class Sets extends Component {
     render() {
-        const { exerciseId, id } = this.props;
+        const { exerciseId, _id } = this.props;
         return (
             <View style={styles.setContainer}>
             <Text>weight:</Text>
             <TextInput 
                 value={this.props.weight} 
                 style={styles.inputStyle} 
-                onChangeText={text => this.props.changeSetTextMethod(text, types.CHANGE_SET_WEIGHT_TEXT, id, exerciseId)}
+                onChangeText={text => this.props.changeSetTextMethod(text, types.CHANGE_SET_WEIGHT_TEXT, _id, exerciseId)}
             />
             <Text>reps: </Text>
             <TextInput 
                 value={this.props.reps} 
                 style={styles.inputStyle} 
-                onChangeText={text => this.props.changeSetTextMethod(text, types.CHANGE_SET_REPS_TEXT, id, exerciseId)}
+                onChangeText={text => this.props.changeSetTextMethod(text, types.CHANGE_SET_REPS_TEXT, _id, exerciseId)}
             />
             <TouchableOpacity
-                onPress={() => this.props.deleteSetMethod(exerciseId, id)}
+                onPress={() => this.props.deleteSetMethod(exerciseId, _id)}
             >  
                 <Icon 
                     name="cancel"

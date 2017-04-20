@@ -50,14 +50,18 @@ const SmallListItem = (props) => {
                             <Text style={styles.moreInfoText}>Description: </Text>
                             <Text >{props.description}</Text> 
                         </View>
-                        <View style={styles.infoItem}>
-                            <Text style={styles.moreInfoText}>Type: </Text>
-                            <Text>{props.type}</Text>
+                        {props.kind !== 'workout' &&
+                        <View>
+                            <View style={styles.infoItem}>
+                                <Text style={styles.moreInfoText}>Type: </Text>
+                                <Text>{props.type}</Text>
+                            </View>
+                            <View style={styles.infoItem}>
+                                <Text style={styles.moreInfoText}>Points per Set: </Text> 
+                                <Text>{props.points}</Text>
+                            </View>
                         </View>
-                        <View style={styles.infoItem}>
-                            <Text style={styles.moreInfoText}>Points per Set: </Text> 
-                            <Text>{props.points}</Text>
-                        </View>
+                        }
                     </View>  
                 }
             </View>

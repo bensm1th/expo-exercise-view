@@ -91,6 +91,7 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
                 exerciseEdit: { ...state.exerciseEdit, moreInfoId }
             }
         case types.CLOSE_EDIT_INFO:
+            console.log('============hit close edit info in reducer---------------');
             return {
                 ...state,
                 exerciseEdit: { ...state.exerciseEdit, moreInfoId: "" }
