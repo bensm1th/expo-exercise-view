@@ -1,5 +1,20 @@
 import * as types from '../actions/types';
 
+const toggleExerciseCheck = (action, state) => {
+    let updatedExercises;
+    const { deleteExercises, addExercises } = state;
+    const exercises = action.type === types.PUSH_TO_ADD_ARRAY ? addExercises : deleteExercises;
+    const filteredExercises = exercises.filter(exercise => {
+        return exercise !== action.payload;
+    });
+    if (exercises.length !== filteredExercises.length) {
+        return updatedExercises = filteredExercises;
+    }
+    else {
+        return updatedExercises = [...exercises, action.payload];
+    }
+}
+
 const initialState = {
     exerciseEditOption: 'left',
     workouts: [],
@@ -14,31 +29,58 @@ const initialState = {
     exercises: [],
     deleteMoreInfoId: '',
     deleteExercises: [],
-    addExercises: []
-}
-
-const toggleDeleteExerciseCheck = (props, state) => {
-    let updatedExercises;
-    const { deleteExercises } = state;
-    const filteredExercises = deleteExercises.filter(exercise => {
-        return exercise !== props;
-    });
-    if (deleteExercises.length !== filteredExercises.length) {
-        return updatedExercises = filteredExercises;
-    }
-    else {
-        return updatedExercises = [...deleteExercises, props];
-    }
+    addExercises: [],
+    addExercisesPopulated: []
 }
 
 const editWorkoutsReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.SAVE_WORKOUT:
+            return initialState;
+        case types.GET_EDIT_ADD_EXERCISES:
+            const populatedExercises = state.exercises.filter(exercise => {
+                return state.addExercises.some(_id => _id === exercise._id);
+            })
+            .map(exercise => {
+                return {
+                    exerciseInfo: exercise,
+                    sets: []
+                }
+            });
+            return {
+                ...state,
+                addExercisesPopulated: populatedExercises,
+                editStep: state.editStep + 1
+                
+            }
+        case types.REMOVE_EXERCISES_WORKOUT:
+            const updatedWorkoutExercises = state.selectedWorkout.exercises.filter(exercise => {
+                return !state.deleteExercises.some(_exercise => _exercise === exercise._id);
+            });
+            return {
+                ...state,
+                selectedWorkout: {
+                    ...state.selectedWorkout,
+                    exercises: [
+                        ...updatedWorkoutExercises
+                    ]
+                }
+            }
+        case types.PUSH_TO_ADD_ARRAY:
+            const toggledExercisesAdd = toggleExerciseCheck(action, state);
+            return {
+                ...state,
+                addExercises: [
+                    ...toggledExercisesAdd
+
+                ]
+            }
         case types.PUSH_TO_DELETE_ARRAY:
-            const toggledExercises = toggleDeleteExerciseCheck(action.payload, state);
+            const toggledExercisesDelete = toggleExerciseCheck(action, state);
             return {
                 ...state,
                 deleteExercises: [
-                    ...toggledExercises
+                    ...toggledExercisesDelete
                 ]
             }
         case types.TOGGLE_DELETE_INFO:

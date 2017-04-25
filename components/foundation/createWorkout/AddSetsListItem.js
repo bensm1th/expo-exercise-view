@@ -10,6 +10,7 @@ let SCREEN_WIDTH = Dimensions.get("window").width;
 const AddSetsListItem = props => {
     const renderSets = () => {
         return props.sets.map(set => {
+
             return (
                 <View style={styles.addSetContainer} key={set._id}>
                     <Sets 

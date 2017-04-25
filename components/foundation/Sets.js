@@ -9,6 +9,8 @@ let SCREEN_WIDTH = Dimensions.get("window").width;
 class Sets extends Component {
     render() {
         const { exerciseId, _id } = this.props;
+        console.log('--------- all props in Sets component ================');
+        console.log(this.props);
         return (
             <View style={styles.setContainer}>
             <Text>weight:</Text>

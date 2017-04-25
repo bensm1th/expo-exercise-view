@@ -8,6 +8,17 @@ import * as actions from '../../actions';
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
+const createInfoText = exercise => {
+    return Object.keys(exercise).reduce((initial, current) => {
+            const first = current.substr(0, 1);
+            if (first !== '_') {
+                const label = first.toUpperCase() + current.substr(1);
+                initial = [...initial, { label, text: exercise[current]}]
+            }
+        return initial;
+    }, [])
+};
+
 class ListViewExample extends Component {
     constructor(props) {
         super(props);
@@ -25,16 +36,16 @@ class ListViewExample extends Component {
     }
 
     renderRow = (exercise) => {
+        const infoText = createInfoText(exercise);
         return (
             <SmallList
-                moreIcon={require('../../images/circleMore.png')}
-                lessIcon={require('../../images/lessCircle.png')}
                 onSelect={this.props.onSelect}
                 id={exercise._id}
                 onMoreInfo={this.props.exerciseInfoVisibility}
                 moreInfoId={this.props.setup_exercises.exerciseEdit.moreInfoId}
                 rightIcon={this.props.rightIcon}
                 {...exercise}
+                infoText={infoText}
             />
         )
     }

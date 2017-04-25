@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
-import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView, ScrollView } from 'react-native';
+import { Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
+import EditStepOne from '../foundation/editWorkout/EditStepOne';
+import EditStepZero from '../foundation/editWorkout/EditStepZero';
+import EditStepTwo from '../foundation/editWorkout/EditStepTwo';
 import ListTitle from '../foundation/listTitle';
 import SmallList from '../foundation/smallListItem';
-import WorkoutList from '../foundation/editWorkout/WorkoutListView';
-import ChoiceButton from '../foundation/choiceButton';
 import * as actions from '../../actions';
 import * as types from '../../actions/types';
 
-let SCREEN_HEIGHT = Dimensions.get("window").height;
-let SCREEN_WIDTH = Dimensions.get("window").width;
-let headerHeight = SCREEN_HEIGHT * .1;
-let choiceHeight = SCREEN_HEIGHT * .15;
+const createInfoText = exercise => {
+    return Object.keys(exercise).reduce((initial, current) => {
+            const first = current.substr(0, 1);
+            if (first !== '_') {
+                const label = first.toUpperCase() + current.substr(1);
+                initial = [...initial, { label, text: exercise[current]}]
+            }
+        return initial;
+    }, [])
+};
 
 class _EditWorkout extends Component {
     constructor(props) {
@@ -20,168 +27,99 @@ class _EditWorkout extends Component {
         this.props.fetchExercises();
     }
 
+    componentWillReceiveProps(nextProps) {
+        const checkOne = nextProps.edit_workouts.addExercisesPopulated.length !== this.props.edit_workouts.addExercisesPopulated.length;
+        
+        if (checkOne && this.props.edit_workouts.editStep === 2) {
+            const { addExercisesPopulated, selectedWorkout, deleteExercises } = nextProps.edit_workouts;
+            const workoutInfo = {newExercises: addExercisesPopulated, currentWorkout: selectedWorkout, deleteExercises};
+            this.props.switchToCreateWorkout(workoutInfo);
+            this.props.navigation.navigate('workoutCreate');
+        }
+    }
+
+    incrementStepAdd = () => { this.props.getEditAddExercises() }
+    onSelectDelete = id => {this.props.exerciseToDelete(id)}
+    onSelectAdd = id => {this.props.exerciseToAdd(id)}
+    renderWorkouts = () => this.props.workouts.map(workout => <Text>{workout.name}</Text>)
+    rightIcon = () => <Icon name="chevron-right" size={40} />
+    onChoiceButtonPress = choice => this.props.exerciseEditOption(choice);
+
     onBackListVisible = () => {
         this.props.workoutInfoVisibility('')
         this.props.navigation.navigate('setup');
-    }
-
-    renderWorkouts = () => {
-        return this.props.workouts.map(workout => {
-            return <Text>{workout.name}</Text>
-        })
-    }
-
-    rightIcon = () => {
-        return <Icon name="chevron-right" size={40} />
     }
 
     moveEditStep = direction => {
         direction ? this.props.incrementEditStep() : this.props.decrementEditStep();
     }
 
-    onChoiceButtonPress = choice => {
-        this.props.exerciseEditOption(choice);
-    }
-
-    rightIconTwo = id => {
+    rightIconDelete = id => {
         const checked = this.props.edit_workouts.deleteExercises.filter(exercise => exercise === id).length;
         const iconProp = checked ? 'square' : 'square-o';
         return <Icon size={40} name={iconProp} type='font-awesome' />
     }
 
-    onSelect = id => {
-        this.props.exerciseToDelete(id);
+    rightIconAdd = id => {
+        const checked = this.props.edit_workouts.addExercises.filter(exercise => exercise === id).length;
+        const iconProp = checked ? 'square' : 'square-o';
+        return <Icon size={40} name={iconProp} type='font-awesome' />
     }
 
     renderExercisesList = () => {
         const selectedExercises = this.props.edit_workouts.selectedWorkout.exercises;
         const { exercises, exerciseEditOption } = this.props.edit_workouts;
-
-        if (exerciseEditOption === 'left') {
-            const unselectedExercises = exercises.filter(e => !selectedExercises.filter(_e => e._id === _e.exerciseInfo._id).length);
-            return unselectedExercises.map(filtered_exercise => {
-                return <SmallList
-                            key={filtered_exercise._id}
-                            moreIcon={require('../../images/circleMore.png')}
-                            lessIcon={require('../../images/lessCircle.png')}
-                            onSelect={this.onSelect}
-                            id={filtered_exercise._id}
-                            onMoreInfo={this.props.toggleDeleteInfo}
-                            moreInfoId={this.props.edit_workouts.deleteMoreInfoId}
-                            rightIcon={this.rightIconTwo}
-                            {...filtered_exercise}
-                        />
-            });
-        } else {
-            return selectedExercises.map(exercise => {
+        const add = exerciseEditOption === 'left';
+        const exerciseList = add ? exercises.filter(e => !selectedExercises.some(_e => e._id === _e.exerciseInfo._id)) : selectedExercises;
+        const onSelect = add ? this.onSelectAdd : this.onSelectDelete;
+        const rightIcon = add ? this.rightIconAdd : this.rightIconDelete;
+        return exerciseList.map(exercise => {
+                const infoTextArg = add ? exercise : exercise.exerciseInfo;
+                const infoText = createInfoText(infoTextArg);
                 return <SmallList
                             key={exercise._id}
-                            moreIcon={require('../../images/circleMore.png')}
-                            lessIcon={require('../../images/lessCircle.png')}
-                            onSelect={this.onSelect}
+                            onSelect={onSelect}
                             id={exercise._id}
                             onMoreInfo={this.props.toggleDeleteInfo}
                             moreInfoId={this.props.edit_workouts.deleteMoreInfoId}
-                            rightIcon={this.rightIconTwo}
-                            {...exercise.exerciseInfo}
+                            rightIcon={rightIcon}
+                            {...infoTextArg}
+                            infoText={infoText}
                         />
             });
-        }
+
     }
 
     render() {
         const { editStep, listVisibility, selectedWorkout: { name, description, exercises } } = this.props.edit_workouts;
         return (
             <View>
-            <ListTitle title='EDIT WORKOUT' />
+                <ListTitle title='EDIT WORKOUT' />
                 {editStep === 0 &&
-                <View>
-                    <View style={styles.directions}>
-                        <Text style={styles.directionsText}>Choose a workout to edit.</Text>
-                    </View>
-                    <View style={styles.listContainer}>
-                        <WorkoutList
-                            rightIcon={this.rightIcon}
-                        />
-                    </View>
-                    <Button 
-                        buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * .05,}}
-                        onPress={this.onBackListVisible}
-                        title="BACK"
-                        backgroundColor="#0043cb"
-                    />
-                </View>
+                <EditStepZero
+                    rightIcon={this.rightIcon}
+                    onBackListVisible={this.onBackListVisible}
+                />
                 }
                 {editStep === 1 &&
-                <View>
-                    <View style={styles.directions}>
-                        <Text style={styles.directionsText}>Step One: Edit workout name or description</Text>
-                    </View>
-                    <View style={styles.stepOneContainer}>
-                        <FormLabel>Name:</FormLabel>
-                        <FormInput 
-                            value={name}
-                        />
-                        <FormLabel>Description:</FormLabel>
-                        <FormInput 
-                            value={description}
-                        />
-                    </View>
-                        <Button 
-                            buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05}}
-                            onPress={() => this.moveEditStep(true)}
-                            title="FORWARD"
-                            backgroundColor="#8f9bff"
-                        />
-                        <Button 
-                            buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05}}
-                            onPress={() => this.moveEditStep(false)}
-                            title="BACK"
-                            backgroundColor="#0043cb"
-                        />
-                </View>    
+                <EditStepOne
+                    name={name} 
+                    description={description} 
+                    moveEditStep={this.moveEditStep}
+                />
                 }
                 {editStep === 2 &&
-                    <View>
-                        <View style={styles.directions}>
-                            <Text style={styles.directionsText}>Step Two: Add or delete exercises.</Text>
-                        </View>
-                        <View style={styles.choiceContainer}>
-                            <ChoiceButton 
-                                choiceOne="ADD" 
-                                choiceTwo="DELETE"
-                                selected={this.props.edit_workouts.exerciseEditOption}
-                                onPress={this.onChoiceButtonPress}
-                            />
-                        </View>
-                        <ScrollView style={styles.stepTwoScrollView}>
-                            {this.renderExercisesList()}
-                        </ScrollView>
-                        <Button 
-                            buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05,}}
-                            onPress={() => this.moveEditStep(true)}
-                            title="FORWARD"
-                            backgroundColor="#8f9bff"
-                        />
-                        <Button 
-                            buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05,}}
-                            onPress={() => this.moveEditStep(false)}
-                            title="BACK"
-                            backgroundColor="#0043cb"
-                        />
-                    </View>
+                <EditStepTwo
+                    incrementStepAdd={this.incrementStepAdd}
+                    exerciseEditOption={this.props.edit_workouts.exerciseEditOption}
+                    onChoiceButtonPress={this.onChoiceButtonPress}
+                    removeExercisesFromWorkout={this.props.removeExercisesFromWorkout}
+                    moveEditStep={this.moveEditStep}
+                    renderExercisesList={this.renderExercisesList}
+                />
                 }
                 {editStep === 3 &&
                     <View>
-                        <View style={styles.directions}>
-                            <Text style={styles.directionsText}>Step Three</Text>
-                        </View>
-                        <Button 
-                            buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .1,}}
-                            onPress={() => this.moveEditStep(false)}
-                            title="BACK"
-                            backgroundColor="#0043cb"
-                        />
                     </View>
                 }
             </View>
@@ -190,54 +128,11 @@ class _EditWorkout extends Component {
 }
 
 const mapStateToProps = state => {
-    const { edit_workouts } = state;
+    const { edit_workouts, setup_workouts } = state;
     return {
-        edit_workouts
+        edit_workouts, setup_workouts
     }
 }
 
-const styles = StyleSheet.create({
-    stepOneContainer: {
-        backgroundColor: "#f7f7f7",
-        marginLeft: SCREEN_WIDTH * .05,
-        width: SCREEN_WIDTH * .9,
-        marginBottom: SCREEN_HEIGHT * .05,
-        paddingBottom: SCREEN_HEIGHT * .025
-    },
-    stepTwoScrollView: {
-        width: SCREEN_WIDTH * .9,
-        marginLeft: SCREEN_WIDTH * .05,
-        height: SCREEN_HEIGHT *.40,
-        marginBottom: SCREEN_HEIGHT * .05,
-    },
-    stepTwoContainer: {
-        backgroundColor: '#f7f7f7'
-    },
-    listContainer: {
-        width: SCREEN_WIDTH * .9,
-        marginLeft: SCREEN_WIDTH * .05,
-        height: SCREEN_HEIGHT *.60,
-        marginBottom: SCREEN_HEIGHT * .05
-    },
-    choiceContainer: {
-        height: choiceHeight,
-        backgroundColor: "#f7f7f7",
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    directions: {
-        height: SCREEN_HEIGHT * .08,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    directionsText: {
-        fontSize: 20
-    },
-    buttonContainer: {
-        width: SCREEN_WIDTH * .9,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    }
-})
 const EditWorkout = connect(mapStateToProps, actions)(_EditWorkout);
 export { EditWorkout };

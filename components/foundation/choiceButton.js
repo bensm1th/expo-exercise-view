@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, StyleSheet, Dimensions } from 'react-native';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -14,18 +14,28 @@ const ChoiceButton = (props) => {
 
     return (
         <View style={styles.choiceButton}>
-            <TouchableOpacity 
-                style={leftContainer}
-                onPress={() => props.onPress('left')}
-            >
-                    <Text style={leftText}>{props.choiceOne}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                style={rightContainer}
-                onPress={() => props.onPress('right')}
-            >
+            <View style={leftContainer}>
+                <TouchableWithoutFeedback 
+                    
+                    onPress={() => props.onPress('left')}
+                >
+                    <View>
+                        <Text style={leftText}>{props.choiceOne}</Text>
+                    </View>
+                
+                </TouchableWithoutFeedback>
+            </View>
+            <View style={rightContainer} >
+                <TouchableWithoutFeedback 
+                    
+                    onPress={() => props.onPress('right')}
+                >
+                <View>
                     <Text style={rightText}>{props.choiceTwo}</Text>
-            </TouchableOpacity>
+                </View>
+                
+                </TouchableWithoutFeedback>
+            </View>
         </View>
     );
 }

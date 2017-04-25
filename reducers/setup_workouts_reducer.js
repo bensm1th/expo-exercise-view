@@ -73,7 +73,24 @@ const deleteSet = (props, exercises) => {
         return exercise;
     });
 }
-
+const removeDeletedExercises = (exercises, deleteExercises) => {
+    return exercises
+    .map(exercise => {
+        const sets = exercise.sets.map(set => {
+            return { 
+                weight: set.goals.weight.toString(), 
+                reps: set.goals.number.toString(), 
+                _id: set._id 
+            }
+        });
+        return { exerciseInfo: exercise.exerciseInfo, sets, setsVisibility: false, setsSaved: false }
+    })
+    .filter(exercise => {
+        return !deleteExercises.some(_id => {
+            return _id === exercise._id
+        });
+    });
+}
 const initialState = {
     createForm: {
         name: "",
@@ -82,10 +99,25 @@ const initialState = {
     createStep: 1,
     exercises: [],
     populatedExercises: [],
+    editWorkout: false
 }
 
 const setupWorkoutsReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.EDIT_ADD_EXERCISES:
+            
+            const { newExercises, deleteExercises, currentWorkout: { name, description, exercises } } = action.payload;            
+            const removeDeleted = removeDeletedExercises(exercises, deleteExercises)
+            
+            const currentExercises = [...newExercises, ...removeDeleted];
+
+            return {
+                ...state,
+                populatedExercises: currentExercises,
+                createStep: 3,
+                editWorkout: true,
+                createForm: { name, description }
+            }
         case types.SAVE_WORKOUT:
             return initialState;
         case types.DELETE_SET:

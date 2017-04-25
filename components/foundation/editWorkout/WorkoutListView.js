@@ -7,6 +7,10 @@ import * as actions from '../../../actions';
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
+const createInfoText = workout => {
+    return [{ label: 'Description', text: workout.description }]
+};
+
 class WorkoutListView extends Component {
     constructor(props) {
         super(props);
@@ -24,6 +28,7 @@ class WorkoutListView extends Component {
     }
 
     renderRow = (workout) => {
+        let infoText = createInfoText(workout);
         return (
             <SmallList
                 moreIcon={require('../../../images/circleMore.png')}
@@ -34,7 +39,7 @@ class WorkoutListView extends Component {
                 onSelect={this.props.workoutEditVisibility}
                 rightIcon={this.props.rightIcon}
                 {...workout}
-                kind='workout'
+                infoText={infoText}
             />
         )
     }

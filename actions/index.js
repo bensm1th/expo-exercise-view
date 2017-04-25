@@ -1,6 +1,20 @@
 import axios from 'axios';
 import * as types from './types';
 
+const URL = '192.168.1.109';
+export const switchToCreateWorkout = exercises => {
+    return {
+        type: types.EDIT_ADD_EXERCISES,
+        payload: exercises
+    }
+}
+export const getEditAddExercises = (props) => {
+    return {
+        type: types.GET_EDIT_ADD_EXERCISES,
+        payload: props
+    }
+}
+
 export const exerciseToDelete = id => {
     return {
         type: types.PUSH_TO_DELETE_ARRAY,
@@ -8,6 +22,18 @@ export const exerciseToDelete = id => {
     }
 }
 
+export const removeExercisesFromWorkout = () => {
+    return {
+        type: types.REMOVE_EXERCISES_WORKOUT
+    }
+}
+
+export const exerciseToAdd = id => {
+    return {
+        type: types.PUSH_TO_ADD_ARRAY,
+        payload: id
+    }
+}
 
 export const toggleDeleteInfo = id => {
     return {
@@ -17,7 +43,8 @@ export const toggleDeleteInfo = id => {
 }
 
 export const fetchExercises = () => async dispatch => {
-    let response = await axios.get('http://192.168.1.109:3000/exerciseInfo');
+    let response = await axios.get(`http://${URL}:3000/exerciseInfo`);
+
     dispatch({
         type: types.FETCH_EXERCISES,
         payload: response.data

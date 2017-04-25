@@ -7,20 +7,19 @@ import axios from 'axios';
 import ListItem from '../components/foundation/listItem';
 import ListTitle from '../components/foundation/listTitle';
 import ChoiceButton from '../components/foundation/choiceButton';
-import { setupChoice, setupListSelect, closeModal } from '../actions';
-import RNModal from 'react-native-modal';
+import * as actions from '../actions';
 import * as Setup from '../components/setup';
 
-let ScreenHeight = Dimensions.get("window").height;
-let ScreenWidth = Dimensions.get("window").width;
-let listWidth = ScreenWidth * .8;
-let headerHeight = ScreenHeight * .1;
-let choiceHeight = ScreenHeight * .15;
-let middleHeight = ScreenHeight * .27;
-let bottomHeight = ScreenHeight * .125;
-let listTop = ScreenHeight * .09;
-let listLeftOffset = ScreenWidth * .1;
-let listItemHeight = ScreenHeight * .135;
+let SCREEN_HEIGHT = Dimensions.get("window").height;
+let SCREEN_WIDTH = Dimensions.get("window").width;
+let listWidth = SCREEN_WIDTH * .8;
+let headerHeight = SCREEN_HEIGHT * .1;
+let choiceHeight = SCREEN_HEIGHT * .15;
+let middleHeight = SCREEN_HEIGHT * .27;
+let bottomHeight = SCREEN_HEIGHT * .125;
+let listTop = SCREEN_HEIGHT * .09;
+let listLeftOffset = SCREEN_WIDTH * .1;
+let listItemHeight = SCREEN_HEIGHT * .135;
 let checkBoxLength = listItemHeight * .2;
 
 class SetupScreen extends Component {
@@ -143,7 +142,7 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { setupChoice, setupListSelect, closeModal })(SetupScreen);
+export default connect(mapStateToProps, actions)(SetupScreen);
 
 const styles = StyleSheet.create({
     container: {
@@ -158,14 +157,14 @@ const styles = StyleSheet.create({
     middle: {
         backgroundColor: "#f7f7f7",
         flexDirection: 'row',
-        height: ScreenHeight * .4
+        height: SCREEN_HEIGHT * .4
     },
     listContainer: {
         borderTopColor: "#e0e0e0",
         borderTopWidth: 1
     },
     listContainerMiddle: {
-        top: ScreenHeight * .52,
+        top: SCREEN_HEIGHT * .52,
         left: listLeftOffset,
         width: listWidth
     },

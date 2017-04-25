@@ -1,71 +1,108 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, UIManager, Text, TouchableOpacity, Modal, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
 
-let ScreenHeight = Dimensions.get("window").height;
-let ScreenWidth = Dimensions.get("window").width;
-let listItemHeight = ScreenHeight * .12;
+let SCREEN_HEIGHT = Dimensions.get("window").height;
+let SCREEN_WIDTH = Dimensions.get("window").width;
+let listItemHeight = SCREEN_HEIGHT * .12;
 
-const SmallListItem = (props) => {
-    const { moreIcon, onSelect, id, lessIcon, moreInfoId, onMoreInfo } = props;
-    return (
-            <View style={styles.listItem}>
-                <View style={styles.mainItem}>
-                    <TouchableOpacity
-                        onPress={() => props.onMoreInfo(id)}
-                        style={styles.icon}
-                    >
-                    {moreInfoId === id ? (
-                        <Icon 
-                            name="ios-more-outline"
-                            size={40}
-                            type="ionicon"
-                        />
-                    ) : (
-                        <Icon 
-                            name="ios-more"
-                            size={40}
-                            type="ionicon"
-                        />
-                    )}
-                        
-                    </TouchableOpacity>
-                    <View 
-                        style={styles.itemTextContainer}
-                    >
-                        <Text style={styles.itemText}>{props.name}</Text>
-                        <TouchableOpacity
-                            onPress={() => props.onSelect(id)}
-                            style={styles.rightIcon}
-                        >
-                            <View>
-                                {props.rightIcon(id)}
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+class SmallListItem extends Component {
+    constructor(props) {
+        super(props);
+        this.animatedValue = new Animated.Value(0);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.moreInfoId !== this.props.id && this.props.id === this.props.moreInfoId) {
+            Animated.timing(this.animatedValue, {
+                toValue: 0,
+                duration: 200
+            }).start();
+        } 
+    }
+
+    componentWillUpdate() {
+        UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+        LayoutAnimation.easeInEaseOut();
+    }
+
+    rotate = (id) => {
+        if (this.props.moreInfoId !== this.props.id) {
+            this.props.onMoreInfo(id);
+            Animated.timing(this.animatedValue, {
+                toValue: 1,
+                duration: 300
+            }).start();
+
+        } else {
+            this.props.onMoreInfo(id)
+            Animated.timing(this.animatedValue, {
+                toValue: 0,
+                duration: 300
+            }).start();
+        }
+    }
+
+    renderInfo = () => {
+        const fadeInterpolation = this.animatedValue.interpolate({
+            inputRange: [0, .9, 1],
+            outputRange: ['rgb(247,247,247)', 'rgb(247,247,247)', 'rgb(0,0,0)']
+        });
+        const fadeStyle = {
+            color: fadeInterpolation
+        }
+        return this.props.infoText.map(info => {
+            return (
+                <View style={styles.infoItem} key={info.label}>
+                    <Animated.Text style={[styles.moreInfoText, fadeStyle]}>{info.label}: </Animated.Text>
+                    <Animated.Text style={fadeStyle}>{info.text}</Animated.Text> 
                 </View>
-                {moreInfoId === id &&
-                    <View style={styles.moreInfo}>
-                        <View style={styles.infoItem}>
-                            <Text style={styles.moreInfoText}>Description: </Text>
-                            <Text >{props.description}</Text> 
+            )});
+    }
+    render() { 
+        const { onSelect, id, moreInfoId, onMoreInfo } = this.props;
+        const rotateMoreInterpolation = this.animatedValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '180deg']
+        });
+        const moreIconStyle = {
+            transform: [{ rotateX: rotateMoreInterpolation }]
+        }; 
+        return (
+                <View style={styles.listItem}>
+                    <View style={styles.mainItem}>
+                        <TouchableWithoutFeedback
+                            onPress={() => this.rotate(id)}
+                        >
+                            <Animated.View style={[styles.icon, moreIconStyle]}>
+                                <Icon 
+                                    name="expand-more"
+                                    size={40}
+                                />
+                            </Animated.View>
+                        </TouchableWithoutFeedback>
+                        <View 
+                            style={styles.itemTextContainer}
+                        >
+                            <Text style={styles.itemText}>{this.props.name}</Text>
+                            <TouchableOpacity
+                                onPress={() => this.props.onSelect(id)}
+                                style={styles.rightIcon}
+                            >
+                                <View style={styles.moreInfo}>
+                                    {this.props.rightIcon(id)}
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                        {props.kind !== 'workout' &&
-                        <View>
-                            <View style={styles.infoItem}>
-                                <Text style={styles.moreInfoText}>Type: </Text>
-                                <Text>{props.type}</Text>
-                            </View>
-                            <View style={styles.infoItem}>
-                                <Text style={styles.moreInfoText}>Points per Set: </Text> 
-                                <Text>{props.points}</Text>
-                            </View>
-                        </View>
-                        }
-                    </View>  
-                }
-            </View>
-    );
+                    </View>
+                    {moreInfoId === id &&
+                    <View>
+                        {this.renderInfo()}
+                    </View>
+                    }
+                </View>
+        );
+    }
 }
 
 export default SmallListItem;
@@ -75,6 +112,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         borderBottomColor: "#e0e0e0",
         borderBottomWidth: 2,
+        backgroundColor: "#f7f7f7",
+        overflow: 'hidden'
     },
     mainItem: {
         height: listItemHeight,
@@ -82,7 +121,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     moreInfo: {
-        flex: 1
     },
     itemTextContainer: {
         flex: 1,
@@ -101,8 +139,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     icon: {
-        height: ScreenWidth * .06,
-        width: ScreenWidth * .06,
         marginLeft: 15,
         marginRight: 20
     },
@@ -111,6 +147,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     rightIcon: {
-        marginRight: ScreenWidth * .06
+        marginRight: SCREEN_WIDTH * .06
     }
 });

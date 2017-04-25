@@ -25,6 +25,8 @@ const initialState = {
 
 const setupExercisesReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.SAVE_WORKOUT:
+            return initialState;
         case types.SETUP_CHOICE:
             return {
                 ...state,

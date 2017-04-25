@@ -101,11 +101,18 @@ class _CreateWorkout extends Component {
         this.props.navigation.navigate('setup');
     }
 
+    navigateBack = () => {
+        this.props.decrementEditStep();
+        this.props.navigation.navigate('workoutEdit');
+    }
+    
     render() {
-        const { createStep } = this.props.setup_workouts;
+        const { createStep, editWorkout } = this.props.setup_workouts;
+        const title = editWorkout ? 'EDIT WORKOUT' : 'CREATE WORKOUT';
+        const onBackOption = editWorkout ? this.navigateBack : this.decrementStep
         return (
             <View style={styles.container}>
-                <ListTitle title='CREATE WORKOUT' />
+                <ListTitle title={title} />
                 {createStep === 1 &&
                 <StepOne
                     changeText={this.changeText}
@@ -126,8 +133,9 @@ class _CreateWorkout extends Component {
                 {createStep === 3 &&
                 <StepThree
                     incrementStep={this.incrementStep}
-                    decrementStep={this.decrementStep}
+                    decrementStep={onBackOption}
                     renderSelectedExercises={this.renderSelectedExercises}
+                    editWorkout={editWorkout}
                 />
                 }
                 {createStep === 4 &&
