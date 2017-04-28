@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions, ListView, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions, 
+    ListView, ScrollView, UIManager, LayoutAnimation } from 'react-native';
 import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
 import ListTitle from '../foundation/listTitle';
 import StepOne from '../foundation/createWorkout/StepOne';
@@ -15,32 +16,32 @@ let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
 class _CreateWorkout extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentWillUpdate() {
+        UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+        LayoutAnimation.easeInEaseOut();
+    }
 
     onBack = () => this.props.navigation.navigate('setup');
-    
     incrementStep = () => this.props.createWorkoutStepInc();
-    
     decrementStep = () => this.props.createWorkoutStepDec();
-    
     changeText = (type, text) => this.props.createWorkoutText({type, text});
-    
     fetchSelectedExercises = () => this.props.fetchExercisesById(this.props.setup_workouts.exercises);
-
     addSet = exerciseInfoId => this.props.addSetToExerciseModel(exerciseInfoId);
-    
     deleteSetMethod = (exerciseId, setId) => this.props.deleteSet({ exerciseId, setId });
-    
     saveSets = exerciseId => this.props.toggleSetsView(exerciseId);
-    
     changeSetTextMethod = (text, type, id, exerciseId) => this.props.changeSetText({ type, text, id, exerciseId });
-
     onExerciseSelect = id => this.props.toggleExerciseCheck(id);
     
     rightIcon = id => {
         const checked = this.props.setup_workouts.exercises.filter(exercise => exercise === id).length;
-        const iconProp = checked ? 'square' : 'square-o';
-        return <Icon size={40} name={iconProp} type='font-awesome' />
+        const iconProp = checked ? 'check-box' : 'check-box-outline-blank';
+        return <Icon size={40} name={iconProp} />
     }
+
 
     renderSelectedExercises = () => {
         return (
@@ -102,14 +103,25 @@ class _CreateWorkout extends Component {
     }
 
     navigateBack = () => {
-        this.props.decrementEditStep();
+        this.props.setEditStep(2);
+        this.props.workoutCreateStepSet(1);
         this.props.navigation.navigate('workoutEdit');
     }
     
     render() {
-        const { createStep, editWorkout } = this.props.setup_workouts;
+        const { createStep, editWorkout, createForm: { name, description} } = this.props.setup_workouts;
         const title = editWorkout ? 'EDIT WORKOUT' : 'CREATE WORKOUT';
-        const onBackOption = editWorkout ? this.navigateBack : this.decrementStep
+        const onBackOption = editWorkout ? this.navigateBack : this.decrementStep;
+        const buttons = {
+            buttonOne: {
+                text: 'SAVE',
+                onPress: this.saveWorkoutMethod
+            },
+            buttonTwo: {
+                text: 'BACK',
+                onPress: this.decrementStep
+            }
+        }
         return (
             <View style={styles.container}>
                 <ListTitle title={title} />
@@ -141,9 +153,9 @@ class _CreateWorkout extends Component {
                 {createStep === 4 &&
                 <StepFour
                     {...this.props}
-                    saveWorkoutMethod={this.saveWorkoutMethod}
+                    buttons={buttons}
                     renderFinalExercises={this.renderFinalExercises}
-                    decrementStep={this.decrementStep}
+                    workoutInfo = {{ name, description, title: 'Step 4: View and save your workout.'}}
                 />
                 }
             </View>
@@ -169,23 +181,6 @@ const styles = StyleSheet.create({
         borderColor: 'silver',
         marginLeft: SCREEN_WIDTH *.036,
         marginRight: SCREEN_WIDTH * .036
-    },
-    buttonContainer: {
-        width: 200,
-        flexDirection: 'row',
-        marginTop: 20
-    },
-    directions: {
-        height: SCREEN_HEIGHT * .08,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    directionsText: {
-        fontSize: 20
-    },
-    stepTwoList: {
-        height: SCREEN_HEIGHT * .5,
-        marginBottom: SCREEN_HEIGHT * .035
     },
     setsListContainer: {
         backgroundColor: '#f7f7f7',

@@ -1,17 +1,90 @@
 import axios from 'axios';
 import * as types from './types';
-
 const URL = '192.168.1.109';
+//const URL = '107.185.83.180';
+//const URL = '10.62.40.34';
+const ROOT_URL = `http://${URL}:3000`
+
+export const setChangeAcutalText = props => {
+    return {
+        type: props.type,
+        payload: props.text
+    }
+}
+
+export const setsEditOpen = set => {
+    return {
+        type: types.EDIT_OPEN_SET,
+        payload: set
+    }
+}
+
+export const setsOpen = exercise => {
+    return {
+        type: types.OPEN_EXERCISE,
+        payload: exercise
+    }
+} 
+
+export const workoutStart = () => {
+    return {
+        type: types.START_WORKOUT
+    }
+}
+
+export const startStepDec = () => {
+    return {
+        type: types.DEC_START_STEP
+    }
+}
+
+export const selectStartWorkout = workout => {
+    return {
+        type: types.SELECT_START_WORKOUT,
+        payload: workout
+    }
+}
+
+export const onBackDeleteWorkouts = () => {
+    return {
+        type: types.ON_BACK_DELETE_WORKOUTS
+    }
+}
+export const setEditStep = value => {
+    return {
+        type: types.SET_EDIT_STEP,
+        payload: value
+    }
+}
+export const workoutCreateStepSet = value => {
+    return {
+        type: types.SET_CREATE_STEP,
+        payload: value
+    }
+}
+export const changeEditWorkoutText = ({text, type}) => {
+    return {
+        type,
+        payload: text
+    }
+}
+
+export const createWorkoutText = ({ text, type }) => {
+    return {
+            type,
+            payload: text
+        }
+}
+
 export const switchToCreateWorkout = exercises => {
     return {
         type: types.EDIT_ADD_EXERCISES,
         payload: exercises
     }
 }
-export const getEditAddExercises = (props) => {
+export const getEditAddExercises = () => {
     return {
         type: types.GET_EDIT_ADD_EXERCISES,
-        payload: props
     }
 }
 
@@ -43,8 +116,7 @@ export const toggleDeleteInfo = id => {
 }
 
 export const fetchExercises = () => async dispatch => {
-    let response = await axios.get(`http://${URL}:3000/exerciseInfo`);
-
+    let response = await axios.get(`${ROOT_URL}/exerciseInfo`);
     dispatch({
         type: types.FETCH_EXERCISES,
         payload: response.data
@@ -53,7 +125,7 @@ export const fetchExercises = () => async dispatch => {
 
 export const saveWorkout = (props) => {
     return function(dispatch) {
-        axios.post('http://192.168.1.109:3000/createworkout', props)
+        axios.post(`${ROOT_URL}/createworkout`, props)
             .then(response => {
                 dispatch( {
                     type: types.SAVE_WORKOUT
@@ -64,9 +136,17 @@ export const saveWorkout = (props) => {
     }
 }
 
+export const deleteWorkout = id => async dispatch => {
+    let reponse = await axios.delete(`${ROOT_URL}/workout/${id}`);
+
+    dispatch({
+        type: types.DELETE_WORKOUT
+    });
+}
+
 export const fetchWorkouts = () => {
     return function(dispatch) {
-        axios.get('http://192.168.1.109:3000/workout')
+        axios.get(`${ROOT_URL}/workout`)
             .then(({data}) => {
                 dispatch({
                     type: types.FETCH_WORKOUTS,
@@ -95,13 +175,6 @@ export const toggleExerciseCheck = (id) => {
         type: types.TOGGLE_EXERCISE_CHECK,
         payload: id
     }
-}
-
-export const createWorkoutText = ({ text, type }) => {
-    return {
-            type,
-            payload: text
-        }
 }
 
 export const createWorkoutStepInc = () => {
@@ -184,7 +257,7 @@ export const exerciseInfoSaved = ({ exerciseName, exerciseDescription, exerciseT
             description: exerciseDescription,
             points: exercisePoints
         }
-        axios.post('http://192.168.1.109:3000/exerciseInfo', exerciseInfoProps)
+        axios.post(`${ROOT_URL}/exerciseInfo`, exerciseInfoProps)
             .then(response => {
                 dispatch({ type: types.SAVE_EXERCISE_INFO, payload: response.data });
             })
@@ -196,7 +269,7 @@ export const exerciseInfoSaved = ({ exerciseName, exerciseDescription, exerciseT
 
 export const exerciseEditVisibility = (id) => {
     return function(dispatch) {
-        axios.get('http://192.168.1.109:3000/exerciseInfo')
+        axios.get(`${ROOT_URL}/exerciseInfo`)
             .then(exercises => {
                 const exercise = exercises.data.filter(_exercise => {
                     return _exercise._id === id;
@@ -220,7 +293,7 @@ export const workoutEditVisibility = id => {
 }
 
 export const exerciseDeleteVisibility = id => async dispatch => {
-    let response = await axios.get('http://192.168.1.109:3000/exerciseInfo');
+    let response = await axios.get(`${ROOT_URL}/exerciseInfo`);
     const exercise = response.data.filter(_exercise => {
         return _exercise._id === id;
     })[0];
@@ -232,7 +305,7 @@ export const exerciseDeleteVisibility = id => async dispatch => {
 
 export const fetchExercisesById = props => {
     return function(dispatch) {
-        axios.post('http://192.168.1.109:3000/exerciseInfo?prop=exercises', props)
+        axios.post(`${ROOT_URL}/exerciseInfo?prop=exercises`, props)
             .then(exercises => {
                 dispatch({
                     type: types.FETCH_EXERCISES_BY_ID,
@@ -253,7 +326,7 @@ export const toggleExerciseDeleteListVisibility = () => {
 }
 
 export const exerciseInfoUpdated = formProps => async dispatch => {
-    let response = await axios.put(`http://192.168.1.109:3000/exerciseInfo/${formProps._id}`, formProps);
+    let response = await axios.put(`${ROOT_URL}/exerciseInfo/${formProps._id}`, formProps);
     dispatch({
         type: types.TOGGLE_EXERCISE_VISIBILITY,
         payload: {}
@@ -261,7 +334,7 @@ export const exerciseInfoUpdated = formProps => async dispatch => {
 }
 
 export const exerciseInfoDelete = id => async dispatch => {
-    await axios.delete(`http://192.168.1.109:3000/exerciseInfo/${id}`);
+    await axios.delete(`${ROOT_URL}/exerciseInfo/${id}`);
     dispatch({
         type: types.TOGGLE_DELETE_EXERCISE_VISIBILITY,
         payload: {}

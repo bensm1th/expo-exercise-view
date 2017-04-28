@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native'
 import { Icon } from 'react-native-elements';
+import ListTitle from '../components/foundation/listTitle';
 
 class StatsScreen extends Component {
 
@@ -21,6 +22,7 @@ class StatsScreen extends Component {
     render() {
         return (
             <View>
+                <ListTitle title="Stats" />
                 <Text>StatsScreen</Text>
                 <Text>StatsScreen</Text>
                 <Text>StatsScreen</Text>

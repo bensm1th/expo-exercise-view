@@ -35,7 +35,37 @@ const initialState = {
 
 const editWorkoutsReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.SET_EDIT_STEP:
+            return {
+                ...state,
+                editStep: action.payload
+            }
+        case types.EDIT_ADD_EXERCISES: 
+            return {
+                ...state,
+                editStep: 0
+            }
+        case types.CHANGE_EDIT_WORKOUT_DESCRIPTION:
+            return {
+                ...state,
+                selectedWorkout: {
+                    ...state.selectedWorkout,
+                    description: action.payload
+                }
+            }
+        case types.CHANGE_EDIT_WORKOUT_NAME:
+            return {
+                ...state,
+                selectedWorkout: {
+                    ...state.selectedWorkout,
+                    name: action.payload
+                }
+            }
+        case types.DELETE_WORKOUT:
+            return initialState;
         case types.SAVE_WORKOUT:
+            return initialState;
+        case types.ON_BACK_DELETE_WORKOUTS:
             return initialState;
         case types.GET_EDIT_ADD_EXERCISES:
             const populatedExercises = state.exercises.filter(exercise => {

@@ -6,11 +6,12 @@ let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
 const StepFour = props => {
-    const { populatedExercises, exercises, createStep, createForm: { name, description } } = props.setup_workouts;
+    const { name, description, title } = props.workoutInfo;
+    const { buttonOne, buttonTwo } = props.buttons;
     return (
         <View>
             <View style={styles.directions}>
-                <Text style={styles.directionsText}>Step 4: View and save your workout.</Text>
+                <Text style={styles.directionsText}>{title}</Text>
             </View>
             <View style={styles.workoutTitle}>
                 <Text style={styles.workoutTitleText}>{name}</Text>
@@ -22,13 +23,13 @@ const StepFour = props => {
                 </ScrollView>
             </View>
             <Button 
-                title='SAVE'
-                onPress={props.saveWorkoutMethod}
+                title={buttonOne.text}
+                onPress={buttonOne.onPress}
                 backgroundColor='#8f9bff'
             />
             <Button 
-                title='BACK'
-                onPress={props.decrementStep}
+                title={buttonTwo.text}
+                onPress={buttonTwo.onPress}
                 backgroundColor='#0043cb'
             />
         </View>

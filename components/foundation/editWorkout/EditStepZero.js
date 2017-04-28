@@ -11,19 +11,22 @@ export default EditStepZero = props => {
     return (
         <View>
             <View style={styles.directions}>
-                <Text style={styles.directionsText}>Choose a workout to edit.</Text>
+                <Text style={styles.directionsText}>{props.title}</Text>
             </View>
             <View style={styles.listContainer}>
                 <WorkoutList
                     rightIcon={props.rightIcon}
+                    parent={props.parent}
                 />
             </View>
+            {props.parent !== 'start' &&
             <Button 
                 buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * .05}}
                 onPress={props.onBackListVisible}
                 title="BACK"
                 backgroundColor="#0043cb"
             />
+            }
         </View>
     )
 }

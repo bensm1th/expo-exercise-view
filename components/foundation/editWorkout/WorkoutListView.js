@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, StyleSheet, ListView, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, ListView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import SmallList from '../smallListItem';
 import * as actions from '../../../actions';
 
@@ -14,6 +14,9 @@ const createInfoText = workout => {
 class WorkoutListView extends Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
         this.props.fetchWorkouts();
     }
 
@@ -29,25 +32,41 @@ class WorkoutListView extends Component {
 
     renderRow = (workout) => {
         let infoText = createInfoText(workout);
+        const onSelect = this.props.parent === 'start' ? this.props.selectStartWorkout : this.props.workoutEditVisibility;
         return (
             <SmallList
-                moreIcon={require('../../../images/circleMore.png')}
-                lessIcon={require('../../../images/lessCircle.png')}
                 id={workout._id}
                 moreInfoId={this.props.edit_workouts.moreInfoId}
                 onMoreInfo={this.props.workoutInfoVisibility}
-                onSelect={this.props.workoutEditVisibility}
+                onSelect={onSelect}
                 rightIcon={this.props.rightIcon}
                 {...workout}
+                workout={workout}
                 infoText={infoText}
+                parent={this.props.parent}
             />
         )
     }
 
     render() {
+        const waiting = this.props.edit_workouts.workouts.length === 0;
         return (
             <View style={styles.container}>
-                {this.renderListView()}
+                {!waiting &&
+                <View>
+                    {this.renderListView()}
+                </View>
+                    
+                }
+                {waiting &&
+                <View>
+                <ActivityIndicator
+                    animating={!this.props.edit_workouts.workouts.length}
+                    style={styles.centering}
+                    size='large'
+                />
+                </View>
+                }
             </View>
         );
     }
@@ -68,6 +87,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'silver',
         borderRadius: 3
+    },
+    centering: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 8,
+        height: 80
     }
 });
 

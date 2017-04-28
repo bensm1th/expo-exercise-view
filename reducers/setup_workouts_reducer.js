@@ -104,6 +104,11 @@ const initialState = {
 
 const setupWorkoutsReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.SET_CREATE_STEP: 
+            return {
+                ...state,
+                createStep: 1
+            }
         case types.EDIT_ADD_EXERCISES:
             
             const { newExercises, deleteExercises, currentWorkout: { name, description, exercises } } = action.payload;            

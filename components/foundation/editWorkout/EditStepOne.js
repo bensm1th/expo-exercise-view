@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
 import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView, ScrollView } from 'react-native';
+import * as types from '../../../actions/types';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
@@ -16,10 +17,12 @@ export default EditStepOne = props => {
             <View style={styles.stepOneContainer}>
                 <FormLabel>Name:</FormLabel>
                 <FormInput 
+                    onChangeText={(text) => props.changeText(types.CHANGE_EDIT_WORKOUT_NAME, text)}
                     value={props.name}
                 />
                 <FormLabel>Description:</FormLabel>
                 <FormInput 
+                    onChangeText={(text) => props.changeText(types.CHANGE_EDIT_WORKOUT_DESCRIPTION, text)}
                     value={props.description}
                 />
             </View>

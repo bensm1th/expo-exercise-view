@@ -31,7 +31,7 @@ export default EditStepTwo = props => {
                 <Button 
                     buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05,}}
                     onPress={() => props.incrementStepAdd()}
-                    title="ADD"
+                    title="NEXT"
                     backgroundColor="#8f9bff"
                 />
                 }

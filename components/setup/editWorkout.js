@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View } from 'react-native';
+import { Text, View, UIManager, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EditStepOne from '../foundation/editWorkout/EditStepOne';
 import EditStepZero from '../foundation/editWorkout/EditStepZero';
@@ -11,6 +11,9 @@ import * as actions from '../../actions';
 import * as types from '../../actions/types';
 
 const createInfoText = exercise => {
+    if(!exercise){ 
+        console.log(exercise);
+        return};
     return Object.keys(exercise).reduce((initial, current) => {
             const first = current.substr(0, 1);
             if (first !== '_') {
@@ -24,13 +27,20 @@ const createInfoText = exercise => {
 class _EditWorkout extends Component {
     constructor(props) {
         super(props);
+        
+    }
+
+    componentDidMount() {
         this.props.fetchExercises();
     }
 
-    componentWillReceiveProps(nextProps) {
-        const checkOne = nextProps.edit_workouts.addExercisesPopulated.length !== this.props.edit_workouts.addExercisesPopulated.length;
-        
-        if (checkOne && this.props.edit_workouts.editStep === 2) {
+    componentWillUpdate() {
+        UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+        LayoutAnimation.easeInEaseOut();
+    }
+
+    componentWillReceiveProps(nextProps) {        
+        if (nextProps.edit_workouts.editStep === 3 && this.props.edit_workouts.editStep === 2) {
             const { addExercisesPopulated, selectedWorkout, deleteExercises } = nextProps.edit_workouts;
             const workoutInfo = {newExercises: addExercisesPopulated, currentWorkout: selectedWorkout, deleteExercises};
             this.props.switchToCreateWorkout(workoutInfo);
@@ -44,6 +54,7 @@ class _EditWorkout extends Component {
     renderWorkouts = () => this.props.workouts.map(workout => <Text>{workout.name}</Text>)
     rightIcon = () => <Icon name="chevron-right" size={40} />
     onChoiceButtonPress = choice => this.props.exerciseEditOption(choice);
+    changeText = (type, text) => this.props.createWorkoutText({type, text});
 
     onBackListVisible = () => {
         this.props.workoutInfoVisibility('')
@@ -56,21 +67,32 @@ class _EditWorkout extends Component {
 
     rightIconDelete = id => {
         const checked = this.props.edit_workouts.deleteExercises.filter(exercise => exercise === id).length;
-        const iconProp = checked ? 'square' : 'square-o';
-        return <Icon size={40} name={iconProp} type='font-awesome' />
+        const iconProp = checked ? 'check-box' : 'check-box-outline-blank';
+        return <Icon size={40} name={iconProp} />
     }
 
     rightIconAdd = id => {
         const checked = this.props.edit_workouts.addExercises.filter(exercise => exercise === id).length;
-        const iconProp = checked ? 'square' : 'square-o';
-        return <Icon size={40} name={iconProp} type='font-awesome' />
+        const iconProp = checked ? 'check-box' : 'check-box-outline-blank';
+        return <Icon size={40} name={iconProp} />
     }
 
     renderExercisesList = () => {
         const selectedExercises = this.props.edit_workouts.selectedWorkout.exercises;
         const { exercises, exerciseEditOption } = this.props.edit_workouts;
         const add = exerciseEditOption === 'left';
-        const exerciseList = add ? exercises.filter(e => !selectedExercises.some(_e => e._id === _e.exerciseInfo._id)) : selectedExercises;
+        let addExercises = {};
+        if (add) {
+            addExercises = exercises.filter(e => {
+                return !selectedExercises.some(_e => {
+                    if (_e.exerciseInfo) {
+                        return e._id === _e.exerciseInfo._id
+                    }
+                    });
+                }
+            );
+        }
+        const exerciseList = add ?  addExercises : selectedExercises;
         const onSelect = add ? this.onSelectAdd : this.onSelectDelete;
         const rightIcon = add ? this.rightIconAdd : this.rightIconDelete;
         return exerciseList.map(exercise => {
@@ -99,6 +121,7 @@ class _EditWorkout extends Component {
                 <EditStepZero
                     rightIcon={this.rightIcon}
                     onBackListVisible={this.onBackListVisible}
+                    title='Choose a workout to edit.'
                 />
                 }
                 {editStep === 1 &&
@@ -106,6 +129,7 @@ class _EditWorkout extends Component {
                     name={name} 
                     description={description} 
                     moveEditStep={this.moveEditStep}
+                    changeText={this.changeText}
                 />
                 }
                 {editStep === 2 &&
@@ -117,10 +141,6 @@ class _EditWorkout extends Component {
                     moveEditStep={this.moveEditStep}
                     renderExercisesList={this.renderExercisesList}
                 />
-                }
-                {editStep === 3 &&
-                    <View>
-                    </View>
                 }
             </View>
         );

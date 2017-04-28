@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, StyleSheet, ListView, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, ListView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
 import SmallList from './smallListItem';
 import * as actions from '../../actions';
@@ -53,7 +53,19 @@ class ListViewExample extends Component {
     render() {
         return (
         <View style={styles.container}>
-            {this.renderListView()}
+            {this.props.setup_exercises.exercises.length === 0 ? (
+            <View>
+                <ActivityIndicator
+                    animating={!this.props.setup_exercises.exercises.length}
+                    style={styles.centering}
+                    size='large'
+                />
+                </View>
+            ): (
+            <View>
+                {this.renderListView()}
+            </View>)
+            }
         </View>
         )
     }
@@ -65,7 +77,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'silver',
         borderRadius: 3
-    }
+    },
+    centering: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 8,
+        height: 80
+    },
 });
 
 const mapStateToProps = (state) => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, UIManager, Text, TouchableOpacity, Modal, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
+import { View, UIManager, Text, TouchableOpacity, TouchableHighlight, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -60,7 +60,7 @@ class SmallListItem extends Component {
             )});
     }
     render() { 
-        const { onSelect, id, moreInfoId, onMoreInfo } = this.props;
+        const { onSelect, id, moreInfoId, onMoreInfo, parent, workout } = this.props;
         const rotateMoreInterpolation = this.animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: ['0deg', '180deg']
@@ -68,6 +68,7 @@ class SmallListItem extends Component {
         const moreIconStyle = {
             transform: [{ rotateX: rotateMoreInterpolation }]
         }; 
+        const onSelectProp = parent === 'start' ? workout : id;
         return (
                 <View style={styles.listItem}>
                     <View style={styles.mainItem}>
@@ -85,14 +86,16 @@ class SmallListItem extends Component {
                             style={styles.itemTextContainer}
                         >
                             <Text style={styles.itemText}>{this.props.name}</Text>
-                            <TouchableOpacity
-                                onPress={() => this.props.onSelect(id)}
-                                style={styles.rightIcon}
-                            >
-                                <View style={styles.moreInfo}>
-                                    {this.props.rightIcon(id)}
-                                </View>
-                            </TouchableOpacity>
+                            <View style={styles.rightIcon}>
+                                <TouchableWithoutFeedback
+                                    onPress={() => this.props.onSelect(onSelectProp)}
+
+                                >
+                                    <View style={styles.moreInfo}>
+                                        {this.props.rightIcon(id)}
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </View>
                         </View>
                     </View>
                     {moreInfoId === id &&

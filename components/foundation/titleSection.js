@@ -16,3 +16,26 @@
 // options screen
 
 // basic welcome screen (it is lighter and more inviting) 1/6
+
+     // return exercises.map(exercise => {
+            
+        //     const { openedExercise } = this.props.start;
+        //     const { exerciseInfo: { points, name }, sets, pointsEarned, _id } = exercise;
+        //     const totalPoints = points * sets.length;
+        //     return (
+        //         <View key={exercise._id}>
+        //             <TouchableOpacity
+        //                 onPress={() => this.openSets(exercise)}
+        //             >
+        //                 <View style={styles.startedExerciseContainer}>
+        //                     <Text>{name}</Text>
+        //                     <Text>{pointsEarned}/{totalPoints} pts</Text>
+        //                     <Text>0/{sets.length}</Text>
+        //                 </View>
+        //             </TouchableOpacity>
+        //             {openedExercise._id === _id &&
+        //                 <View>
+        //                 {this.renderOpenedSets(sets)}
+        //                 </View>    
+        //             }
+        //         </View>
