@@ -11,12 +11,15 @@ const changeStartWorkout = exercises => {
     return newExercises;
 }
 
-const changedStartedWorkoutText = (exercises, field) => { 
-    return exercises.map(exercise => {
+const changedStartedWorkoutText = (field, state, payload) => { 
+    let both = {};
+    const exercises = state.startedWorkout.exercises.map(exercise => {
         if (exercise._id === state.openedExercise._id) {
             const changedSets = exercise.sets.map(set => {
-                if (set._id === openedSet._id) {
-                    return {...set, actual: {...set.actual, [field]: action.payload }}
+                if (set._id === state.openedSet._id) {
+                    set = {...set, actual: {...set.actual, [field]: payload }};
+                    both = set;
+                    return set;
                 }
                 return set;
             });
@@ -24,6 +27,16 @@ const changedStartedWorkoutText = (exercises, field) => {
         }
         return exercise;
     });
+    return { exercises, both };
+}
+
+const textVars = props => {
+    const { _id, actual: { number, weight } } = props;
+    const setFinished = number.length > 0 && weight.length > 0;
+    return {
+        setFinished,
+        _id
+    }
 }
 
 const initialState = {
@@ -33,28 +46,70 @@ const initialState = {
     },
     startStep: 0,
     openedExercise: { sets: []},
-    openedSet: {}
+    openedSet: {},
+    finishedSets: []
 }
 
 export default start_reducer = (state = initialState, action = {}) => {
     switch(action.type) {
         case types.CHANGE_ACTUAL_SET_REPS:
-            const changeReps = changedStartedWorkoutText(state.startedWorkout.exercises, 'number');
-            return {
-                ...state,
-                startedWorkout: {
-                    ...state.startedWorkout,
-                    exercises: changeReps
-                }
+            const changeReps = changedStartedWorkoutText('number', state, action.payload);
+            const repsVars = textVars(changeReps.both);
+            const repeatedReps = state.finishedSets.some(id => id === repsVars._id);
+            let repsFinishedSet;
+            if (!repsVars.setFinished && !repeatedReps) {
+                repsFinishedSet = state.finishedSets;
             }
-        case types.CHANGE_ACTUAL_SET_WEIGHT:
-            const changeWeight = changedStartedWorkoutText(state.startedWorkout.exercises, 'weight');
+            if (repsVars.setFinished && !repeatedReps) {
+                repsFinishedSet = [...state.finishedSets, repsVars._id];
+            }
+            if (!repsVars.setFinished && repeatedReps) {
+                //here is where I'll have to take one out
+                const filterOutUnfinished = state.finishedSets.filter(id => {
+                    return id !== repsVars._id;
+                })
+                repsFinishedSet = filterOutUnfinished;
+            }
+            if (repsVars.setFinished && repeatedReps) {
+                repsFinishedSet = state.finishedSets;
+            }       
             return {
                 ...state,
                 startedWorkout: {
                     ...state.startedWorkout,
-                    exercises: changeWeight
-                }
+                    exercises: changeReps.exercises
+                },
+                finishedSets: repsFinishedSet
+            }
+
+        case types.CHANGE_ACTUAL_SET_WEIGHT:
+            const changeWeight = changedStartedWorkoutText('weight', state, action.payload);
+            const weightVars = textVars(changeWeight.both);
+            let weightFinishedSet;
+            const repeatedWeight = state.finishedSets.some(id => id === weightVars._id);
+            if (!weightVars.setFinished && !repeatedWeight) {
+                weightFinishedSet = state.finishedSets;
+            }
+            if (weightVars.setFinished && !repeatedWeight) {
+                weightFinishedSet = [...state.finishedSets, repsVars._id];
+            }
+            if (!weightVars.setFinished && repeatedWeight) {
+                //here is where I'll have to take one out
+                const filterOutUnfinished = state.finishedSets.filter(id => {
+                    return id !== repsVars._id;
+                })
+                weightFinishedSet = filterOutUnfinished;
+            }
+            if (weightVars.setFinished && repeatedWeight) {
+                weightFinishedSet = state.finishedSets;
+            }     
+            return {
+                ...state,
+                startedWorkout: {
+                    ...state.startedWorkout,
+                    exercises: changeWeight.exercises
+                },
+                finishedSets: weightFinishedSet
             }
         case types.EDIT_OPEN_SET:
             let openedSet;

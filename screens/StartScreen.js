@@ -77,21 +77,34 @@ class StartScreen extends Component {
     }
 
     renderExercises = () => {
-        const { openedExercise, startedWorkout: { exercises } } = this.props.start;
+        const { openedExercise, startedWorkout: { exercises }, finishedSets } = this.props.start;
+
         return (
             <OpenedExercise 
                 exercises={exercises}
                 openSets={this.openSets}
                 openedExercise={openedExercise}
                 renderOpenedSets={this.renderOpenedSets}
+                finishedSets={finishedSets}
             />
             );
     }
 
     renderOpenedSets = sets => {
         return sets.map(set => {
-            const open = this.props.start.openedSet._id === set._id
-            const iconName = open ? "minus-circle": "plus-circle"
+            const { openedSet, finishedSets } = this.props.start;
+            const open = openedSet._id === set._id
+            const setFinished = finishedSets.some(id => id === set._id);
+            let iconName;
+            if (open) {
+                iconName = "minus-circle";
+            }
+            if (!open) {
+                iconName = "plus-circle";
+            }
+            if (setFinished) {
+                iconName = "check";
+            }
             return (
             <View style={styles.setContainer} key={set._id}>
                 <View key={set._id} style={styles.setContainerTop}>
@@ -123,25 +136,31 @@ class StartScreen extends Component {
 
     renderActualReps = () => {
         const { openedSet, startedWorkout: { exercises } } = this.props.start;
-        const values = exercises.map(exercise => {
-            return exercise.sets.filter(set => {
+        const values = exercises.reduce((init, exercise) => {
+            const foundSet = exercise.sets.filter(set => {
                 return set._id === openedSet._id;
             });
-        });
-        console.log('---------- values ----------');
-        console.log(values)
+            if (foundSet.length) {
+                init= foundSet[0];
+            }
+            return init;
+        }, {});
+        const { actual: { weight, number }, _id } = values;
+        const bothTypedIn = weight.length > 0 && number.length > 0; 
         return (
             <View>
-                <FormLabel>Weight:</FormLabel>
-                <FormInput 
-                    onChangeText={text => this.changeActualSetText(text, types.CHANGE_ACTUAL_SET_WEIGHT)}
-                    value='0'   
-                />
-                <FormLabel>Reps: </FormLabel>
-                <FormInput 
-                    onChangeText={text => this.changeActualSetText(text, types.CHANGE_ACTUAL_SET_REPS)}
-                    value='0'
-                />
+                <View style={styles.actualSetTop}>
+                    <FormLabel>Weight:</FormLabel>
+                    <FormInput 
+                        onChangeText={text => this.changeActualSetText(text, types.CHANGE_ACTUAL_SET_WEIGHT)}
+                        value={weight}   
+                    />
+                    <FormLabel>Reps: </FormLabel>
+                    <FormInput 
+                        onChangeText={text => this.changeActualSetText(text, types.CHANGE_ACTUAL_SET_REPS)}
+                        value={number}
+                    />
+                </View>
             </View>
         )
     }
@@ -212,6 +231,12 @@ const styles = StyleSheet.create({
     setContainer: {
         flexDirection: 'column',
         justifyContent: 'flex-start'
+    },
+    actualSetTop: {
+        marginBottom: 5
+    },
+    actualSetBottom: {
+        marginBottom: 5
     }
 });
 
