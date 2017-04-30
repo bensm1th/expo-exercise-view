@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions } from 'react-native';
-import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
+import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions, Picker } from 'react-native';
+import { FormLabel, FormInput, Button, Icon, FormValidationMessage } from 'react-native-elements';
 import * as actions from '../../actions';
 import * as types from '../../actions/types';
 import ListTitle from '../foundation/listTitle';
@@ -9,10 +9,37 @@ import ListTitle from '../foundation/listTitle';
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 let headerHeight = SCREEN_HEIGHT * .1;
-
+const validateExerciseForm = formProps => {
+ const { exerciseName, exerciseDescription, exerciseType, exercisePoints } = formProps;
+ let errorMessage = "";
+ let countErrors = 0;
+ if (exerciseName.length === 0) {
+     countErrors++;
+     errorMessage += 'Exercise name required. ';
+ }
+ if (exerciseDescription.length === 0) {
+     countErrors++;
+     errorMessage += 'Description required. ';
+ }
+ if (exerciseType.length === 0) {
+     countErrors++;
+     errorMessage += 'Type required. ';
+ }
+ if (exercisePoints.length === 0) {
+     countErrors++;
+     errorMessage += 'Points required.'
+ }
+ if (countErrors === 0) {
+     return {complete: true, errorMessage }
+ }
+ if (countErrors > 0) {
+     return {complete: false, errorMessage }
+ }
+}
 class _CreateExercise extends Component {
     constructor(props) {
         super(props);
+        this.state = { value: ""}
     }
 
     changeText = (type, text) => {
@@ -20,12 +47,18 @@ class _CreateExercise extends Component {
     }
 
     onSave = () => {
-        const formProps = {...this.props.setup_exercises.exerciseForm}
+        const formProps = this.props.setup_exercises.exerciseForm;
+        const validate = validateExerciseForm(formProps);
+        if (!validate.complete) {
+            return this.props.errorMessage(validate.errorMessage);
+        }
+        this.props.errorMessage('');
         this.props.exerciseInfoSaved(formProps);
         this.props.navigation.navigate('setup');
     }
 
     onBack = () => {
+        this.props.errorMessage('');
         this.props.navigation.navigate('setup');
     }
 
@@ -48,16 +81,43 @@ class _CreateExercise extends Component {
                         numberOfLines={4}
                         inputStyle={{ height: 100}}
                     />
-                    <FormLabel>Exercise Type</FormLabel>
-                    <FormInput
-                        value={exerciseType}
-                        onChangeText={(text) => this.changeText(types.CHANGE_EXERCISE_TYPE, text)}
-                    />
-                    <FormLabel>Point Value</FormLabel>
-                    <FormInput
-                        value={exercisePoints}
-                        onChangeText={(text) => this.changeText(types.CHANGE_EXERCISE_POINTS, text)}
-                    />
+                    <View style={styles.pickerLabels}>
+                        <FormLabel>Exercise Type</FormLabel>
+                        <FormLabel>Point Value</FormLabel>
+                    </View>
+                    
+                    <View style={styles.pickersContainer}>
+                        <Picker
+                            selectedValue={exerciseType}
+                            onValueChange={text =>  this.changeText(types.CHANGE_EXERCISE_TYPE, text)}
+                            style={styles.picker}
+                        >    
+                            <Picker.Item label="Strength" value ="Strength" />
+                            <Picker.Item label="Endurance" value ="Endurance" />
+                            <Picker.Item label="Balance" value ="Balance" />
+                            <Picker.Item label="Flexibility" value ="Flexibility" />
+                        </Picker>
+                        
+                        <Picker
+                            style={styles.picker}
+                            selectedValue={exercisePoints}
+                            onValueChange={text =>  this.changeText(types.CHANGE_EXERCISE_POINTS, text)}
+                        >    
+                            <Picker.Item label="1" value ="1" />
+                            <Picker.Item label="2" value ="2" />
+                            <Picker.Item label="3" value ="3" />
+                            <Picker.Item label="4" value ="4" />
+                            <Picker.Item label="5" value ="5" />
+                        </Picker>
+                        
+                    </View>
+                    
+                    {this.props.setup_exercises.errorMessage.length > 0 &&
+                    <View style={styles.errorContainer}>
+                        <FormValidationMessage style={styles.errorText}>{this.props.setup_exercises.errorMessage}</FormValidationMessage>
+                    </View>
+                    }
+                    
                     <View style={styles.buttonContainer}>
                         <Button 
                             title='SAVE'
@@ -83,6 +143,29 @@ const styles = StyleSheet.create({
         width: 200,
         flexDirection: 'row',
         marginTop: 20
+    },
+    picker: {
+        height: 200,
+        width: 200
+    },
+    pickersContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    pickerLabels: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginRight: 50,
+        marginLeft: 50
+    },
+    errorContainer: {
+        marginRight: SCREEN_WIDTH * .036,
+        marginLeft: SCREEN_WIDTH * .036,
+    },
+    errorText: {
+        color: 'red'
     }
 });
 

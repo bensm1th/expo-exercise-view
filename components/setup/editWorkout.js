@@ -10,6 +10,26 @@ import SmallList from '../foundation/smallListItem';
 import * as actions from '../../actions';
 import * as types from '../../actions/types';
 
+const validateWorkoutForm = formProps => {
+ const { name, description } = formProps;
+ let errorMessage = "";
+ let countErrors = 0;
+ if (name.length === 0) {
+     countErrors++;
+     errorMessage += 'Workout name required. ';
+ }
+ if (description.length === 0) {
+     countErrors++;
+     errorMessage += 'Description required. ';
+ }
+ if (countErrors === 0) {
+     return {complete: true, errorMessage }
+ }
+ if (countErrors > 0) {
+     return {complete: false, errorMessage }
+ }
+}
+
 const createInfoText = exercise => {
     if(!exercise){ 
         console.log(exercise);
@@ -39,7 +59,7 @@ class _EditWorkout extends Component {
         LayoutAnimation.easeInEaseOut();
     }
 
-    componentWillReceiveProps(nextProps) {        
+    componentWillReceiveProps(nextProps) {      
         if (nextProps.edit_workouts.editStep === 3 && this.props.edit_workouts.editStep === 2) {
             const { addExercisesPopulated, selectedWorkout, deleteExercises } = nextProps.edit_workouts;
             const workoutInfo = {newExercises: addExercisesPopulated, currentWorkout: selectedWorkout, deleteExercises};
@@ -48,7 +68,7 @@ class _EditWorkout extends Component {
         }
     }
 
-    incrementStepAdd = () => { this.props.getEditAddExercises() }
+    
     onSelectDelete = id => {this.props.exerciseToDelete(id)}
     onSelectAdd = id => {this.props.exerciseToAdd(id)}
     renderWorkouts = () => this.props.workouts.map(workout => <Text>{workout.name}</Text>)
@@ -56,13 +76,38 @@ class _EditWorkout extends Component {
     onChoiceButtonPress = choice => this.props.exerciseEditOption(choice);
     changeText = (type, text) => this.props.createWorkoutText({type, text});
 
+    incrementStepAdd = () => { 
+        const { selectedWorkout: { exercises }, addExercises } = this.props.edit_workouts;
+        if (exercises.length === 0 && addExercises.length === 0) {
+            return this.props.workoutEditError('You must have at least one exercise.');
+        }
+        this.props.workoutEditError('');
+        this.props.getEditAddExercises();
+    }
+
     onBackListVisible = () => {
-        this.props.workoutInfoVisibility('')
+        this.props.workoutInfoVisibility('');
         this.props.navigation.navigate('setup');
     }
 
     moveEditStep = direction => {
+        this.props.workoutEditError('');
         direction ? this.props.incrementEditStep() : this.props.decrementEditStep();
+    }
+
+    moveEditStepOne = direction => {
+        if (direction) {
+            const { selectedWorkout } = this.props.edit_workouts;
+            const validate = validateWorkoutForm(selectedWorkout);
+            if (!validate.complete) {
+                return this.props.workoutEditError(validate.errorMessage);
+            }
+            this.props.workoutEditError('');
+            this.props.incrementEditStep();
+        } else {
+            this.props.workoutEditError('');
+            this.props.decrementEditStep();
+        }
     }
 
     rightIconDelete = id => {
@@ -113,7 +158,7 @@ class _EditWorkout extends Component {
     }
 
     render() {
-        const { editStep, listVisibility, selectedWorkout: { name, description, exercises } } = this.props.edit_workouts;
+        const { errorMessage, editStep, listVisibility, selectedWorkout: { name, description, exercises } } = this.props.edit_workouts;
         return (
             <View>
                 <ListTitle title='EDIT WORKOUT' />
@@ -128,8 +173,9 @@ class _EditWorkout extends Component {
                 <EditStepOne
                     name={name} 
                     description={description} 
-                    moveEditStep={this.moveEditStep}
+                    moveEditStep={this.moveEditStepOne}
                     changeText={this.changeText}
+                    errorMessage={errorMessage}
                 />
                 }
                 {editStep === 2 &&
@@ -140,6 +186,7 @@ class _EditWorkout extends Component {
                     removeExercisesFromWorkout={this.props.removeExercisesFromWorkout}
                     moveEditStep={this.moveEditStep}
                     renderExercisesList={this.renderExercisesList}
+                    errorMessage={errorMessage}
                 />
                 }
             </View>

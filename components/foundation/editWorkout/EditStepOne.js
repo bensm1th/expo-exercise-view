@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
+import { FormLabel, FormInput, Button, Icon, FormValidationMessage } from 'react-native-elements';
 import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView, ScrollView } from 'react-native';
 import * as types from '../../../actions/types';
 
@@ -26,6 +26,9 @@ export default EditStepOne = props => {
                     value={props.description}
                 />
             </View>
+            {props.errorMessage.length > 0  &&
+                <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
+            }
                 <Button 
                     buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05}}
                     onPress={() => props.moveEditStep(true)}

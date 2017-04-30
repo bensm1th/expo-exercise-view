@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
+import { FormLabel, FormInput, Button, Icon, FormValidationMessage } from 'react-native-elements';
 import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView, ScrollView } from 'react-native';
 
 import ChoiceButton from '../choiceButton';
@@ -26,6 +26,9 @@ export default EditStepTwo = props => {
             <ScrollView style={styles.stepTwoScrollView}>
                 {props.renderExercisesList()}
             </ScrollView>
+            {props.errorMessage.length > 0 &&
+                <FormValidationMessage>{props.errorMessage}</FormValidationMessage>    
+            }
             <View style={styles.stepTwoBottom}>
                 {props.exerciseEditOption === 'left' &&
                 <Button 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, FormValidationMessage } from 'react-native-elements';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -10,7 +10,14 @@ const StepThree = props => {
             <View style={styles.directions}>
                 <Text style={styles.directionsText}>Step 3: Add sets to each exercise you chose.</Text>
             </View>
-            {props.renderSelectedExercises()}
+            <View>
+                {props.renderSelectedExercises()}
+            </View>
+            <View>
+            {props.errorMessage.length > 0 &&
+                <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
+            }
+            </View>
             <Button 
                 title='FORWARD'
                 onPress={props.incrementStep}

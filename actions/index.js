@@ -3,7 +3,28 @@ import * as types from './types';
 const URL = '192.168.1.109';
 //const URL = '107.185.83.180';
 //const URL = '10.62.40.34';
-const ROOT_URL = `http://${URL}:3000`
+const ROOT_URL = `http://${URL}:3000`;
+
+export const workoutEditError = errorMessage => {
+    return {
+        type: types.ERROR_WORKOUT_EDIT,
+        payload: errorMessage
+    }
+}
+
+export const workoutCreateError = errorMessage => {
+    return {
+        type: types.ERROR_WORKOUT_CREATE,
+        payload: errorMessage
+    }
+}
+
+export const errorMessage = errorMessage => {
+    return {
+        type: types.EXERCISE_CREATE_ERROR,
+        payload: errorMessage
+    }
+}
 
 export const setChangeAcutalText = props => {
     return {

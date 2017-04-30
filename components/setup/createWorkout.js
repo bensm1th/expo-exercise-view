@@ -15,6 +15,26 @@ import * as types from '../../actions/types';
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
+const validateWorkoutForm = formProps => {
+ const { name, description } = formProps;
+ let errorMessage = "";
+ let countErrors = 0;
+ if (name.length === 0) {
+     countErrors++;
+     errorMessage += 'Workout name required. ';
+ }
+ if (description.length === 0) {
+     countErrors++;
+     errorMessage += 'Description required. ';
+ }
+ if (countErrors === 0) {
+     return {complete: true, errorMessage }
+ }
+ if (countErrors > 0) {
+     return {complete: false, errorMessage }
+ }
+}
+
 class _CreateWorkout extends Component {
     constructor(props) {
         super(props);
@@ -25,9 +45,8 @@ class _CreateWorkout extends Component {
         LayoutAnimation.easeInEaseOut();
     }
 
-    onBack = () => this.props.navigation.navigate('setup');
-    incrementStep = () => this.props.createWorkoutStepInc();
-    decrementStep = () => this.props.createWorkoutStepDec();
+    
+    
     changeText = (type, text) => this.props.createWorkoutText({type, text});
     fetchSelectedExercises = () => this.props.fetchExercisesById(this.props.setup_workouts.exercises);
     addSet = exerciseInfoId => this.props.addSetToExerciseModel(exerciseInfoId);
@@ -35,6 +54,52 @@ class _CreateWorkout extends Component {
     saveSets = exerciseId => this.props.toggleSetsView(exerciseId);
     changeSetTextMethod = (text, type, id, exerciseId) => this.props.changeSetText({ type, text, id, exerciseId });
     onExerciseSelect = id => this.props.toggleExerciseCheck(id);
+
+    decrementStep = () => {
+        this.props.workoutEditError('');
+        this.props.workoutCreateError('');
+        this.props.createWorkoutStepDec();
+    };
+
+    onBack = () => {
+        this.props.workoutCreateError('');
+        this.props.navigation.navigate('setup');
+    };
+
+    incrementStep = () => {
+        this.props.workoutCreateError('');
+        this.props.createWorkoutStepInc();
+    };
+
+    incrementStepThree = () => {
+        // this.props.workoutCreateError('');
+        const allSetsSaved = this.props.setup_workouts.populatedExercises.every(exercise => {
+            return exercise.setsSaved === true;
+        });
+        if (!allSetsSaved) {
+            return this.props.workoutCreateError('Add at least one set to each exercise.');
+        }
+        this.props.workoutCreateError('');
+        this.props.createWorkoutStepInc();
+    };
+
+    incrementStepTwo = () => {
+        //check to see if the exercises array is empty or not
+        if (this.props.setup_workouts.exercises.length === 0) {
+            return this.props.workoutCreateError('You must choose at least one exercise.');
+        }
+        this.props.createWorkoutStepInc();
+    };
+
+    incrementStepOne = () => {
+        const { createForm } = this.props.setup_workouts;
+        const validate = validateWorkoutForm(createForm);
+        if (!validate.complete) {
+            return this.props.workoutCreateError(validate.errorMessage);
+        }
+        this.props.workoutCreateError('');
+        this.props.createWorkoutStepInc();
+    };
     
     rightIcon = id => {
         const checked = this.props.setup_workouts.exercises.filter(exercise => exercise === id).length;
@@ -103,13 +168,15 @@ class _CreateWorkout extends Component {
     }
 
     navigateBack = () => {
+        this.props.workoutCreateError('');
+        this.props.workoutEditError('');
         this.props.setEditStep(2);
         this.props.workoutCreateStepSet(1);
         this.props.navigation.navigate('workoutEdit');
     }
     
     render() {
-        const { createStep, editWorkout, createForm: { name, description} } = this.props.setup_workouts;
+        const { errorMessage, createStep, editWorkout, createForm: { name, description} } = this.props.setup_workouts;
         const title = editWorkout ? 'EDIT WORKOUT' : 'CREATE WORKOUT';
         const onBackOption = editWorkout ? this.navigateBack : this.decrementStep;
         const buttons = {
@@ -128,7 +195,7 @@ class _CreateWorkout extends Component {
                 {createStep === 1 &&
                 <StepOne
                     changeText={this.changeText}
-                    incrementStep={this.incrementStep}
+                    incrementStep={this.incrementStepOne}
                     onBack={this.onBack}
                     {...this.props.setup_workouts}
                 />
@@ -137,17 +204,19 @@ class _CreateWorkout extends Component {
                 <StepTwo
                     rightIcon={this.rightIcon}
                     onExerciseSelect={this.onExerciseSelect}
-                    incrementStep={this.incrementStep}
+                    incrementStep={this.incrementStepTwo}
                     decrementStep={this.decrementStep}
                     fetchSelectedExercises={this.fetchSelectedExercises}
+                    errorMessage={errorMessage}
                 />
                 }
                 {createStep === 3 &&
                 <StepThree
-                    incrementStep={this.incrementStep}
+                    incrementStep={this.incrementStepThree}
                     decrementStep={onBackOption}
                     renderSelectedExercises={this.renderSelectedExercises}
                     editWorkout={editWorkout}
+                    errorMessage={errorMessage}
                 />
                 }
                 {createStep === 4 &&

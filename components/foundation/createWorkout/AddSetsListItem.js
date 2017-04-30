@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Dimensions, Image } from 'react-native';
-import { Icon, Button, FormInput, FormLabel } from 'react-native-elements';
+import { Icon, Button, FormInput, FormLabel, LayoutAnimation } from 'react-native-elements';
 import Sets from '../Sets';
 import * as types from '../../../actions/types';
 
@@ -9,8 +9,7 @@ let SCREEN_WIDTH = Dimensions.get("window").width;
 
 const AddSetsListItem = props => {
     const renderSets = () => {
-        return props.sets.map(set => {
-
+        return props.sets.map(set => {;
             return (
                 <View style={styles.addSetContainer} key={set._id}>
                     <Sets 
@@ -26,7 +25,6 @@ const AddSetsListItem = props => {
             )
         });
     }
-
     return (
         <View style={styles.container}>
             <View style={styles.containerTop}>
@@ -79,12 +77,12 @@ const styles = StyleSheet.create({
     },
     addSetContainer: {
         flex: 1,
-        borderColor: '#e0e0e0',
-        borderWidth: 1,
-        borderRadius: 2,
-        height: SCREEN_HEIGHT * .1,
-        width: SCREEN_WIDTH * .8,
-        marginLeft: SCREEN_WIDTH * .1,
+        // borderColor: '#e0e0e0',
+        // borderWidth: 1,
+        // borderRadius: 2,
+        // height: SCREEN_HEIGHT * .1,
+        // width: SCREEN_WIDTH * .8,
+        // marginLeft: SCREEN_WIDTH * .1,
         
     },
     setListContainer: {

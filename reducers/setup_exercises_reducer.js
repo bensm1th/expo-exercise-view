@@ -20,11 +20,17 @@ const initialState = {
         moreInfoId: '',
         selectedExercise: {}
     },
+    errorMessage: ''
 }
 
 
 const setupExercisesReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.EXERCISE_CREATE_ERROR: 
+            return {
+                ...state,
+                errorMessage: action.payload
+            }
         case types.SAVE_WORKOUT:
             return initialState;
         case types.SETUP_CHOICE:
@@ -61,7 +67,8 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
         case types.SAVE_EXERCISE_INFO:
             return {
                 ...state,
-                exerciseForm: initialState.exerciseForm
+                exerciseForm: initialState.exerciseForm,
+                errorMessage: initialState.errorMessage
             }
         case types.TOGGLE_EXERCISE_VISIBILITY:
             return {

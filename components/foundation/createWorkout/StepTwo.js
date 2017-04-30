@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
-import { FormLabel, FormInput, Button } from 'react-native-elements';
+import { FormLabel, FormInput, Button, FormValidationMessage } from 'react-native-elements';
 import ExercisesList from '../listViewExample';
 import * as types from '../../../actions/types';
 
@@ -21,6 +21,9 @@ const StepTwo = props => {
                     onSelect={props.onExerciseSelect}
                 />
             </View>
+            {props.errorMessage.length > 0 &&
+                <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
+            }
             <Button 
                 title='FORWARD'
                 onPress={() => {

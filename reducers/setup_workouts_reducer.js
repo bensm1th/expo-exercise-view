@@ -99,11 +99,17 @@ const initialState = {
     createStep: 1,
     exercises: [],
     populatedExercises: [],
-    editWorkout: false
+    editWorkout: false,
+    errorMessage: ""
 }
 
 const setupWorkoutsReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.ERROR_WORKOUT_CREATE:
+        return {
+            ...state,
+            errorMessage: action.payload
+        }
         case types.SET_CREATE_STEP: 
             return {
                 ...state,

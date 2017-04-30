@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
-import { FormLabel, FormInput, Button } from 'react-native-elements';
+import { FormLabel, FormInput, Button, FormValidationMessage } from 'react-native-elements';
 import * as types from '../../../actions/types';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -21,6 +21,9 @@ const StepOne = (props) => {
                 onChangeText={(text) => props.changeText(types.CHANGE_WORKOUT_DESCRIPTION, text)}
                 value={props.description}
             />
+            {props.errorMessage.length > 0 &&
+                <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
+            }
             <Button 
                 title='FORWARD'
                 onPress={props.incrementStep}

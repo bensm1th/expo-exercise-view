@@ -30,11 +30,17 @@ const initialState = {
     deleteMoreInfoId: '',
     deleteExercises: [],
     addExercises: [],
-    addExercisesPopulated: []
+    addExercisesPopulated: [],
+    errorMessage: ""
 }
 
 const editWorkoutsReducer = (state = initialState, action = {}) => {
     switch(action.type) {
+        case types.ERROR_WORKOUT_EDIT:
+            return {
+                ...state,
+                errorMessage: action.payload
+            }
         case types.SET_EDIT_STEP:
             return {
                 ...state,

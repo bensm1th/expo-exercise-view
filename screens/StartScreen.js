@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, View, StyleSheet, Dimensions, UIManager, LayoutAnimation, 
-    TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native'
+    TouchableOpacity, TouchableWithoutFeedback, ScrollView, TextInput } from 'react-native'
 import { Icon, Button, FormInput, FormLabel } from 'react-native-elements';
+import ModalPicker from 'react-native-modal-picker';
 import ListTitle from '../components/foundation/listTitle';
 import EditStepZero from '../components/foundation/editWorkout/EditStepZero';
 import StepFour from '../components/foundation/createWorkout/StepFour';
@@ -14,6 +15,23 @@ import * as types from '../actions/types';
 
 let SCREEN_WIDTH = Dimensions.get("window").width;
 let SCREEN_HEIGHT = Dimensions.get("window").height;
+
+const renderWeights = () => {
+    let weights = []
+    for (let i = 0; i < 500; i++) {
+        weights.push({ key:`${i}`, label: `${i}` });
+    }
+    return weights; 
+}
+
+const renderReps = () => {
+    let reps = [];
+    for (let i = 1; i < 100; i++) {
+        reps.push({ key:`${i}`, label: `${i}` });
+    }
+    return reps;
+}
+
 
 class StartScreen extends Component {
 
@@ -147,19 +165,39 @@ class StartScreen extends Component {
         }, {});
         const { actual: { weight, number }, _id } = values;
         const bothTypedIn = weight.length > 0 && number.length > 0; 
+        const weights = renderWeights();
+        const reps = renderReps();
         return (
-            <View>
-                <View style={styles.actualSetTop}>
-                    <FormLabel>Weight:</FormLabel>
-                    <FormInput 
-                        onChangeText={text => this.changeActualSetText(text, types.CHANGE_ACTUAL_SET_WEIGHT)}
-                        value={weight}   
-                    />
-                    <FormLabel>Reps: </FormLabel>
-                    <FormInput 
-                        onChangeText={text => this.changeActualSetText(text, types.CHANGE_ACTUAL_SET_REPS)}
-                        value={number}
-                    />
+            <View style={styles.pickersContainer}>
+                <View>
+                    <Text>weight</Text>
+                    <ModalPicker
+                        initValue={weight}
+                        onChange={text => this.changeActualSetText(text.label, types.CHANGE_ACTUAL_SET_WEIGHT)}
+                        data={weights}
+                    >
+                        <TextInput 
+                            style={{borderWidth:1, borderColor:'#ccc', padding:10, height:30, width: 75}}
+                            editable={false}
+                            value={weight}
+                            placeholder='weight'
+                        />
+                    </ModalPicker> 
+                </View>
+                <View>
+                    <Text>reps</Text>
+                    <ModalPicker
+                        data={reps}
+                        initValue={this.props.reps}
+                        onChange={text => this.changeActualSetText(text.label, types.CHANGE_ACTUAL_SET_REPS)}
+                    >
+                        <TextInput 
+                            style={{borderWidth:1, borderColor:'#ccc', padding:10, height:30, width: 75}}
+                            editable={false}
+                            value={number}
+                            placeholder='reps'
+                        />
+                    </ModalPicker>   
                 </View>
             </View>
         )
@@ -237,7 +275,17 @@ const styles = StyleSheet.create({
     },
     actualSetBottom: {
         marginBottom: 5
-    }
+    },
+    pickersContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        marginBottom: 10,
+        borderColor: 'silver',
+        borderWidth: 1,
+        marginHorizontal: SCREEN_WIDTH * .036,
+        padding: 5
+    },
 });
 
 const mapStateToProps = state => {
