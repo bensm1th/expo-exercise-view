@@ -4,12 +4,12 @@ import * as types from '../actions/types';
 const changeStartWorkout = exercises => {
     const newExercises = exercises.map(exercise => {
         const newSets = exercise.sets.map(set => {
-            return {...set, actual: { weight: '', number: ''}}
+            return { ...set, actual: { weight: '', number: '' } };
         });
-        return {...exercise, sets: newSets}
+        return { ...exercise, sets: newSets };
     });
     return newExercises;
-}
+};
 
 const changedStartedWorkoutText = (field, state, payload) => { 
     let both = {};
@@ -17,18 +17,18 @@ const changedStartedWorkoutText = (field, state, payload) => {
         if (exercise._id === state.openedExercise._id) {
             const changedSets = exercise.sets.map(set => {
                 if (set._id === state.openedSet._id) {
-                    set = {...set, actual: {...set.actual, [field]: payload }};
+                    set = { ...set, actual: { ...set.actual, [field]: payload } };
                     both = set;
                     return set;
                 }
                 return set;
             });
-            return {...exercise, sets: changedSets}
+            return { ...exercise, sets: changedSets }
         }
         return exercise;
     });
     return { exercises, both };
-}
+};
 
 const textVars = props => {
     const { _id, actual: { number, weight } } = props;
@@ -36,8 +36,8 @@ const textVars = props => {
     return {
         setFinished,
         _id
-    }
-}
+    };
+};
 
 const initialState = {
     workoutStarted: false,
@@ -45,13 +45,13 @@ const initialState = {
 
     },
     startStep: 0,
-    openedExercise: { sets: []},
+    openedExercise: { sets: [] },
     openedSet: {},
     finishedSets: []
-}
+};
 
 export default start_reducer = (state = initialState, action = {}) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.CHANGE_ACTUAL_SET_REPS:
             const changeReps = changedStartedWorkoutText('number', state, action.payload);
             const repsVars = textVars(changeReps.both);
@@ -67,7 +67,7 @@ export default start_reducer = (state = initialState, action = {}) => {
                 //here is where I'll have to take one out
                 const filterOutUnfinished = state.finishedSets.filter(id => {
                     return id !== repsVars._id;
-                })
+                });
                 repsFinishedSet = filterOutUnfinished;
             }
             if (repsVars.setFinished && repeatedReps) {
@@ -80,7 +80,7 @@ export default start_reducer = (state = initialState, action = {}) => {
                     exercises: changeReps.exercises
                 },
                 finishedSets: repsFinishedSet
-            }
+            };
 
         case types.CHANGE_ACTUAL_SET_WEIGHT:
             const changeWeight = changedStartedWorkoutText('weight', state, action.payload);
@@ -110,7 +110,7 @@ export default start_reducer = (state = initialState, action = {}) => {
                     exercises: changeWeight.exercises
                 },
                 finishedSets: weightFinishedSet
-            }
+            };
         case types.EDIT_OPEN_SET:
             let openedSet;
             if (state.openedSet._id === action.payload._id) {
@@ -120,41 +120,40 @@ export default start_reducer = (state = initialState, action = {}) => {
             }
             return {
                 ...state,
-                openedSet: openedSet
-            }
+                openedSet
+            };
         case types.OPEN_EXERCISE:
             let openedExercise;
             if (state.openedExercise._id === action.payload._id) {
                 openedExercise = initialState.openedExercise;
             } else {
                 openedExercise = action.payload;
-
             }
             return {
                 ...state,
-                openedExercise: openedExercise
-            }
+                openedExercise
+            };
         case types.START_WORKOUT:
             return {
                 ...state,
                 workoutStarted: true,
                 startStep: state.startStep + 1
-            }
+            };
         case types.DEC_START_STEP:
             return {
                 ...state,
                 startStep: state.startStep - 1
-            }
+            };
         case types.SELECT_START_WORKOUT:
             const startedExercises = changeStartWorkout(action.payload.exercises);
-            const startedWorkout = {...action.payload, exercises: startedExercises}
+            const startedWorkout = { ...action.payload, exercises: startedExercises }
             return {
                 ...state,
-                startedWorkout: startedWorkout,
+                startedWorkout,
                 startStep: 1
-            }
+            };
         default:
             return state;
     }
-}
+};
 
