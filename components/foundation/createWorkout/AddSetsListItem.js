@@ -3,13 +3,14 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet, Dimensions, Image } fr
 import { Icon, Button, FormInput, FormLabel, LayoutAnimation } from 'react-native-elements';
 import Sets from '../Sets';
 import * as types from '../../../actions/types';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
 const AddSetsListItem = props => {
     const renderSets = () => {
-        return props.sets.map(set => {;
+        return props.sets.map(set => {
             return (
                 <View style={styles.addSetContainer} key={set._id}>
                     <Sets 
@@ -22,9 +23,9 @@ const AddSetsListItem = props => {
                         {...props}
                     />
                 </View>
-            )
+            );
         });
-    }
+    };
     return (
         <View style={styles.container}>
             <View style={styles.containerTop}>
@@ -39,7 +40,7 @@ const AddSetsListItem = props => {
                 <Button
                     title='ADD SET'
                     onPress={() => props.addSet(props.exerciseInfo._id)}
-                    backgroundColor='#8f9bff'
+                    backgroundColor={colors.secondary.light}
                 />
             </View>
             <View style={styles.setListContainer}>
@@ -49,7 +50,7 @@ const AddSetsListItem = props => {
                     <Button
                         title='SAVE'
                         onPress={() => props.saveSets(props.exerciseInfo._id)}
-                        backgroundColor='#8f9bff'
+                        backgroundColor={colors.secondary.light}
                     />
                 </View>
             }
@@ -60,7 +61,7 @@ const AddSetsListItem = props => {
 
 const styles = StyleSheet.create({
     containerTop: {
-        height: SCREEN_HEIGHT * .12,
+        height: SCREEN_HEIGHT * 0.12,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -68,25 +69,18 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        borderBottomColor: "#e0e0e0",
+        borderBottomColor: colors.border.light,
         borderBottomWidth: 2,
-        backgroundColor: '#f7f7f7',
+        backgroundColor: colors.background.light,
     },
     name: {
-        marginLeft: SCREEN_WIDTH * .08
+        marginLeft: SCREEN_WIDTH * 0.08
     },
     addSetContainer: {
         flex: 1,
-        // borderColor: '#e0e0e0',
-        // borderWidth: 1,
-        // borderRadius: 2,
-        // height: SCREEN_HEIGHT * .1,
-        // width: SCREEN_WIDTH * .8,
-        // marginLeft: SCREEN_WIDTH * .1,
-        
     },
     setListContainer: {
-        marginBottom: SCREEN_HEIGHT * .03
+        marginBottom: SCREEN_HEIGHT * 0.03
     }
 })
 

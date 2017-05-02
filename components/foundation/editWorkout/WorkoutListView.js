@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Text, View, StyleSheet, ListView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import SmallList from '../smallListItem';
 import * as actions from '../../../actions';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
@@ -72,18 +73,18 @@ class WorkoutListView extends Component {
     }
 }
 
-mapStateToProps = state => {
+const mapStateToProps = state => {
     const { edit_workouts } = state;
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
         edit_workouts,
         listData: ds.cloneWithRows(edit_workouts.workouts)
-    }
-}
+    };
+};
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f7f7f7',
+        backgroundColor: colors.background.light,
         borderWidth: 1,
         borderColor: 'silver',
         borderRadius: 3

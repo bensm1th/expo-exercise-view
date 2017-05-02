@@ -8,47 +8,43 @@ import EditStepTwo from '../foundation/editWorkout/EditStepTwo';
 import ListTitle from '../foundation/listTitle';
 import SmallList from '../foundation/smallListItem';
 import * as actions from '../../actions';
-import * as types from '../../actions/types';
 
 const validateWorkoutForm = formProps => {
- const { name, description } = formProps;
- let errorMessage = "";
- let countErrors = 0;
- if (name.length === 0) {
-     countErrors++;
-     errorMessage += 'Workout name required. ';
- }
- if (description.length === 0) {
-     countErrors++;
-     errorMessage += 'Description required. ';
- }
- if (countErrors === 0) {
-     return {complete: true, errorMessage }
- }
- if (countErrors > 0) {
-     return {complete: false, errorMessage }
- }
-}
+    const { name, description } = formProps;
+    let errorMessage = '';
+    let countErrors = 0;
+    if (name.length === 0) {
+        countErrors++;
+        errorMessage += 'Workout name required. ';
+    }
+    if (description.length === 0) {
+        countErrors++;
+        errorMessage += 'Description required. ';
+    }
+    if (countErrors === 0) {
+        return { complete: true, errorMessage };
+    }
+    if (countErrors > 0) {
+        return { complete: false, errorMessage };
+    }
+};
 
 const createInfoText = exercise => {
-    if(!exercise){ 
+    if (!exercise) { 
         console.log(exercise);
-        return};
+        return;
+    }
     return Object.keys(exercise).reduce((initial, current) => {
             const first = current.substr(0, 1);
             if (first !== '_') {
                 const label = first.toUpperCase() + current.substr(1);
-                initial = [...initial, { label, text: exercise[current]}]
+                initial = [...initial, { label, text: exercise[current] }];
             }
         return initial;
-    }, [])
+    }, []);
 };
 
 class _EditWorkout extends Component {
-    constructor(props) {
-        super(props);
-        
-    }
 
     componentDidMount() {
         this.props.fetchExercises();
@@ -62,19 +58,19 @@ class _EditWorkout extends Component {
     componentWillReceiveProps(nextProps) {      
         if (nextProps.edit_workouts.editStep === 3 && this.props.edit_workouts.editStep === 2) {
             const { addExercisesPopulated, selectedWorkout, deleteExercises } = nextProps.edit_workouts;
-            const workoutInfo = {newExercises: addExercisesPopulated, currentWorkout: selectedWorkout, deleteExercises};
+            const workoutInfo = { newExercises: addExercisesPopulated, currentWorkout: selectedWorkout, deleteExercises };
             this.props.switchToCreateWorkout(workoutInfo);
             this.props.navigation.navigate('workoutCreate');
         }
     }
 
     
-    onSelectDelete = id => {this.props.exerciseToDelete(id)}
-    onSelectAdd = id => {this.props.exerciseToAdd(id)}
+    onSelectDelete = id => { this.props.exerciseToDelete(id); };
+    onSelectAdd = id => { this.props.exerciseToAdd(id); };
     renderWorkouts = () => this.props.workouts.map(workout => <Text>{workout.name}</Text>)
     rightIcon = () => <Icon name="chevron-right" size={40} />
     onChoiceButtonPress = choice => this.props.exerciseEditOption(choice);
-    changeText = (type, text) => this.props.createWorkoutText({type, text});
+    changeText = (type, text) => this.props.createWorkoutText({ type, text });
 
     incrementStepAdd = () => { 
         const { selectedWorkout: { exercises }, addExercises } = this.props.edit_workouts;
@@ -113,13 +109,13 @@ class _EditWorkout extends Component {
     rightIconDelete = id => {
         const checked = this.props.edit_workouts.deleteExercises.filter(exercise => exercise === id).length;
         const iconProp = checked ? 'check-box' : 'check-box-outline-blank';
-        return <Icon size={40} name={iconProp} />
+        return <Icon size={40} name={iconProp} />;
     }
 
     rightIconAdd = id => {
         const checked = this.props.edit_workouts.addExercises.filter(exercise => exercise === id).length;
         const iconProp = checked ? 'check-box' : 'check-box-outline-blank';
-        return <Icon size={40} name={iconProp} />
+        return <Icon size={40} name={iconProp} />;
     }
 
     renderExercisesList = () => {
@@ -131,19 +127,20 @@ class _EditWorkout extends Component {
             addExercises = exercises.filter(e => {
                 return !selectedExercises.some(_e => {
                     if (_e.exerciseInfo) {
-                        return e._id === _e.exerciseInfo._id
+                        return e._id === _e.exerciseInfo._id;
                     }
                     });
                 }
             );
         }
-        const exerciseList = add ?  addExercises : selectedExercises;
+        const exerciseList = add ? addExercises : selectedExercises;
         const onSelect = add ? this.onSelectAdd : this.onSelectDelete;
         const rightIcon = add ? this.rightIconAdd : this.rightIconDelete;
         return exerciseList.map(exercise => {
                 const infoTextArg = add ? exercise : exercise.exerciseInfo;
                 const infoText = createInfoText(infoTextArg);
-                return <SmallList
+                return (
+                        <SmallList
                             key={exercise._id}
                             onSelect={onSelect}
                             id={exercise._id}
@@ -152,13 +149,12 @@ class _EditWorkout extends Component {
                             rightIcon={rightIcon}
                             {...infoTextArg}
                             infoText={infoText}
-                        />
+                        />);
             });
-
-    }
+    };
 
     render() {
-        const { errorMessage, editStep, listVisibility, selectedWorkout: { name, description, exercises } } = this.props.edit_workouts;
+        const { errorMessage, editStep, selectedWorkout: { name, description } } = this.props.edit_workouts;
         return (
             <View>
                 <ListTitle title='EDIT WORKOUT' />
@@ -198,8 +194,8 @@ const mapStateToProps = state => {
     const { edit_workouts, setup_workouts } = state;
     return {
         edit_workouts, setup_workouts
-    }
-}
+    };
+};
 
 const EditWorkout = connect(mapStateToProps, actions)(_EditWorkout);
 export { EditWorkout };

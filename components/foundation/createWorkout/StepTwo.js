@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { FormLabel, FormInput, Button, FormValidationMessage } from 'react-native-elements';
 import ExercisesList from '../listViewExample';
 import * as types from '../../../actions/types';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -30,12 +31,12 @@ const StepTwo = props => {
                     props.fetchSelectedExercises();
                     props.incrementStep();
                 }}
-                backgroundColor='#8f9bff'
+                backgroundColor={colors.secondary.light}
             />
             <Button 
                 title='BACK'
                 onPress={props.decrementStep}
-                backgroundColor='#0043cb'
+                backgroundColor={colors.secondary.dark}
             />
         </View>
     )
@@ -43,7 +44,7 @@ const StepTwo = props => {
 
 const styles = StyleSheet.create({
     directions: {
-        height: SCREEN_HEIGHT * .08,
+        height: SCREEN_HEIGHT * 0.08,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -51,8 +52,8 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     stepTwoList: {
-        height: SCREEN_HEIGHT * .5,
-        marginBottom: SCREEN_HEIGHT * .035
+        height: SCREEN_HEIGHT * 0.5,
+        marginBottom: SCREEN_HEIGHT * 0.035
     }
 });
 

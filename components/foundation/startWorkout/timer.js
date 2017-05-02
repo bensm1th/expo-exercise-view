@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import timer from 'react-native-timer';
 import moment from 'moment';
 import * as actions from '../../../actions';
+import colors from '../../../colors';
 
 class _Timer extends Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class _Timer extends Component {
 
     render() {
         return (
-            <Text>{this.state.elapsedTime}</Text>
+            <Text style={{ color: colors.primary.medium }}>{this.state.elapsedTime}</Text>
         );
     }
 }

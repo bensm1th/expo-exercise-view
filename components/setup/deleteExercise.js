@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
-import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView } from 'react-native';
+import { Text, View, Dimensions, StyleSheet } from 'react-native';
 import ListTitle from '../foundation/listTitle';
 import ExercisesList from '../foundation/listViewExample';
 import * as actions from '../../actions';
-import * as types from '../../actions/types';
+import colors from '../../colors';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
-let headerHeight = ScreenHeight * .1;
+let headerHeight = ScreenHeight * 0.1;
 
 class _DeleteExercise extends Component {
 
@@ -40,7 +40,6 @@ class _DeleteExercise extends Component {
 
     render() {
         const { listVisibility, 
-            selectedExercise, 
             selectedExercise: { 
                 name, points, description, type 
             } } = this.props.setup_exercises.exerciseDelete;
@@ -64,10 +63,10 @@ class _DeleteExercise extends Component {
                             />
                         </View>
                         <Button 
-                            buttonStyle={{ width: 100, marginLeft: ScreenWidth * .1,}}
+                            buttonStyle={{ width: 100, marginLeft: ScreenWidth * 0.1 }}
                             onPress={this.onBackListVisible}
                             title="BACK"
-                            backgroundColor="#0043cb"
+                            backgroundColor={colors.secondary.dark}
                         />
                     </View>
                 }
@@ -83,7 +82,7 @@ class _DeleteExercise extends Component {
                             value={description}
                             multiline={true}
                             numberOfLines={4}
-                            inputStyle={{ height: 100}}
+                            inputStyle={{ height: 100 }}
                             editable={false}
                         />
                         <FormLabel>Exercise Type</FormLabel>
@@ -100,12 +99,12 @@ class _DeleteExercise extends Component {
                             <Button 
                                 title='DELETE'
                                 onPress={this.onDelete}
-                                backgroundColor='#f44330'
+                                backgroundColor={colors.primary.medium}
                             />
                             <Button 
                                 title="BACK"
                                 onPress={this.onBack}
-                                backgroundColor="#0043cb"
+                                backgroundColor={colors.secondary.dark}
                             />
                         </View>
                     </View>    
@@ -118,13 +117,13 @@ class _DeleteExercise extends Component {
 
 const styles = StyleSheet.create({
     listContainer: {
-        width: ScreenWidth * .8,
-        marginLeft: ScreenWidth * .1,
-        height: ScreenHeight *.60,
-        marginBottom: ScreenHeight * .05
+        width: ScreenWidth * 0.8,
+        marginLeft: ScreenWidth * 0.1,
+        height: ScreenHeight * 0.60,
+        marginBottom: ScreenHeight * 0.05
     },
     directions: {
-        height: ScreenHeight * .08,
+        height: ScreenHeight * 0.08,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -143,8 +142,8 @@ const mapStateToProps = (state) => {
     return { 
         setup_exercises,
         selectedExercise: state.setup_exercises.exerciseDelete.selectedExercise    
-    }
-}
+    };
+};
 
 const DeleteExercise = connect(mapStateToProps, actions)(_DeleteExercise);
 

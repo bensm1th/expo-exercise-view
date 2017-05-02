@@ -6,44 +6,41 @@ import ListTitle from '../foundation/listTitle';
 import ExercisesList from '../foundation/listViewExample';
 import * as actions from '../../actions';
 import * as types from '../../actions/types';
+import colors from '../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 let headerHeight = SCREEN_HEIGHT * .1;
 
 const validateExerciseForm = formProps => {
- const { name, description, type, points } = formProps;
- let errorMessage = "";
- let countErrors = 0;
- if (name.length === 0) {
-     countErrors++;
-     errorMessage += 'Exercise name required. ';
- }
- if (description.length === 0) {
-     countErrors++;
-     errorMessage += 'Description required. ';
- }
- if (type.length === 0) {
-     countErrors++;
-     errorMessage += 'Type required. ';
- }
- if (points.length === 0) {
-     countErrors++;
-     errorMessage += 'Points required.'
- }
- if (countErrors === 0) {
-     return {complete: true, errorMessage }
- }
- if (countErrors > 0) {
-     return {complete: false, errorMessage }
- }
-}
+    const { name, description, type, points } = formProps;
+    let errorMessage = '';
+    let countErrors = 0;
+    if (name.length === 0) {
+        countErrors++;
+        errorMessage += 'Exercise name required. ';
+    }
+    if (description.length === 0) {
+        countErrors++;
+        errorMessage += 'Description required. ';
+    }
+    if (type.length === 0) {
+        countErrors++;
+        errorMessage += 'Type required. ';
+    }
+    if (points.length === 0) {
+        countErrors++;
+        errorMessage += 'Points required.';
+    }
+    if (countErrors === 0) {
+        return { complete: true, errorMessage };
+    }
+    if (countErrors > 0) {
+        return { complete: false, errorMessage };
+    }
+};
 
 class _EditExercise extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     changeText = (type, text) => {
         this.props.editExerciseText({ type, text });
@@ -71,12 +68,11 @@ class _EditExercise extends Component {
     }
 
     rightIcon = () => {
-        return <Icon name="chevron-right" size={40} />
+        return <Icon name="chevron-right" size={40} />;
     }
 
     render() {
         const { listVisibility, 
-                selectedExercise, 
                 selectedExercise: { 
                     name, points, description, type 
                 } } = this.props.setup_exercises.exerciseEdit;
@@ -101,10 +97,10 @@ class _EditExercise extends Component {
                             />
                         </View>
                         <Button 
-                            buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * .1,}}
+                            buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * 0.1 }}
                             onPress={this.onBackListVisible}
                             title="BACK"
-                            backgroundColor="#0043cb"
+                            backgroundColor={colors.secondary.dark}
                         />
                     </View>
                     }   
@@ -121,7 +117,7 @@ class _EditExercise extends Component {
                             onChangeText={(text) => this.changeText(types.EDIT_EXERCISE_DESCRIPTION, text)}
                             multiline={true}
                             numberOfLines={4}
-                            inputStyle={{ height: 100}}
+                            inputStyle={{ height: 100 }}
                         />
                     <View style={styles.pickerLabels}>
                         <FormLabel>Exercise Type</FormLabel>
@@ -134,10 +130,10 @@ class _EditExercise extends Component {
                             onValueChange={(text) => this.changeText(types.EDIT_EXERCISE_TYPE, text)}
                             style={styles.picker}
                         >    
-                            <Picker.Item label="Strength" value ="Strength" />
-                            <Picker.Item label="Endurance" value ="Endurance" />
-                            <Picker.Item label="Balance" value ="Balance" />
-                            <Picker.Item label="Flexibility" value ="Flexibility" />
+                            <Picker.Item label="Strength" value="Strength" />
+                            <Picker.Item label="Endurance" value="Endurance" />
+                            <Picker.Item label="Balance" value="Balance" />
+                            <Picker.Item label="Flexibility" value="Flexibility" />
                         </Picker>
                         
                         <Picker
@@ -145,11 +141,11 @@ class _EditExercise extends Component {
                             selectedValue={stringPoints}
                             onValueChange={(text) => this.changeText(types.EDIT_EXERCISE_POINTS, text)}
                         >    
-                            <Picker.Item label="1" value ="1" />
-                            <Picker.Item label="2" value ="2" />
-                            <Picker.Item label="3" value ="3" />
-                            <Picker.Item label="4" value ="4" />
-                            <Picker.Item label="5" value ="5" />
+                            <Picker.Item label="1" value="1" />
+                            <Picker.Item label="2" value="2" />
+                            <Picker.Item label="3" value="3" />
+                            <Picker.Item label="4" value="4" />
+                            <Picker.Item label="5" value="5" />
                         </Picker>
                     </View>
                     {this.props.setup_exercises.errorMessage.length > 0 &&
@@ -161,12 +157,12 @@ class _EditExercise extends Component {
                             <Button 
                                 title='SAVE'
                                 onPress={this.onSave}
-                                backgroundColor='#8f9bff'
+                                backgroundColor={colors.secondary.light}
                             />
                             <Button 
                                 title="BACK"
                                 onPress={this.onBack}
-                                backgroundColor="#0043cb"
+                                backgroundColor={colors.secondary.dark}
                             />
                         </View>
  
@@ -180,13 +176,13 @@ class _EditExercise extends Component {
 
 const styles = StyleSheet.create({
     listContainer: {
-        width: SCREEN_WIDTH * .8,
-        marginLeft: SCREEN_WIDTH * .1,
-        height: SCREEN_HEIGHT *.60,
-        marginBottom: SCREEN_HEIGHT * .05
+        width: SCREEN_WIDTH * 0.8,
+        marginLeft: SCREEN_WIDTH * 0.1,
+        height: SCREEN_HEIGHT * 0.60,
+        marginBottom: SCREEN_HEIGHT * 0.05
     },
     directions: {
-        height: SCREEN_HEIGHT * .08,
+        height: SCREEN_HEIGHT * 0.08,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -215,8 +211,8 @@ const styles = StyleSheet.create({
         marginLeft: 50
     },
        errorContainer: {
-        marginRight: SCREEN_WIDTH * .036,
-        marginLeft: SCREEN_WIDTH * .036,
+        marginRight: SCREEN_WIDTH * 0.036,
+        marginLeft: SCREEN_WIDTH * 0.036,
     },
     errorText: {
         color: 'red'
@@ -228,8 +224,8 @@ const mapStateToProps = (state) => {
     return { 
         setup_exercises,
         selectedExercise: state.setup_exercises.exerciseEdit.selectedExercise    
-    }
-}
+    };
+};
 
 const EditExercise = connect(mapStateToProps, actions)(_EditExercise);
 

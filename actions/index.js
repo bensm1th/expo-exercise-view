@@ -18,13 +18,11 @@ export const finishWorkout = workoutProps => async dispatch => {
     });
 };
 
-// export const fetchExercises = () => async dispatch => {
-//     let response = await axios.get(`${ROOT_URL}/exerciseInfo`);
-//     dispatch({
-//         type: types.FETCH_EXERCISES,
-//         payload: response.data
-//     });
-// }
+export const clearWorkoutCreate = () => {
+    return {
+        type: types.CLEAR_WORKOUT_CREATE
+    };
+};
 
 export const sendPauseTime = time => {
     return {

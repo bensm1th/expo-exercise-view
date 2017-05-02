@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { FormLabel, FormInput, Button, FormValidationMessage } from 'react-native-elements';
 import * as types from '../../../actions/types';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -14,33 +15,34 @@ const StepOne = (props) => {
             <FormLabel>Name:</FormLabel>
             <FormInput
                 onChangeText={(text) => props.changeText(types.CHANGE_WORKOUT_NAME, text)}
-                value={props.name}
+                value={props.createForm.name}
             />
             <FormLabel>Description:</FormLabel>
             <FormInput
                 onChangeText={(text) => props.changeText(types.CHANGE_WORKOUT_DESCRIPTION, text)}
-                value={props.description}
+                value={props.createForm.description}
             />
             {props.errorMessage.length > 0 &&
                 <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
             }
             <Button 
+                buttonStyle={{ marginTop: 5 }}
                 title='FORWARD'
                 onPress={props.incrementStep}
-                backgroundColor='#8f9bff'
+                backgroundColor={colors.secondary.light}
             />
             <Button 
                 title='BACK'
                 onPress={props.onBack}
-                backgroundColor='#0043cb'
+                backgroundColor={colors.secondary.dark}
             />
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     directions: {
-        height: SCREEN_HEIGHT * .08,
+        height: SCREEN_HEIGHT * 0.08,
         justifyContent: 'center',
         alignItems: 'center'
     },

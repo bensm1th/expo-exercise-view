@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions, 
-    ListView, ScrollView, UIManager, LayoutAnimation } from 'react-native';
-import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
+import { View, StyleSheet, Dimensions, 
+    ListView, UIManager, LayoutAnimation } from 'react-native';
+import { Icon } from 'react-native-elements';
 import ListTitle from '../foundation/listTitle';
 import FinalExercises from '../foundation/createWorkout/FinalExercises';
 import StepOne from '../foundation/createWorkout/StepOne';
@@ -11,30 +11,30 @@ import StepThree from '../foundation/createWorkout/StepThree';
 import StepFour from '../foundation/createWorkout/StepFour';
 import AddSetsListItem from '../foundation/createWorkout/AddSetsListItem'
 import * as actions from '../../actions';
-import * as types from '../../actions/types';
+import colors from '../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
 const validateWorkoutForm = formProps => {
- const { name, description } = formProps;
- let errorMessage = "";
- let countErrors = 0;
- if (name.length === 0) {
-     countErrors++;
-     errorMessage += 'Workout name required. ';
- }
- if (description.length === 0) {
-     countErrors++;
-     errorMessage += 'Description required. ';
- }
- if (countErrors === 0) {
-     return {complete: true, errorMessage }
- }
- if (countErrors > 0) {
-     return {complete: false, errorMessage }
- }
-}
+    const { name, description } = formProps;
+    let errorMessage = '';
+    let countErrors = 0;
+    if (name.length === 0) {
+        countErrors++;
+        errorMessage += 'Workout name required. ';
+    }
+    if (description.length === 0) {
+        countErrors++;
+        errorMessage += 'Description required. ';
+    }
+    if (countErrors === 0) {
+        return { complete: true, errorMessage };
+    }
+    if (countErrors > 0) {
+        return { complete: false, errorMessage };
+    }
+};
 
 class _CreateWorkout extends Component {
     constructor(props) {
@@ -61,6 +61,7 @@ class _CreateWorkout extends Component {
 
     onBack = () => {
         this.props.workoutCreateError('');
+        this.props.clearWorkoutCreate();
         this.props.navigation.navigate('setup');
     };
 
@@ -72,7 +73,6 @@ class _CreateWorkout extends Component {
     };
 
     incrementStepThree = () => {
-        // this.props.workoutCreateError('');
         const allSetsSaved = this.props.setup_workouts.populatedExercises.every(exercise => {
             return exercise.setsSaved === true;
         });
@@ -84,7 +84,6 @@ class _CreateWorkout extends Component {
     };
 
     incrementStepTwo = () => {
-        //check to see if the exercises array is empty or not
         if (this.props.setup_workouts.exercises.length === 0) {
             return this.props.workoutCreateError('You must choose at least one exercise.');
         }
@@ -161,7 +160,7 @@ class _CreateWorkout extends Component {
     }
     
     render() {
-        const { errorMessage, createStep, editWorkout, createForm: { name, description} } = this.props.setup_workouts;
+        const { errorMessage, createStep, editWorkout, createForm: { name, description } } = this.props.setup_workouts;
         const title = editWorkout ? 'EDIT WORKOUT' : 'CREATE WORKOUT';
         const onBackOption = editWorkout ? this.navigateBack : this.decrementStep;
         const buttons = {
@@ -217,26 +216,26 @@ class _CreateWorkout extends Component {
     }
 }
 
-mapStateToProps = state => {
+const mapStateToProps = state => {
     const { setup_workouts } = state;
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
         setup_workouts,
         listData: ds.cloneWithRows(setup_workouts.populatedExercises)
-    }
-}
+    };
+};
 
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'space-between'
     },
     setsListContainer: {
-        backgroundColor: '#f7f7f7',
+        backgroundColor: colors.background.light,
         borderWidth: 1,
-        borderColor: 'silver',
+        borderColor: colors.border.light,
         borderRadius: 3,
-        height: SCREEN_HEIGHT *.5,
-        marginBottom: SCREEN_HEIGHT * .05
+        height: SCREEN_HEIGHT * 0.5,
+        marginBottom: SCREEN_HEIGHT * 0.05
     }
 });
 

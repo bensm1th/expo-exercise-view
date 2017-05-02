@@ -5,7 +5,6 @@ import { FormLabel, FormInput } from 'react-native-elements';
 const Input = ({ label, value, onChangeText, placeholder, secureTextEntry, multiline }) => {
   const { inputStyle, labelStyle, containerStyle } = styles;
   value=value.toString();
-  console.log(multiline);
   return (
     <View style={containerStyle}>
       <Text style={labelStyle}>{label}</Text>

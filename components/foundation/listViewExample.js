@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, StyleSheet, ListView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
-import Modal from 'react-native-modal';
+import { View, StyleSheet, ListView, Dimensions, ActivityIndicator } from 'react-native';
 import SmallList from './smallListItem';
 import * as actions from '../../actions';
+import colors from '../../colors';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -16,7 +16,7 @@ const createInfoText = exercise => {
                 initial = [...initial, { label, text: exercise[current]}]
             }
         return initial;
-    }, [])
+    }, []);
 };
 
 class ListViewExample extends Component {
@@ -32,7 +32,7 @@ class ListViewExample extends Component {
                 dataSource={this.props.listData}
                 renderRow={(exercise) => this.renderRow(exercise)}
             />
-        ) 
+        );
     }
 
     renderRow = (exercise) => {
@@ -47,7 +47,7 @@ class ListViewExample extends Component {
                 {...exercise}
                 infoText={infoText}
             />
-        )
+        );
     }
 
     render() {
@@ -61,21 +61,21 @@ class ListViewExample extends Component {
                     size='large'
                 />
                 </View>
-            ): (
+            ) : (
             <View>
                 {this.renderListView()}
             </View>)
             }
         </View>
-        )
+        );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#f7f7f7',
+        backgroundColor: colors.background.light,
         borderWidth: 1,
-        borderColor: 'silver',
+        borderColor: colors.border.light,
         borderRadius: 3
     },
     centering: {

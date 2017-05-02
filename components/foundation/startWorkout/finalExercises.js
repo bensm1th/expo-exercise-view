@@ -1,11 +1,12 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { FormLabel } from 'react-native-elements';
+import colors from '../../../colors';
 
 let SCREEN_WIDTH = Dimensions.get("window").width;
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 
-export default FinalExercises = props => {
+const FinalExercises = props => {
      return ( 
         <View>
         {props.exercises.map((exercise, i) => {
@@ -29,15 +30,15 @@ export default FinalExercises = props => {
             })}
         </View>
      );
-}
+};
 
 const styles = StyleSheet.create({
      exerciseContainer: {
         borderWidth: 1,
-        borderColor: 'silver',
+        borderColor: colors.border.light,
         marginLeft: SCREEN_WIDTH * 0.036,
         marginRight: SCREEN_WIDTH * 0.036,
-        backgroundColor: '#fff'
+        backgroundColor: colors.background.white
     },
     textContainer: {
         padding: 5
@@ -47,4 +48,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginTop: 5
     }
-})
+});
+
+export { FinalExercises };

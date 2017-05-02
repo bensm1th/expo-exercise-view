@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Icon } from 'react-native-elements';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -52,10 +53,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: '#a9a9a9',
+        backgroundColor: colors.background.dark,
         height: SCREEN_HEIGHT * 0.1,
         borderBottomWidth: 1,
-        borderBottomColor: 'silver'
+        borderBottomColor: colors.border.light
     },
     setContainer: {
         flexDirection: 'column',
@@ -63,4 +64,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OpenedSet;
+export { OpenedSet };

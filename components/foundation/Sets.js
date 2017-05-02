@@ -3,25 +3,26 @@ import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity, Picker
 import { Icon, FormLabel } from 'react-native-elements';
 import ModalPicker from 'react-native-modal-picker';
 import * as types from '../../actions/types';
+import colors from '../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
 const renderWeights = () => {
-    let weights = []
+    let weights = [];
     for (let i = 0; i < 500; i++) {
-        weights.push({ key:`${i}`, label: `${i}` });
+        weights.push({ key: `${i}`, label: `${i}` });
     }
     return weights; 
-}
+};
 
 const renderReps = () => {
     let reps = [];
     for (let i = 1; i < 100; i++) {
-        reps.push({ key:`${i}`, label: `${i}` });
+        reps.push({ key: `${i}`, label: `${i}` });
     }
     return reps;
-}
+};
 
 class Sets extends Component {
     render() {
@@ -67,7 +68,7 @@ class Sets extends Component {
                     <Icon 
                         name="cancel"
                         size={30}
-                        color={'#f44330'}
+                        color={colors.primary.medium}
                     />
                 </TouchableOpacity>
             </View>
@@ -86,9 +87,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         marginBottom: 10,
-        borderColor: 'silver',
+        borderColor: colors.border.light,
         borderWidth: 1,
-        marginHorizontal: SCREEN_WIDTH * .036,
+        marginHorizontal: SCREEN_WIDTH * 0.036,
         padding: 5
     },
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
 import { Text, View, Dimensions, StyleSheet } from 'react-native';
-
+import colors from '../../../colors';
 import WorkoutList from './WorkoutListView';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -21,22 +21,22 @@ export default EditStepZero = props => {
             </View>
             {props.parent !== 'start' &&
             <Button 
-                buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * .05}}
+                buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * 0.05}}
                 onPress={props.onBackListVisible}
                 title="BACK"
-                backgroundColor="#0043cb"
+                backgroundColor={colors.secondary.dark}
             />
             }
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     listContainer: {
-        width: SCREEN_WIDTH * .9,
-        marginLeft: SCREEN_WIDTH * .05,
-        height: SCREEN_HEIGHT *.60,
-        marginBottom: SCREEN_HEIGHT * .05
+        width: SCREEN_WIDTH * 0.9,
+        marginLeft: SCREEN_WIDTH * 0.05,
+        height: SCREEN_HEIGHT * 0.60,
+        marginBottom: SCREEN_HEIGHT * 0.05
     },
     directions: {
         marginTop: 15,
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
     directionsText: {
         fontSize: 20
     },
-})
+});

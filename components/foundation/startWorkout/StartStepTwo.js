@@ -1,5 +1,4 @@
 import React from 'react';
-import moment from 'moment';
 import { Text, View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
 import colors from '../../../colors';
@@ -30,7 +29,7 @@ const calculateStatusInfo = exercises => {
     }, { pointsEarned: 0, exercisesCompleted: 0, setsCompleted: 0 });
 };
 
-export default StartStepTwo = props => {
+const StartStepTwo = props => {
     const { paused, startedWorkout: { exercises } } = props;
     const statusInfo = calculateStatusInfo(exercises);
     const { pointsEarned, exercisesCompleted, setsCompleted } = statusInfo;
@@ -47,8 +46,10 @@ export default StartStepTwo = props => {
                 </View>
                 <View style={styles.statusContainer}>
                     <Text style={styles.topTextLabel}>Status: </Text>
-                    <Text style={styles.topText}>-elapsed time </Text>
-                    <Timer />
+                    <View style={styles.timerContainer}>
+                        <Text style={styles.topText}>-elapsed time </Text>
+                        <Timer />
+                    </View>
                     <Text style={styles.topText}>-{pointsEarned} points earned</Text>
                     <Text style={styles.topText}>-{setsCompleted} sets completed</Text>
                     <Text style={styles.topText}>-{exercisesCompleted} exercises completed</Text>
@@ -68,7 +69,7 @@ export default StartStepTwo = props => {
             <Button 
                 title={"PAUSE"}
                 onPress={props.pause}
-                backgroundColor='#8f9bff'
+                backgroundColor={colors.secondary.light}
             />
             ) : (
             <View>
@@ -83,12 +84,10 @@ export default StartStepTwo = props => {
                     backgroundColor={colors.primary.medium}
                 />
             </View>
-            
             )}
-            
         </View>  
     );
-}
+};
 
 const styles = StyleSheet.create({
     stepTwoContainerTop: {
@@ -98,7 +97,7 @@ const styles = StyleSheet.create({
     },
     stepTwoContainer: {
         borderWidth: 1,
-        borderColor: 'silver',
+        borderColor: colors.border.light,
         marginLeft: SCREEN_WIDTH * 0.036,
         width: SCREEN_WIDTH * 0.928,
         maxHeight: SCREEN_HEIGHT * 0.4
@@ -119,18 +118,24 @@ const styles = StyleSheet.create({
     },
     listLabel: {
         borderBottomWidth: 1,
-        borderBottomColor: 'silver',
+        borderBottomColor: colors.border.light,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
         height: SCREEN_HEIGHT * 0.07,
-        backgroundColor: '#0043cb',
+        backgroundColor: colors.secondary.dark,
         marginHorizontal: SCREEN_WIDTH * 0.036
     },
     listLabelText: {
         fontWeight: 'bold',
         fontSize: 16,
-        color: '#FFF'
+        color: colors.background.white
+    },
+    timerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 });
+
+export { StartStepTwo };
 

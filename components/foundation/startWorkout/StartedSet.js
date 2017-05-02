@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default StartedSet;
+export { StartedSet };

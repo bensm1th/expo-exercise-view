@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, TouchableOpacity, StyleSheet, Dimensions, UIManager, LayoutAnimation } from 'react-native';
-import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
+import { Text, View, StyleSheet, Dimensions, UIManager, LayoutAnimation } from 'react-native';
+import { Icon } from 'react-native-elements';
 import EditStepZero from '../foundation/editWorkout/EditStepZero';
 import StepFour from '../foundation/createWorkout/StepFour';
 import ListTitle from '../foundation/listTitle';
 import * as actions from '../../actions';
+import colors from '../../colors';
 
 let SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -21,7 +22,7 @@ class _DeleteWorkout extends Component {
     }
 
     rightIcon = id => {
-        return <Icon name="chevron-right" size={40} />
+        return <Icon name="chevron-right" size={40} />;
     }
 
     renderFinalExercises = () => {
@@ -64,7 +65,7 @@ class _DeleteWorkout extends Component {
 
 
     render() {
-        const { name, description, exercises } = this.props.edit_workouts.selectedWorkout;
+        const { name, description } = this.props.edit_workouts.selectedWorkout;
         const show = name === '';
         const buttons = {
             buttonOne: {
@@ -75,7 +76,7 @@ class _DeleteWorkout extends Component {
                 text: 'BACK',
                 onPress: this.onBack
             }
-        }
+        };
         return (
             <View>
                 <ListTitle title="DELETE WORKOUTS" />
@@ -106,9 +107,9 @@ class _DeleteWorkout extends Component {
 const styles = StyleSheet.create({
     exerciseContainer: {
         borderWidth: 1,
-        borderColor: 'silver',
-        marginLeft: SCREEN_WIDTH *.036,
-        marginRight: SCREEN_WIDTH * .036
+        borderColor: colors.border.light,
+        marginLeft: SCREEN_WIDTH * 0.036,
+        marginRight: SCREEN_WIDTH * 0.036
     }
 });
 
@@ -116,8 +117,8 @@ const mapStateToProps = state => {
     const { delete_workouts, edit_workouts, setup_workouts } = state;
     return {
         delete_workouts, edit_workouts, setup_workouts
-    }
-}
+    };
+};
 
 const DeleteWorkout = connect(mapStateToProps, actions)(_DeleteWorkout)
 

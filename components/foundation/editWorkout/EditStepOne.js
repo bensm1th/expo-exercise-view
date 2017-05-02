@@ -1,12 +1,11 @@
 import React from 'react';
-import { FormLabel, FormInput, Button, Icon, FormValidationMessage } from 'react-native-elements';
-import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView, ScrollView } from 'react-native';
+import { FormLabel, FormInput, Button, FormValidationMessage } from 'react-native-elements';
+import { Text, View, Dimensions, StyleSheet } from 'react-native';
+import colors from '../../../colors';
 import * as types from '../../../actions/types';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
-let headerHeight = SCREEN_HEIGHT * .1;
-let choiceHeight = SCREEN_HEIGHT * .1;
 
 export default EditStepOne = props => {
     return (
@@ -26,20 +25,20 @@ export default EditStepOne = props => {
                     value={props.description}
                 />
             </View>
-            {props.errorMessage.length > 0  &&
+            {props.errorMessage.length > 0 &&
                 <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
             }
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05}}
+                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
                     onPress={() => props.moveEditStep(true)}
                     title="FORWARD"
-                    backgroundColor="#8f9bff"
+                    backgroundColor={colors.secondary.light}
                 />
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05}}
+                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
                     onPress={() => props.moveEditStep(false)}
                     title="BACK"
-                    backgroundColor="#0043cb"
+                    backgroundColor={colors.secondary.dark}
                 />
         </View>  
     )
@@ -47,11 +46,11 @@ export default EditStepOne = props => {
 
 const styles = StyleSheet.create({
     stepOneContainer: {
-        backgroundColor: "#f7f7f7",
-        marginLeft: SCREEN_WIDTH * .05,
-        width: SCREEN_WIDTH * .9,
-        marginBottom: SCREEN_HEIGHT * .05,
-        paddingBottom: SCREEN_HEIGHT * .025
+        backgroundColor: colors.background.light,
+        marginLeft: SCREEN_WIDTH * 0.05,
+        width: SCREEN_WIDTH * 0.9,
+        marginBottom: SCREEN_HEIGHT * 0.05,
+        paddingBottom: SCREEN_HEIGHT * 0.025
     },
     directions: {
         marginTop: 15,

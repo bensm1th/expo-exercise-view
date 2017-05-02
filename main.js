@@ -4,7 +4,6 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { Icon } from 'react-native-elements';
-
 import SetupScreen from './screens/SetupScreen';
 import HomeScreen from './screens/HomeScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -14,6 +13,7 @@ import AcheivementsScreen from './screens/AcheivementsScreen';
 import AuthScreen from './screens/AuthScreen';
 import * as Setup from './components/setup';
 import store from './store';
+import colors from './colors';
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -26,7 +26,7 @@ class App extends React.Component {
         screen: TabNavigator({
           setup: { screen: 
             StackNavigator({
-            setup: {screen: SetupScreen},
+            setup: { screen: SetupScreen },
               exerciseEdit: { screen: Setup.EditExercise },
               exerciseCreate: { screen: Setup.CreateExercise },
               exerciseDelete: { screen: Setup.DeleteExercise },
@@ -41,14 +41,14 @@ class App extends React.Component {
           stats: { screen: StatsScreen },
         }, {
           tabBarOptions: {
-            inactiveBackgroundColor: "#ff795b",
-            activeBackgroundColor : "#f44330",
+            inactiveBackgroundColor: colors.primary.light,
+            activeBackgroundColor: colors.primary.medium,
             labelStyle: {
               fontSize: 15,
               color: 'white',
             },
             style: {
-              height: SCREEN_HEIGHT * .085,
+              height: SCREEN_HEIGHT * 0.085,
             }
           }
         })

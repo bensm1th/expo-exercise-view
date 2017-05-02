@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, UIManager, Text, TouchableOpacity, TouchableHighlight, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
+import { View, UIManager, Text, StyleSheet, Dimensions, Animated, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
+import colors from '../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
-let listItemHeight = SCREEN_HEIGHT * .12;
+let listItemHeight = SCREEN_HEIGHT * 0.12;
 
 class SmallListItem extends Component {
     constructor(props) {
@@ -33,9 +34,8 @@ class SmallListItem extends Component {
                 toValue: 1,
                 duration: 300
             }).start();
-
         } else {
-            this.props.onMoreInfo(id)
+            this.props.onMoreInfo(id);
             Animated.timing(this.animatedValue, {
                 toValue: 0,
                 duration: 300
@@ -45,7 +45,7 @@ class SmallListItem extends Component {
 
     renderInfo = () => {
         const fadeInterpolation = this.animatedValue.interpolate({
-            inputRange: [0, .9, 1],
+            inputRange: [0, 0.9, 1],
             outputRange: ['rgb(247,247,247)', 'rgb(247,247,247)', 'rgb(0,0,0)']
         });
         const fadeStyle = {
@@ -113,9 +113,9 @@ export default SmallListItem;
 const styles = StyleSheet.create({
      listItem: {
         flexDirection: 'column',
-        borderBottomColor: "#e0e0e0",
+        borderBottomColor: colors.border.light,
         borderBottomWidth: 2,
-        backgroundColor: "#f7f7f7",
+        backgroundColor: colors.background.light,
         overflow: 'hidden'
     },
     mainItem: {
@@ -146,10 +146,10 @@ const styles = StyleSheet.create({
         marginRight: 20
     },
     itemText: {
-        color: "black",
+        color: colors.text.dark,
         fontSize: 20,
     },
     rightIcon: {
-        marginRight: SCREEN_WIDTH * .06
+        marginRight: SCREEN_WIDTH * 0.06
     }
 });

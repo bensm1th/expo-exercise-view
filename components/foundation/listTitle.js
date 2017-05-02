@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import colors from '../../colors';
 
 let ScreenHeight = Dimensions.get("window").height;
-let headerHeight = ScreenHeight * .1;
+let headerHeight = ScreenHeight * 0.1;
 
 const ListTitle = (props) => {
     return (
@@ -18,17 +19,17 @@ export default ListTitle;
 
 const styles = StyleSheet.create({
      headerText: {
-        color: '#000000',
+        color: colors.text.dark,
         fontSize: 30,
         marginTop: 25,
         fontWeight: 'bold'
     },
      header: {
-        backgroundColor: '#f44330',
-        height: headerHeight ,
+        backgroundColor: colors.primary.medium,
+        height: headerHeight,
         flexDirection: 'row',
         justifyContent: 'center',
-        borderBottomColor: "#e0e0e0",
+        borderBottomColor: colors.border.light,
         borderBottomWidth: 1
     }
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -57,13 +58,13 @@ const OpenedExercises = props => (
 const styles = StyleSheet.create({
     startedExerciseContainer: {
         borderBottomWidth: 1,
-        borderBottomColor: 'silver',
+        borderBottomColor: colors.border.light,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
         height: SCREEN_HEIGHT * 0.07,
-        backgroundColor: '#f7f7f7'
+        backgroundColor: colors.background.light
     }
 });
 
-export default OpenedExercises;
+export { OpenedExercises };

@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableWithoutFeedback, StyleSheet, Dimensions } from 'react-native';
+import colors from '../../colors';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
-let choiceHeight = ScreenHeight * .15;
+let choiceHeight = ScreenHeight * 0.15;
 
 const ChoiceButton = (props) => {
     const { selected } = props;
@@ -38,53 +39,53 @@ const ChoiceButton = (props) => {
             </View>
         </View>
     );
-}
+};
 
 export default ChoiceButton;
 
 const styles = StyleSheet.create({
     choiceTextContainerR: {
-        backgroundColor: "#f7f7f7",
+        backgroundColor: colors.background.light,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
     selectedChoiceTextContainerR: {
-        backgroundColor: "#536dff",
+        backgroundColor: colors.secondary.medium,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
     choiceTextContainerL: {
-        backgroundColor: "#f7f7f7",
+        backgroundColor: colors.background.light,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
     selectedChoiceTextContainerL: {
-        backgroundColor: "#536dff",
+        backgroundColor: colors.secondary.medium,
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
     choiceText: {
         fontSize: 20,
-        color: "#536dff",
+        color: colors.secondary.medium,
         fontWeight: 'bold'
     },
     selectedChoiceText: {
         fontSize: 20,
-        color: "#ffffff",
+        color: colors.text.light,
         fontWeight: 'bold'
     },
     choiceButton: {
-        borderColor: "#536dff",
+        borderColor: colors.secondary.medium,
         borderWidth: 1,
         flexDirection: 'row',
-        width: ScreenWidth * .9,
+        width: ScreenWidth * 0.9,
         justifyContent: 'space-around',
-        height: ScreenHeight * .06,
+        height: ScreenHeight * 0.06,
         borderRadius: 5,
         overflow: 'hidden'
     }
-})
+});

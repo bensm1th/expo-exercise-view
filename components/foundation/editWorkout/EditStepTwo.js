@@ -1,13 +1,13 @@
 import React from 'react';
-import { FormLabel, FormInput, Button, Icon, FormValidationMessage } from 'react-native-elements';
-import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView, ScrollView } from 'react-native';
-
+import { Button, FormValidationMessage } from 'react-native-elements';
+import { Text, View, Dimensions, StyleSheet, ScrollView } from 'react-native';
+import colors from '../../../colors';
 import ChoiceButton from '../choiceButton';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
-let headerHeight = SCREEN_HEIGHT * .1;
-let choiceHeight = SCREEN_HEIGHT * .1;
+let headerHeight = SCREEN_HEIGHT * 0.1;
+let choiceHeight = SCREEN_HEIGHT * 0.1;
 
 export default EditStepTwo = props => {
     return (
@@ -32,25 +32,25 @@ export default EditStepTwo = props => {
             <View style={styles.stepTwoBottom}>
                 {props.exerciseEditOption === 'left' &&
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05,}}
+                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
                     onPress={() => props.incrementStepAdd()}
                     title="NEXT"
-                    backgroundColor="#8f9bff"
+                    backgroundColor={colors.secondary.light}
                 />
                 }
                 {props.exerciseEditOption !== 'left' &&
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05,}}
+                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
                     onPress={props.removeExercisesFromWorkout}
                     title="DELETE"
-                    backgroundColor="#f44330"
+                    backgroundColor={colors.primary.medium}
                 />
                 }
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * .05,}}
+                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
                     onPress={() => props.moveEditStep(false)}
                     title="BACK"
-                    backgroundColor="#0043cb"
+                    backgroundColor={colors.secondary.dark}
                 />
             </View>
         </View>
@@ -59,19 +59,19 @@ export default EditStepTwo = props => {
 
 const styles = StyleSheet.create({
     stepTwoBottom: {
-        paddingTop: SCREEN_HEIGHT * .025,
+        paddingTop: SCREEN_HEIGHT * 0.025,
         flexDirection: 'row'
     },
     stepTwoScrollView: {
-        width: SCREEN_WIDTH * .9,
-        marginLeft: SCREEN_WIDTH * .05,
-        height: SCREEN_HEIGHT *.55,
+        width: SCREEN_WIDTH * 0.9,
+        marginLeft: SCREEN_WIDTH * 0.05,
+        height: SCREEN_HEIGHT * 0.55,
     },
     listContainer: {
-        width: SCREEN_WIDTH * .9,
-        marginLeft: SCREEN_WIDTH * .05,
-        height: SCREEN_HEIGHT *.60,
-        marginBottom: SCREEN_HEIGHT * .05
+        width: SCREEN_WIDTH * 0.9,
+        marginLeft: SCREEN_WIDTH * 0.05,
+        height: SCREEN_HEIGHT * 0.60,
+        marginBottom: SCREEN_HEIGHT * 0.05
     },
     choiceContainer: {
         marginBottom: 10,
@@ -88,16 +88,16 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     buttonContainer: {
-        width: SCREEN_WIDTH * .9,
+        width: SCREEN_WIDTH * 0.9,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
         setsListContainer: {
-        backgroundColor: '#f7f7f7',
+        backgroundColor: colors.background.light,
         borderWidth: 1,
-        borderColor: 'silver',
+        borderColor: colors.border.light,
         borderRadius: 3,
-        height: SCREEN_HEIGHT *.5,
-        marginBottom: SCREEN_HEIGHT * .05
+        height: SCREEN_HEIGHT * 0.5,
+        marginBottom: SCREEN_HEIGHT * 0.05
     }
-})
+});

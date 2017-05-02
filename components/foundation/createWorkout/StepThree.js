@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { Button, FormValidationMessage } from 'react-native-elements';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -21,12 +22,12 @@ const StepThree = props => {
             <Button 
                 title='FORWARD'
                 onPress={props.incrementStep}
-                backgroundColor='#8f9bff'
+                backgroundColor={colors.secondary.light}
             />
             <Button 
                 title='BACK'
                 onPress={props.decrementStep}
-                backgroundColor='#0043cb'
+                backgroundColor={colors.secondary.dark}
             />
         </View>
     );
@@ -34,7 +35,7 @@ const StepThree = props => {
 
 const styles = StyleSheet.create({
     directions: {
-        height: SCREEN_HEIGHT * .08,
+        height: SCREEN_HEIGHT * 0.08,
         justifyContent: 'center',
         alignItems: 'center'
     },

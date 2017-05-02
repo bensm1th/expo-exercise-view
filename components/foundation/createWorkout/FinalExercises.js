@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { FormLabel } from 'react-native-elements';
+import colors from '../../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         borderColor: 'silver',
         marginLeft: SCREEN_WIDTH * 0.036,
         marginRight: SCREEN_WIDTH * 0.036,
-        backgroundColor: '#f7f7f7'
+        backgroundColor: colors.background.light
     },
     textContainer: {
         padding: 5

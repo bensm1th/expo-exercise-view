@@ -5,13 +5,9 @@ import { Icon } from 'react-native-elements';
 import ListTitle from '../components/foundation/listTitle';
 import EditStepZero from '../components/foundation/editWorkout/EditStepZero';
 import StepFour from '../components/foundation/createWorkout/StepFour';
-import OpenedExercise from '../components/foundation/startWorkout/openedExercises';
-import StartedSet from '../components/foundation/startWorkout/StartedSet';
-import ActualReps from '../components/foundation/startWorkout/ActualReps';
-import OpenedSet from '../components/foundation/startWorkout/OpenedSet';
-import StartStepTwo from '../components/foundation/startWorkout/StartStepTwo';
-import FinalExercises from '../components/foundation/startWorkout/finalExercises';
+import * as Start from '../components/foundation/startWorkout';
 import * as actions from '../actions';
+import colors from '../colors';
 
 let SCREEN_WIDTH = Dimensions.get('window').width;
 let SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -38,49 +34,32 @@ class StartScreen extends Component {
         LayoutAnimation.easeInEaseOut();
     }
 
-    finish = () => {
-        this.props.finishWorkout(this.props.start.startedWorkout);
-    }
-
-    pause = () => {
-        this.props.pauseWorkout();
-    }
-
-    resume = () => {
-        this.props.resumeWorkout();
-    }
+    onBack = () => this.props.startStepDec();
+    finish = () => this.props.finishWorkout(this.props.start.startedWorkout);
+    pause = () => this.props.pauseWorkout();
+    resume = () => this.props.resumeWorkout();
+    renderSets = sets => <Start.StartedSet sets={sets} />;
+    startWorkout = () => this.props.workoutStart();
+    openSets = exercise => this.props.setsOpen(exercise);
 
     rightIcon = () => (
-            <Icon 
-                name="plus"
-                size={30}
-                type="octicon"
-                color={'#f44330'}
-            />);
+        <Icon 
+            name="plus"
+            size={30}
+            type="octicon"
+            color={colors.primary.medium}
+        />
+    );
     
-
     renderFinalExercises = () => {
         const { startedWorkout: { exercises } } = this.props.start;
-        return <FinalExercises exercises={exercises} renderSets={this.renderSets} />;    
-    }
-
-    renderSets = sets => {
-        return <StartedSet sets={sets} />;
-    }
-
-    startWorkout = () => {
-        this.props.workoutStart();
-    }
-
-    onBack = () => {
-        this.props.startStepDec();
+        return <Start.FinalExercises exercises={exercises} renderSets={this.renderSets} />;    
     }
 
     renderExercises = () => {
         const { openedExercise, startedWorkout: { exercises }, finishedSets } = this.props.start;
-
         return (
-            <OpenedExercise 
+            <Start.OpenedExercises 
                 exercises={exercises}
                 openSets={this.openSets}
                 openedExercise={openedExercise}
@@ -90,24 +69,22 @@ class StartScreen extends Component {
             );
     }
 
-    renderOpenedSets = sets => {
-        return (
-            <OpenedSet 
-                {...this.props.start} 
-                sets={sets} 
-                renderActualReps={this.renderActualReps} 
-                setsEditOpen={this.props.setsEditOpen}
-            />);
-    }
-
-    renderActualReps = () => {
-        return <ActualReps {...this.props.start} setChangeAcutalText={this.props.setChangeAcutalText} />;
-    }
-
-    openSets = exercise => {
-        this.props.setsOpen(exercise);
-    }
-
+    renderOpenedSets = sets => (
+        <Start.OpenedSet 
+            {...this.props.start} 
+            sets={sets} 
+            renderActualReps={this.renderActualReps} 
+            setsEditOpen={this.props.setsEditOpen}
+        />
+    );
+    
+    renderActualReps = () => (
+        <Start.ActualReps 
+            {...this.props.start} 
+            setChangeAcutalText={this.props.setChangeAcutalText} 
+        />
+    );
+    
     render() {
         const { startedWorkout: { name, description }, startStep } = this.props.start;
         const buttons = {
@@ -139,11 +116,11 @@ class StartScreen extends Component {
                     decrementStep={this.decrementStep}
                     workoutInfo={{ name, description, title: 'Start this workout?'}}
                     buttons={buttons}
-                    backgroundColor='#f7f7f7'
+                    backgroundColor={colors.background.light}
                 />   
                 }
                 {startStep === 2 &&
-                <StartStepTwo
+                <Start.StartStepTwo
                     name={name}
                     description={description}
                     renderExercises={this.renderExercises}
@@ -159,11 +136,5 @@ class StartScreen extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { start } = state;
-    return {
-        start
-    };
-};
-
+const mapStateToProps = state => ({ start: state.start });
 export default connect(mapStateToProps, actions)(StartScreen);

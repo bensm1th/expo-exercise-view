@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, TextInput, Dimensions } from 'react-native';
 import ModalPicker from 'react-native-modal-picker';
 import * as types from '../../../actions/types';
+import colors from '../../../colors';
 
 let SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -80,11 +81,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         marginBottom: 10,
-        borderColor: 'silver',
+        borderColor: colors.border.light,
         borderWidth: 1,
         marginHorizontal: SCREEN_WIDTH * 0.036,
         padding: 5
     },
 });
 
-export default ActualReps;
+export { ActualReps };
