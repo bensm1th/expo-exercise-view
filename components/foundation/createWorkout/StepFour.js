@@ -2,14 +2,16 @@ import React from 'react';
 import { Text, View, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
-let SCREEN_HEIGHT = Dimensions.get("window").height;
-let SCREEN_WIDTH = Dimensions.get("window").width;
+let SCREEN_HEIGHT = Dimensions.get('window').height;
+let SCREEN_WIDTH = Dimensions.get('window').width;
 
 const StepFour = props => {
     const { name, description, title } = props.workoutInfo;
     const { buttonOne, buttonTwo } = props.buttons;
+    const backgroundColor = props.backgroundColor ? props.backgroundColor : '#fff';
+    console.log(backgroundColor);
     return (
-        <View>
+        <View style={{ backgroundColor }}>
             <View style={styles.directions}>
                 <Text style={styles.directionsText}>{title}</Text>
             </View>
@@ -34,11 +36,11 @@ const StepFour = props => {
             />
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     directions: {
-        height: SCREEN_HEIGHT * .08,
+        height: SCREEN_HEIGHT * 0.08,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -46,7 +48,8 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     scrollViewContainer: {
-        height: SCREEN_HEIGHT * .5
+        height: SCREEN_HEIGHT * 0.5,
+        marginBottom: 10
     },
     workoutTitleText: {
         fontSize: 30,
@@ -56,9 +59,11 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     workoutTitle: {
-        backgroundColor: "#ff795b",
+        backgroundColor: '#ff795b',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginLeft: SCREEN_WIDTH * 0.036,
+        marginRight: SCREEN_WIDTH * 0.036
     }
 });
 

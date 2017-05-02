@@ -4,6 +4,7 @@ import { Text, View, TouchableOpacity, StyleSheet, TextInput, Dimensions,
     ListView, ScrollView, UIManager, LayoutAnimation } from 'react-native';
 import { FormLabel, FormInput, Button, Icon } from 'react-native-elements';
 import ListTitle from '../foundation/listTitle';
+import FinalExercises from '../foundation/createWorkout/FinalExercises';
 import StepOne from '../foundation/createWorkout/StepOne';
 import StepTwo from '../foundation/createWorkout/StepTwo';
 import StepThree from '../foundation/createWorkout/StepThree';
@@ -45,9 +46,6 @@ class _CreateWorkout extends Component {
         LayoutAnimation.easeInEaseOut();
     }
 
-    
-    
-    changeText = (type, text) => this.props.createWorkoutText({type, text});
     fetchSelectedExercises = () => this.props.fetchExercisesById(this.props.setup_workouts.exercises);
     addSet = exerciseInfoId => this.props.addSetToExerciseModel(exerciseInfoId);
     deleteSetMethod = (exerciseId, setId) => this.props.deleteSet({ exerciseId, setId });
@@ -65,6 +63,8 @@ class _CreateWorkout extends Component {
         this.props.workoutCreateError('');
         this.props.navigation.navigate('setup');
     };
+
+    changeText = (type, text) => this.props.createWorkoutText({ type, text });
 
     incrementStep = () => {
         this.props.workoutCreateError('');
@@ -132,32 +132,17 @@ class _CreateWorkout extends Component {
             />
         );
     }
-    
-    renderSets = sets => {
-        return sets.map((set, i) => {
-            return (
-                <View key={set._id}>
-                    <Text>Set {i + 1}: </Text>
-                    <Text>weight: {set.weight}</Text>
-                    <Text>reps: {set.reps}</Text>
-                </View>
-            );
-        });
-    }
 
     renderFinalExercises = () => {
         const { populatedExercises } = this.props.setup_workouts;
         return populatedExercises.map((exercise, i) => {
-            const { name, description, type, points, _id } = exercise.exerciseInfo;
             return (
-                <View key={_id} style={styles.exerciseContainer}>
-                    <Text>Exercise {i + 1}: {name}</Text>
-                    <Text>Description: {description}</Text>
-                    <Text>Type: {type}</Text>
-                    <Text>Points per set: {points}</Text>
-                    {this.renderSets(exercise.sets)}
-                </View>
-            );
+                <FinalExercises 
+                    key={exercise._id} 
+                    {...exercise.exerciseInfo} 
+                    index={i} 
+                    sets={exercise.sets} 
+                />);
         });
     }
     
@@ -224,7 +209,7 @@ class _CreateWorkout extends Component {
                     {...this.props}
                     buttons={buttons}
                     renderFinalExercises={this.renderFinalExercises}
-                    workoutInfo = {{ name, description, title: 'Step 4: View and save your workout.'}}
+                    workoutInfo={{ name, description, title: 'Step 4: View and save your workout.' }}
                 />
                 }
             </View>
@@ -244,12 +229,6 @@ mapStateToProps = state => {
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'space-between'
-    },
-    exerciseContainer: {
-        borderWidth: 1,
-        borderColor: 'silver',
-        marginLeft: SCREEN_WIDTH *.036,
-        marginRight: SCREEN_WIDTH * .036
     },
     setsListContainer: {
         backgroundColor: '#f7f7f7',

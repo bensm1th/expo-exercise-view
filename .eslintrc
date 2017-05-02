@@ -2,5 +2,9 @@
     "extends": "rallycoding",
     "parserOptions": {
         "spread" : true
+    },
+    "rules": {
+        "no-underscore-dangle": 0,
+        "no-case-declarations": 0
     }
 }

@@ -1,9 +1,51 @@
 import axios from 'axios';
+import moment from 'moment';
 import * as types from './types';
+
 const URL = '192.168.1.109';
-//const URL = '107.185.83.180';
-//const URL = '10.62.40.34';
 const ROOT_URL = `http://${URL}:3000`;
+
+export const finishWorkout = workoutProps => async dispatch => {
+    let response = await axios.put(`${ROOT_URL}/workout/${workoutProps._id}`, workoutProps);
+    //save the sets
+    //save the exercises
+    //save the workout
+
+    //WHAT HAPPENS IF I JUST SAVE IT?
+    console.log(response);
+    dispatch({
+        type: types.FINISH_WORKOUT
+    });
+};
+
+// export const fetchExercises = () => async dispatch => {
+//     let response = await axios.get(`${ROOT_URL}/exerciseInfo`);
+//     dispatch({
+//         type: types.FETCH_EXERCISES,
+//         payload: response.data
+//     });
+// }
+
+export const sendPauseTime = time => {
+    return {
+        type: types.SEND_PAUSE_TIME,
+        payload: time
+    };
+};
+
+export const resumeWorkout = () => {
+    const startTime = moment(); 
+    return {
+        type: types.RESUME_WORKOUT,
+        payload: startTime
+    };
+};
+
+export const pauseWorkout = () => {
+    return {
+        type: types.PAUSE_WORKOUT,
+    };
+};
 
 export const workoutEditError = errorMessage => {
     return {
@@ -48,8 +90,10 @@ export const setsOpen = exercise => {
 } 
 
 export const workoutStart = () => {
+    const startTime = moment();  
     return {
-        type: types.START_WORKOUT
+        type: types.START_WORKOUT,
+        payload: startTime
     }
 }
 
@@ -359,8 +403,8 @@ export const exerciseInfoDelete = id => async dispatch => {
     dispatch({
         type: types.TOGGLE_DELETE_EXERCISE_VISIBILITY,
         payload: {}
-    })
-}
+    });
+};
 
 export const toggleExerciseVisibility = () => {
     return {
