@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import timer from 'react-native-timer';
 import moment from 'moment';
@@ -47,7 +47,7 @@ class _Timer extends Component {
 
     render() {
         return (
-            <Text style={{ color: colors.primary.medium }}>{this.state.elapsedTime}</Text>
+            <Text style={styles.cellText}>{this.state.elapsedTime}</Text>
         );
     }
 }
@@ -56,5 +56,13 @@ const mapStateToProps = state => {
     const { start } = state;
     return { start };
 };
+
+const styles = StyleSheet.create({
+      cellText: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: colors.text.coalmine
+    }
+});
 
 export default connect(mapStateToProps, actions)(_Timer);

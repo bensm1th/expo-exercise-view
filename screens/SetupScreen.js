@@ -28,9 +28,9 @@ class SetupScreen extends Component {
         tabBar: {
             icon: ({ tintColor }) => {
                 return <Icon 
-                    name="gear"
+                    name='gear'
                     size={30}
-                    type="octicon"
+                    type='octicon'
                     color={'white'}
                     iconStyle={{ marginTop: 10, marginBottom: 3 }}
                 />;
@@ -41,14 +41,14 @@ class SetupScreen extends Component {
     constructor(props) {
         super(props);
         this.state = { workoutItems: [
-            { title: "Create a Workout", index: 0, icon: require('../images/workout.png') }, 
-            { title: "Edit a Workout", index: 1,  icon: require('../images/edit.png')}, 
-            { title: "Delete a Workout", index: 2, icon: require('../images/delete.png')}
+            { title: 'Create a Workout', index: 0, icon: require('../images/workout.png') }, 
+            { title: 'Edit a Workout', index: 1,  icon: require('../images/edit.png')}, 
+            { title: 'Delete a Workout', index: 2, icon: require('../images/delete.png')}
         ], 
         exerciseItems: [
-            { title: "Create an Exercise", index: 0, icon: require('../images/workout.png') }, 
-            { title: "Edit an Exercise", index: 1, icon: require('../images/edit.png')}, 
-            { title: "Delete an Exercise", index: 2, icon: require('../images/delete.png')}
+            { title: 'Create an Exercise', index: 0, icon: require('../images/workout.png') }, 
+            { title: 'Edit an Exercise', index: 1, icon: require('../images/edit.png')}, 
+            { title: 'Delete an Exercise', index: 2, icon: require('../images/delete.png')}
         ] };
     }
 
@@ -64,7 +64,7 @@ class SetupScreen extends Component {
     }
 
     returnNavDestination = (item) => {
-        switch(item) {
+        switch (item) {
             case 'Create a Workout':
                 return 'workoutCreate';
             case 'Edit a Workout':
@@ -85,7 +85,7 @@ class SetupScreen extends Component {
     renderIcon = () => {
         return (
             <Icon 
-                name="chevron-right"
+                name='chevron-right'
                 size={50}
             />
         );
@@ -116,11 +116,11 @@ class SetupScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <ListTitle title="SETUP" />
+                <ListTitle title='SETUP' />
                 <View style={styles.choiceContainer}>
                     <ChoiceButton 
-                        choiceOne="WORKOUTS" 
-                        choiceTwo="EXERCISES"
+                        choiceOne='WORKOUTS' 
+                        choiceTwo='EXERCISES'
                         selected={this.props.setup_exercises.setupOption}
                         onPress={this.onChoiceButtonPress}
                     />

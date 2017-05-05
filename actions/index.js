@@ -5,18 +5,17 @@ import * as types from './types';
 const URL = '192.168.1.109';
 const ROOT_URL = `http://${URL}:3000`;
 
-export const finishWorkout = workoutProps => async dispatch => {
-    let response = await axios.put(`${ROOT_URL}/workout/${workoutProps._id}`, workoutProps);
-    //save the sets
-    //save the exercises
-    //save the workout
-
-    //WHAT HAPPENS IF I JUST SAVE IT?
-    console.log(response);
-    dispatch({
-        type: types.FINISH_WORKOUT
-    });
-};
+// export const finishWorkout = workoutProps => async dispatch => {
+//     console.log(workoutProps);
+//     try {
+//         let responseWorkout = await axios.post(`${ROOT_URL}/createworkout/update}`, workoutProps);
+//     } catch (err) {
+//         console.log(err);
+//     }
+//     dispatch({
+//         type: types.FINISH_WORKOUT
+//     });
+//};
 
 export const clearWorkoutCreate = () => {
     return {
@@ -198,6 +197,14 @@ export const saveWorkout = (props) => {
         
     }
 }
+
+export const finishWorkout = props => async dispatch => {
+    let response = await axios.post(`${ROOT_URL}/createworkout/update`, props);
+    console.log(response.data);
+    dispatch({
+        type: types.FINISH_WORKOUT
+    });
+};
 
 export const deleteWorkout = id => async dispatch => {
     let reponse = await axios.delete(`${ROOT_URL}/workout/${id}`);

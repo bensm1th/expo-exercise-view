@@ -4,14 +4,16 @@ import { Text, View, Dimensions, StyleSheet } from 'react-native';
 import colors from '../../../colors';
 import * as types from '../../../actions/types';
 
-let SCREEN_HEIGHT = Dimensions.get("window").height;
-let SCREEN_WIDTH = Dimensions.get("window").width;
+let SCREEN_HEIGHT = Dimensions.get('window').height;
+let SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default EditStepOne = props => {
     return (
         <View>
             <View style={styles.directions}>
-                <Text style={styles.directionsText}>Step One: Edit workout name or description</Text>
+                <Text style={styles.directionsText}>
+                    Step One: Edit workout name or description
+                </Text>
             </View>
             <View style={styles.stepOneContainer}>
                 <FormLabel>Name:</FormLabel>
@@ -31,18 +33,18 @@ export default EditStepOne = props => {
                 <Button 
                     buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
                     onPress={() => props.moveEditStep(true)}
-                    title="FORWARD"
+                    title='FORWARD'
                     backgroundColor={colors.secondary.light}
                 />
                 <Button 
                     buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
                     onPress={() => props.moveEditStep(false)}
-                    title="BACK"
+                    title='BACK'
                     backgroundColor={colors.secondary.dark}
                 />
         </View>  
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     stepOneContainer: {

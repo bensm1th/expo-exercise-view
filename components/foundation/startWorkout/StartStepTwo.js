@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Button } from 'react-native-elements';
+import Status from './Status';
 import colors from '../../../colors';
-import Timer from './timer';
 
-let SCREEN_WIDTH = Dimensions.get("window").width;
-let SCREEN_HEIGHT = Dimensions.get("window").height;
+let SCREEN_WIDTH = Dimensions.get('window').width;
+let SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const calculateStatusInfo = exercises => {
     return exercises.reduce((init, exercise) => {
@@ -37,23 +37,13 @@ const StartStepTwo = props => {
         <View>
             <View style={styles.stepTwoContainerTop}>
                 <View style={styles.topTextContainer}>
-                    <Text style={styles.topTextLabel}>Workout: </Text>
                     <Text style={styles.topText}>{props.name}</Text>
                 </View>
-                <View style={styles.topTextContainer}>
-                    <Text style={styles.topTextLabel}>Description: </Text>
-                    <Text style={styles.topText}>{props.description}</Text>
-                </View>
-                <View style={styles.statusContainer}>
-                    <Text style={styles.topTextLabel}>Status: </Text>
-                    <View style={styles.timerContainer}>
-                        <Text style={styles.topText}>-elapsed time </Text>
-                        <Timer />
-                    </View>
-                    <Text style={styles.topText}>-{pointsEarned} points earned</Text>
-                    <Text style={styles.topText}>-{setsCompleted} sets completed</Text>
-                    <Text style={styles.topText}>-{exercisesCompleted} exercises completed</Text>
-                </View>
+                <Status 
+                    pointsEarned={pointsEarned}
+                    setsCompleted={setsCompleted}
+                    exercisesCompleted={exercisesCompleted}
+                />
             </View>
             <View style={styles.listLabel}>
                 <Text style={styles.listLabelText}>Exercise Name</Text>
@@ -61,30 +51,31 @@ const StartStepTwo = props => {
                 <Text style={styles.listLabelText}>Sets</Text>
             </View>
             <View style={styles.stepTwoContainer}>
-                <ScrollView keyboardShouldPersistTaps="always">
+                <ScrollView keyboardShouldPersistTaps='always'>
                     {props.renderExercises()}
                 </ScrollView>
             </View>
-            {paused.isPaused === false ? (
+            {paused.isPaused === false &&
             <Button 
-                title={"PAUSE"}
+                title={'PAUSE'}
                 onPress={props.pause}
                 backgroundColor={colors.secondary.light}
             />
-            ) : (
-            <View>
-                <Button 
-                    title={"RESUME"}
-                    onPress={props.resume}
-                    backgroundColor={colors.secondary.medium}
-                />
-                <Button 
-                    title={"FINISH WORKOUT"}
-                    onPress={props.finish}
-                    backgroundColor={colors.primary.medium}
-                />
-            </View>
-            )}
+            }
+            {paused.isPaused && 
+            <Button 
+                title={'RESUME'}
+                onPress={props.resume}
+                backgroundColor={colors.secondary.medium}
+            />
+            }
+            {(paused.isPaused || exercisesCompleted === exercises.length) &&
+            <Button 
+                title={'FINISH WORKOUT'}
+                onPress={props.finish}
+                backgroundColor={colors.primary.medium}
+            />
+            }
         </View>  
     );
 };
@@ -100,14 +91,19 @@ const styles = StyleSheet.create({
         borderColor: colors.border.light,
         marginLeft: SCREEN_WIDTH * 0.036,
         width: SCREEN_WIDTH * 0.928,
-        maxHeight: SCREEN_HEIGHT * 0.4
+        maxHeight: SCREEN_HEIGHT * 0.37
     },
     topText: {
-        fontSize: 16
+        fontSize: 20,
+        fontWeight: 'bold',
+        letterSpacing: 3,
+        color: colors.text.dark
     },
     topTextContainer: {
          marginVertical: 3,
-         flexDirection: 'row'
+         flexDirection: 'row',
+         alignItems: 'center',
+         justifyContent: 'center'
     },
     topTextLabel: {
         fontWeight: 'bold',
@@ -131,10 +127,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: colors.background.white
     },
-    timerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    }
 });
 
 export { StartStepTwo };

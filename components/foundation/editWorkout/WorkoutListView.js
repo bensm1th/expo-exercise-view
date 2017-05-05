@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, StyleSheet, ListView, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ListView, Dimensions, ActivityIndicator } from 'react-native';
 import SmallList from '../smallListItem';
 import * as actions from '../../../actions';
 import colors from '../../../colors';
 
-let SCREEN_HEIGHT = Dimensions.get("window").height;
-let SCREEN_WIDTH = Dimensions.get("window").width;
+let SCREEN_HEIGHT = Dimensions.get('window').height;
+let SCREEN_WIDTH = Dimensions.get('window').width;
 
-const createInfoText = workout => {
-    return [{ label: 'Description', text: workout.description }]
-};
+const excludeFinishedWorkouts = workouts => workouts.filter(workout => !workout.finished);
+
+const createInfoText = workout => [{ label: 'Description', text: workout.description }];
 
 class WorkoutListView extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.props.fetchWorkouts();
@@ -32,7 +29,7 @@ class WorkoutListView extends Component {
     }
 
     renderRow = (workout) => {
-        let infoText = createInfoText(workout);
+        const infoText = createInfoText(workout);
         const onSelect = this.props.parent === 'start' ? this.props.selectStartWorkout : this.props.workoutEditVisibility;
         return (
             <SmallList
@@ -46,7 +43,7 @@ class WorkoutListView extends Component {
                 infoText={infoText}
                 parent={this.props.parent}
             />
-        )
+        );
     }
 
     render() {
@@ -78,7 +75,7 @@ const mapStateToProps = state => {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
         edit_workouts,
-        listData: ds.cloneWithRows(edit_workouts.workouts)
+        listData: ds.cloneWithRows(excludeFinishedWorkouts(edit_workouts.workouts))
     };
 };
 

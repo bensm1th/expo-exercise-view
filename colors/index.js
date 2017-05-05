@@ -12,13 +12,14 @@ const colors = {
     background: {
         light: '#f7f7f7',
         white: '#ffffff',
-        dark: '#a9a9a9'
+        dark: '#dbdbdb'
     }, 
     border: {
         light: '#e0e0e0'
     },
     text: {
         dark: '#000000',
+        coalmine: '#555758',
         light: '#ffffff'
     }
 };
@@ -48,5 +49,5 @@ const colors2 = {
     }
 };
 
-export default colors2;
+export default colors;
 

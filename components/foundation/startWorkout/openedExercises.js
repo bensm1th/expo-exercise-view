@@ -20,7 +20,7 @@ const calculatePointsEarned = sets => {
 const OpenedExercises = props => (
     <View>
     {props.exercises.map(exercise => {
-        const { openedExercise, finishedSets } = props;
+        const { openedExercise, finishedSets, paused: { isPaused } } = props;
         const { exerciseInfo: { points, name }, sets, _id } = exercise;
         const countFinished = sets.filter(set => finishedSets.some(id => id === set._id)).length;
         const addCheck = countFinished === sets.length;
@@ -29,7 +29,10 @@ const OpenedExercises = props => (
         return (
             <View key={exercise._id}>
                 <TouchableOpacity
-                    onPress={() => props.openSets(exercise)}
+                    onPress={() => {
+                        if (isPaused) return;
+                        props.openSets(exercise);
+                    }}
                 >
                     <View style={styles.startedExerciseContainer}>
                         {addCheck &&
@@ -44,7 +47,7 @@ const OpenedExercises = props => (
                         <Text>{countFinished}/{sets.length}</Text>
                     </View>
                 </TouchableOpacity>
-                {openedExercise._id === _id &&
+                {openedExercise._id === _id && !isPaused &&
                     <View>
                     {props.renderOpenedSets(sets)}
                     </View>    

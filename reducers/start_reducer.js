@@ -127,7 +127,6 @@ export default start_reducer = (state = initialState, action = {}) => {
             }
         }
         case types.FINISH_WORKOUT:
-            console.log('---- workout finished -----');
             return initialState;
         case types.RESUME_WORKOUT:
             return {

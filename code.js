@@ -66,12 +66,46 @@
 
 // // Note: I am using Haskell's type declaration notation in the comments above the functions 
 // // (e.g. toVideo :: JSON -> Video). It describes the input and output of the declared function.
-const lines = [181, 29, 36, 140, 80, 140, 30, 66, 69, 53, 
-91, 58, 100, 50, 103, 64, 60, 47, 54, 70, 65, 87, 155, 
-97, 87, 35, 66, 91, 65, 232, 124, 149, 245, 181];
+// const lines = [181, 29, 36, 140, 80, 140, 30, 66, 69, 53, 
+// 91, 58, 100, 50, 103, 64, 60, 47, 54, 70, 65, 87, 155, 
+// 97, 87, 35, 66, 91, 65, 232, 124, 149, 245, 181];
 
-const sum = lines.reduce((init, curr) => {
-  return init + curr;
-}, 0);
+// const sum = lines.reduce((init, curr) => {
+//   return init + curr;
+// }, 0);
 
-console.log(sum);
+// console.log(sum);
+const response = 
+{"data":{"_id":"59022fc5fd30c23410c4bf90",
+"pointsEarned":0,"name":"Use this ","description":"It has sets for the exercises. ","__v":0,
+"exercises":
+[{"_id":"59022fc5fd30c23410c4bf8c","exerciseInfo":"58ebd3ec8065ea2b6474e9b4","__v":0,
+"pointsEarned":0,"sets":[{"_id":"59022fc5fd30c23410c4bf88","__v":0,"goals":{"weight":225,"number":12}},
+{"_id":"59022fc5fd30c23410c4bf89","__v":0,"goals":{"weight":225,"number":12}}]},
+
+{"_id":"59022fc5fd30c23410c4bf8b","exerciseInfo":"58ebd3e28065ea2b6474e9b3","__v":0,"pointsEarned":0,
+"sets":[{"_id":"59022fc5fd30c23410c4bf87","__v":0,"goals":{"weight":225,"number":5}}]},
+
+{"_id":"59022fc5fd30c23410c4bf8e","exerciseInfo":"58e3eadcd10b783aacb02936","__v":0,"pointsEarned":0,
+"sets":[{"_id":"59022fc5fd30c23410c4bf81","__v":0,"goals":{"weight":135,"number":12}},
+{"_id":"59022fc5fd30c23410c4bf82","__v":0,"goals":{"weight":135,"number":12}},
+{"_id":"59022fc5fd30c23410c4bf83","__v":0,"goals":{"weight":135,"number":12}}]},
+
+{"_id":"59022fc5fd30c23410c4bf8d","exerciseInfo":"58e3ebab2ec5511de8f11cc3","__v":0,"pointsEarned":0,
+"sets":[{"_id":"59022fc5fd30c23410c4bf84","__v":0,"goals":{"weight":220,"number":10}},
+{"_id":"59022fc5fd30c23410c4bf85","__v":0,"goals":{"weight":220,"number":10}},
+{"_id":"59022fc5fd30c23410c4bf86","__v":0,"goals":{"weight":220,"number":10}}]},
+
+{"_id":"59022fc5fd30c23410c4bf8f","exerciseInfo":"58ebd3fc8065ea2b6474e9b5","__v":0,"pointsEarned":0,
+"sets":[{"_id":"59022fc5fd30c23410c4bf8a","__v":0,"goals":{"weight":225,"number":8}}]
+}]}}
+
+
+const sets = response.exercises.map(exercise => {
+        return exercise.sets.map(set => {
+            return set;
+        });
+    });
+
+cosole.log(sets);
+

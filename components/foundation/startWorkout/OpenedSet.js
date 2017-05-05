@@ -14,29 +14,31 @@ const OpenedSet = props => {
             const setFinished = finishedSets.some(id => id === set._id);
             let iconName;
             if (open) {
-                iconName = 'minus-circle';
+                iconName = 'expand-less';   
             }
             if (!open) {
-                iconName = 'plus-circle';
+                iconName = 'expand-more';
             }
             if (setFinished) {
-                iconName = 'check';
+                iconName = 'check-circle';
             }
             return (
             <View style={styles.setContainer} key={set._id}>
                 <View key={set._id} style={styles.setContainerTop}>
-                    <TouchableOpacity onPress={() => props.setsEditOpen(set)}>
+                    <TouchableOpacity 
+                        onPress={() => props.setsEditOpen(set)}
+                    >
                         <Icon 
                             name={iconName}
-                            type="font-awesome"
-                            size={40}
+                            size={45}
+                            color={colors.secondary.dark}
                         />
                     </TouchableOpacity>
                     <Text>Goals: </Text>
                     <Text>weight - {set.goals.weight}</Text>
                     <Text>reps - {set.goals.number}</Text>
                 </View>
-                {open &&
+                {open && 
                 <View>
                     {props.renderActualReps()}
                 </View>    
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         backgroundColor: colors.background.dark,
-        height: SCREEN_HEIGHT * 0.1,
+        height: SCREEN_HEIGHT * 0.06,
         borderBottomWidth: 1,
         borderBottomColor: colors.border.light
     },

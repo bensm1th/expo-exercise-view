@@ -43,28 +43,28 @@ const ActualReps = props => {
         const reps = makeReps();
         return (
             <View style={styles.pickersContainer}>
-                <View>
-                    <Text>weight</Text>
+                <View style={styles.formUnit}>
+                    <Text>weight: </Text>
                     <ModalPicker
                         onChange={text => changeActualSetText(text.label, types.CHANGE_ACTUAL_SET_WEIGHT, props.setChangeAcutalText)}
                         data={weights}
                     >
                         <TextInput 
-                            style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, height: 30, width: 75 }}
+                            style={styles.formInput}
                             editable={false}
                             value={weight}
                             placeholder='weight'
                         />
                     </ModalPicker> 
                 </View>
-                <View>
-                    <Text>reps</Text>
+                <View style={styles.formUnit}>
+                    <Text>reps: </Text>
                     <ModalPicker
                         data={reps}
                         onChange={text => changeActualSetText(text.label, types.CHANGE_ACTUAL_SET_REPS, props.setChangeAcutalText)}
                     >
                         <TextInput 
-                            style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, height: 30, width: 75 }}
+                            style={styles.formInput}
                             editable={false}
                             value={number}
                             placeholder='reps'
@@ -80,12 +80,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginBottom: 10,
-        borderColor: colors.border.light,
-        borderWidth: 1,
         marginHorizontal: SCREEN_WIDTH * 0.036,
         padding: 5
     },
+    formUnit: {
+        flexDirection: 'row'
+    },
+    formInput: {
+        borderWidth: 1, 
+        borderColor: '#ccc', 
+        padding: 10, 
+        width: 75
+    }
 });
 
 export { ActualReps };

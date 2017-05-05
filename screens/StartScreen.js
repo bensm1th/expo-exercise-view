@@ -57,7 +57,7 @@ class StartScreen extends Component {
     }
 
     renderExercises = () => {
-        const { openedExercise, startedWorkout: { exercises }, finishedSets } = this.props.start;
+        const { openedExercise, startedWorkout: { exercises }, finishedSets, paused } = this.props.start;
         return (
             <Start.OpenedExercises 
                 exercises={exercises}
@@ -65,6 +65,7 @@ class StartScreen extends Component {
                 openedExercise={openedExercise}
                 renderOpenedSets={this.renderOpenedSets}
                 finishedSets={finishedSets}
+                paused={paused}
             />
             );
     }
