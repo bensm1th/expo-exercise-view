@@ -5,7 +5,8 @@ import moment from 'moment';
 import * as types from './types';
 
 const URL = '192.168.1.109';
-const ROOT_URL = `http://${URL}:3000`;
+//const ROOT_URL = `http://${URL}:3000`;
+const ROOT_URL = 'https://mobile-lifting.herokuapp.com';
 
 export const setChangeAcutalText = props => {
     return {

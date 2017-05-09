@@ -4,7 +4,8 @@ import { Facebook } from 'expo';
 import * as types from './types';
 
 const URL = '192.168.1.109';
-const ROOT_URL = `http://${URL}:3000`;
+const ROOT_URL = 'https://mobile-lifting.herokuapp.com';
+//const ROOT_URL = `http://${URL}:3000`;
 
 const saveUser = async (token, dispatch) => {
     console.log('----------- saving user ----------');

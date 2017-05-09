@@ -2,7 +2,8 @@ import axios from 'axios';
 import * as types from './types';
 
 const URL = '192.168.1.109';
-const ROOT_URL = `http://${URL}:3000`;
+//const ROOT_URL = `http://${URL}:3000`;
+const ROOT_URL = 'https://mobile-lifting.herokuapp.com';
 
 export const cancelWorkoutCreate = () => {
     return {
