@@ -33,6 +33,8 @@ const initialState = {
 
 const editWorkoutsReducer = (state = initialState, action = {}) => {
     switch (action.type) {
+        case types.CANCEL_WORKOUT_CREATE:
+            return initialState;
         case types.ERROR_WORKOUT_EDIT:
             return {
                 ...state,

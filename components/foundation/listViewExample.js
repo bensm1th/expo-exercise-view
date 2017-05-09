@@ -22,7 +22,8 @@ const createInfoText = exercise => {
 class ListViewExample extends Component {
     constructor(props) {
         super(props);
-        this.props.fetchExercises();
+        const { user: { id } } = this.props.auth;
+        this.props.fetchExercises(id);
     }
 
     renderListView = () => {
@@ -46,6 +47,7 @@ class ListViewExample extends Component {
                 rightIcon={this.props.rightIcon}
                 {...exercise}
                 infoText={infoText}
+                userId={this.props.auth.user.id}
             />
         );
     }
@@ -87,12 +89,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { setup_exercises } = state;
+    const { setup_exercises, auth } = state;
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
         setup_exercises,
+        auth,
         listData: ds.cloneWithRows(setup_exercises.exercises)
-    }
-}
+    };
+};
 
 export default connect(mapStateToProps, actions)(ListViewExample);

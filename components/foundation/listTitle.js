@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import colors from '../../colors';
 
-let ScreenHeight = Dimensions.get("window").height;
-let headerHeight = ScreenHeight * 0.1;
+let SCREEN_HEIGHT = Dimensions.get('window').height;
+let headerHeight = SCREEN_HEIGHT * 0.1;
 
 const ListTitle = (props) => {
     return (

@@ -15,7 +15,7 @@ const createInfoText = workout => [{ label: 'Description', text: workout.descrip
 class WorkoutListView extends Component {
 
     componentDidMount() {
-        this.props.fetchWorkouts();
+        this.props.fetchWorkouts(this.props.auth.user.id);
     }
 
     renderListView = () => {
@@ -54,7 +54,6 @@ class WorkoutListView extends Component {
                 <View>
                     {this.renderListView()}
                 </View>
-                    
                 }
                 {waiting &&
                 <View>
@@ -71,10 +70,11 @@ class WorkoutListView extends Component {
 }
 
 const mapStateToProps = state => {
-    const { edit_workouts } = state;
+    const { edit_workouts, auth } = state;
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
         edit_workouts,
+        auth,
         listData: ds.cloneWithRows(excludeFinishedWorkouts(edit_workouts.workouts))
     };
 };

@@ -62,7 +62,10 @@ class _DeleteWorkout extends Component {
         this.props.onBackDeleteWorkouts();
     }
 
-
+    onCancel = () => {
+    this.props.cancelWorkoutCreate();
+    this.props.navigation.navigate('setup');
+    }
 
     render() {
         const { name, description } = this.props.edit_workouts.selectedWorkout;
@@ -94,9 +97,10 @@ class _DeleteWorkout extends Component {
                     saveWorkoutMethod={this.saveWorkoutMethod}
                     renderFinalExercises={this.renderFinalExercises}
                     decrementStep={this.decrementStep}
-                    workoutInfo = {{ name, description, title: 'Do you want to delete this workout?'}}
+                    workoutInfo={{ name, description, title: 'Do you want to delete this workout?' }}
                     buttons={buttons}
                     parent='deleteWorkout'
+                    onCancel={this.onCancel}
                 />
                 ) }
             </View>

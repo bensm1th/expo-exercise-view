@@ -36,8 +36,6 @@ const styles = StyleSheet.create({
      exerciseContainer: {
         borderWidth: 1,
         borderColor: colors.border.light,
-        marginLeft: SCREEN_WIDTH * 0.036,
-        marginRight: SCREEN_WIDTH * 0.036,
         backgroundColor: colors.background.white
     },
     textContainer: {

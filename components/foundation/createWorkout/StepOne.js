@@ -8,7 +8,7 @@ let SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const StepOne = (props) => {
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.directions}>
                 <Text style={styles.directionsText}>Step 1: Enter workout information.</Text>
             </View>
@@ -25,17 +25,27 @@ const StepOne = (props) => {
             {props.errorMessage.length > 0 &&
                 <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
             }
-            <Button 
-                buttonStyle={{ marginTop: 5 }}
-                title='FORWARD'
-                onPress={props.incrementStep}
-                backgroundColor={colors.secondary.light}
-            />
-            <Button 
-                title='BACK'
-                onPress={props.onBack}
-                backgroundColor={colors.secondary.dark}
-            />
+            <View style={styles.buttonContainer}>
+                <Button 
+                    buttonStyle={styles.buttonStyle}
+                    title='NEXT'
+                    onPress={props.incrementStep}
+                    backgroundColor={colors.secondary.light}
+                />
+                <Button 
+                    buttonStyle={styles.buttonStyle}
+                    title='BACK'
+                    onPress={props.onBack}
+                    backgroundColor={colors.secondary.dark}
+                />
+                <Button 
+                    buttonStyle={styles.buttonStyle}
+                    title='CANCEL'
+                    onPress={props.onCancel}
+                    backgroundColor={colors.primary.dark}
+                />
+            </View>
+            
         </View>
     );
 };
@@ -49,6 +59,19 @@ const styles = StyleSheet.create({
     directionsText: {
         fontSize: 20
     },
+    buttonStyle: {
+        width: 110,
+        height: 50,
+        marginTop: 10
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    container: {
+        backgroundColor: colors.background.medium,
+        height: SCREEN_HEIGHT
+    }
 });
 
 export default StepOne;

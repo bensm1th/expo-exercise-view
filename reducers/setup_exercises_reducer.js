@@ -6,8 +6,8 @@ const initialState = {
     exerciseForm: {
         exerciseName: '',
         exerciseDescription: '',
-        exerciseType: '',
-        exercisePoints: ''
+        exerciseType: 'Strength',
+        exercisePoints: '1'
     },
     exerciseEdit: {
         listVisibility: true,
@@ -21,39 +21,38 @@ const initialState = {
         selectedExercise: {}
     },
     errorMessage: ''
-}
-
+};
 
 const setupExercisesReducer = (state = initialState, action = {}) => {
-    switch(action.type) {
+    switch (action.type) {
         case types.EXERCISE_CREATE_ERROR: 
             return {
                 ...state,
                 errorMessage: action.payload
-            }
+            };
         case types.SAVE_WORKOUT:
             return initialState;
         case types.SETUP_CHOICE:
             return {
                 ...state,
                 setupOption: action.payload
-            }
+            };
         case types.CLOSE_MODAL:
             return {
                 ...state,
                 modalVisible: false,
                 exerciseEdit: { ...state.exerciseEdit, moreInfoId: "" }
-            }
+            };
         case types.CHANGE_EXERCISE_NAME:
             return {
                 ...state,
                 exerciseForm: { ...state.exerciseForm, exerciseName: action.payload }
-            }    
+            };
         case types.CHANGE_EXERCISE_DESCRIPTION:
             return {
                 ...state,
                 exerciseForm: { ...state.exerciseForm, exerciseDescription: action.payload }
-            }
+            };
         case types.CHANGE_EXERCISE_TYPE:
             return {
                 ...state,
@@ -63,13 +62,13 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
             return {
                 ...state,
                 exerciseForm: { ...state.exerciseForm, exercisePoints: action.payload }
-            }
+            };
         case types.SAVE_EXERCISE_INFO:
             return {
                 ...state,
                 exerciseForm: initialState.exerciseForm,
                 errorMessage: initialState.errorMessage
-            }
+            };
         case types.TOGGLE_EXERCISE_VISIBILITY:
             return {
                 ...state,
@@ -78,7 +77,7 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
                     listVisibility: !state.exerciseEdit.listVisibility, 
                     selectedExercise: action.payload 
                 }
-            }
+            };
         case types.TOGGLE_DELETE_EXERCISE_VISIBILITY:
             return {
                 ...state,
@@ -87,24 +86,23 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
                     listVisibility: !state.exerciseDelete.listVisibility,
                     selectedExercise: action.payload
                 }
-            }
+            };
         case types.FETCH_EXERCISES: 
             return {
                 ...state,
                 exercises: action.payload
-            }
+            };
         case types.TOGGLE_EDIT_INFO:
             const moreInfoId = state.exerciseEdit.moreInfoId === action.payload ? '' : action.payload;
             return {
                 ...state,
                 exerciseEdit: { ...state.exerciseEdit, moreInfoId }
-            }
+            };
         case types.CLOSE_EDIT_INFO:
-            console.log('============hit close edit info in reducer---------------');
             return {
                 ...state,
                 exerciseEdit: { ...state.exerciseEdit, moreInfoId: "" }
-            }
+            };
         case types.EDIT_EXERCISE_NAME:
             return {
                 ...state,
@@ -115,7 +113,7 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
                         name: action.payload
                     }
                 }
-            }
+            };
         case types.EDIT_EXERCISE_POINTS:
             return {
                 ...state,
@@ -126,7 +124,7 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
                         points: action.payload
                     }
                 }
-            }
+            };
         case types.EDIT_EXERCISE_TYPE:
             return {
                 ...state,
@@ -137,7 +135,7 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
                         type: action.payload
                     }
                 }
-            }
+            };
         case types.EDIT_EXERCISE_DESCRIPTION:
             return {
                 ...state,
@@ -148,10 +146,10 @@ const setupExercisesReducer = (state = initialState, action = {}) => {
                         description: action.payload
                     }
                 }
-            }
+            };
         default: 
             return state;
     }
-}
+};
 
 export default setupExercisesReducer;

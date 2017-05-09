@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, UIManager, LayoutAnimation } from 'react-native';
+import { Text, View, UIManager, LayoutAnimation, Dimensions, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 import EditStepOne from '../foundation/editWorkout/EditStepOne';
 import EditStepZero from '../foundation/editWorkout/EditStepZero';
@@ -8,6 +8,9 @@ import EditStepTwo from '../foundation/editWorkout/EditStepTwo';
 import ListTitle from '../foundation/listTitle';
 import SmallList from '../foundation/smallListItem';
 import * as actions from '../../actions';
+import colors from '../../colors';
+
+let SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const validateWorkoutForm = formProps => {
     const { name, description } = formProps;
@@ -47,7 +50,8 @@ const createInfoText = exercise => {
 class _EditWorkout extends Component {
 
     componentDidMount() {
-        this.props.fetchExercises();
+        const { user: { id } } = this.props.auth;
+        this.props.fetchExercises(id);
     }
 
     componentWillUpdate() {
@@ -82,6 +86,7 @@ class _EditWorkout extends Component {
     }
 
     onBackListVisible = () => {
+        this.props.onBackDeleteWorkouts();
         this.props.workoutInfoVisibility('');
         this.props.navigation.navigate('setup');
     }
@@ -136,21 +141,29 @@ class _EditWorkout extends Component {
         const exerciseList = add ? addExercises : selectedExercises;
         const onSelect = add ? this.onSelectAdd : this.onSelectDelete;
         const rightIcon = add ? this.rightIconAdd : this.rightIconDelete;
-        return exerciseList.map(exercise => {
-                const infoTextArg = add ? exercise : exercise.exerciseInfo;
-                const infoText = createInfoText(infoTextArg);
-                return (
-                        <SmallList
-                            key={exercise._id}
-                            onSelect={onSelect}
-                            id={exercise._id}
-                            onMoreInfo={this.props.toggleDeleteInfo}
-                            moreInfoId={this.props.edit_workouts.deleteMoreInfoId}
-                            rightIcon={rightIcon}
-                            {...infoTextArg}
-                            infoText={infoText}
-                        />);
-            });
+        if (exerciseList.length === 0) {
+            const message = add ? 'No more exercises to add.' : 'No more exercises to delete';
+            return (
+                    <View style={styles.blankContainer}>
+                        <Text style={styles.blankText}>{message}</Text>
+                    </View>
+                    );
+        }
+        return exerciseList.map((exercise) => {
+            const infoTextArg = add ? exercise : exercise.exerciseInfo;
+            const infoText = createInfoText(infoTextArg);
+            return (
+                    <SmallList
+                        key={exercise._id}
+                        onSelect={onSelect}
+                        id={exercise._id}
+                        onMoreInfo={this.props.toggleDeleteInfo}
+                        moreInfoId={this.props.edit_workouts.deleteMoreInfoId}
+                        rightIcon={rightIcon}
+                        {...infoTextArg}
+                        infoText={infoText}
+                    />);
+        });
     };
 
     render() {
@@ -191,11 +204,25 @@ class _EditWorkout extends Component {
 }
 
 const mapStateToProps = state => {
-    const { edit_workouts, setup_workouts } = state;
+    const { edit_workouts, setup_workouts, auth } = state;
     return {
-        edit_workouts, setup_workouts
+        edit_workouts, setup_workouts, auth
     };
 };
+
+const styles = StyleSheet.create({
+    blankContainer: { 
+        height: SCREEN_HEIGHT * 0.12, 
+        backgroundColor: colors.background.light, 
+        borderWidth: 1, 
+        borderColor: colors.border.light,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    blankText: {
+        fontSize: 20
+    }
+});
 
 const EditWorkout = connect(mapStateToProps, actions)(_EditWorkout);
 export { EditWorkout };

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native'
+import { connect } from 'react-redux';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { Icon } from 'react-native-elements';
 import ListTitle from '../components/foundation/listTitle';
+import * as actions from '../actions';
+import colors from '../colors';
+
+let SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class HomeScreen extends Component {
 
@@ -20,17 +25,36 @@ class HomeScreen extends Component {
     }
 
     render() {
+        const { firstName, lastName } = this.props.user;
         return (
-            <View>
+            <View style={styles.container}>
                 <ListTitle title="Home" />
-                <Text>HomeScreen</Text>
-                <Text>HomeScreen</Text>
-                <Text>HomeScreen</Text>
-                <Text>HomeScreen</Text>
-                <Text>HomeScreen</Text>
+                <View style={styles.body}>
+                    <Text>Welcome</Text>
+                    <Text>{firstName}</Text>
+                    <Text>{lastName}</Text>
+                </View>
             </View>
         );
     }
 }
 
-export default HomeScreen;
+const mapStateToProps = state => {
+    const { auth, auth: { user } } = state;
+    return {
+        auth, user
+    };
+};
+
+const styles = StyleSheet.create({
+    body: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    container: {
+        backgroundColor: colors.background.medium,
+        flex: 1
+    }
+});
+
+export default connect(mapStateToProps, actions)(HomeScreen);

@@ -30,18 +30,20 @@ export default EditStepOne = props => {
             {props.errorMessage.length > 0 &&
                 <FormValidationMessage>{props.errorMessage}</FormValidationMessage>
             }
+            <View style={styles.buttonContainer}>
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
+                    buttonStyle={styles.buttonStyle}
                     onPress={() => props.moveEditStep(true)}
-                    title='FORWARD'
+                    title='NEXT'
                     backgroundColor={colors.secondary.light}
                 />
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
+                    buttonStyle={styles.buttonStyle}
                     onPress={() => props.moveEditStep(false)}
                     title='BACK'
                     backgroundColor={colors.secondary.dark}
                 />
+            </View>
         </View>  
     );
 };
@@ -63,4 +65,14 @@ const styles = StyleSheet.create({
     directionsText: {
         fontSize: 20
     },
-})
+    buttonContainer: {
+        marginHorizontal: SCREEN_WIDTH * 0.05,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    }, 
+    buttonStyle: {
+        marginLeft: 0,
+        marginRight: 0,
+        width: 125
+    }
+});

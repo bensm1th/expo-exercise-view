@@ -35,16 +35,17 @@ const OpenedExercises = props => (
                     }}
                 >
                     <View style={styles.startedExerciseContainer}>
+                        <Text>{name}</Text>
+                        <Text>{pointsEarned}/{totalPoints} pts</Text>
+                        <Text>{countFinished}/{sets.length}</Text>
                         {addCheck &&
                             <Icon 
                                 name="check"
                                 type="font-awesome"
-                                size={40}
+                                size={30}
+                                color={colors.secondary.dark}
                             />    
                         }
-                        <Text>{name}</Text>
-                        <Text>{pointsEarned}/{totalPoints} pts</Text>
-                        <Text>{countFinished}/{sets.length}</Text>
                     </View>
                 </TouchableOpacity>
                 {openedExercise._id === _id && !isPaused &&

@@ -32,7 +32,7 @@ export default EditStepTwo = props => {
             <View style={styles.stepTwoBottom}>
                 {props.exerciseEditOption === 'left' &&
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
+                    buttonStyle={styles.buttonStyle}
                     onPress={() => props.incrementStepAdd()}
                     title="NEXT"
                     backgroundColor={colors.secondary.light}
@@ -40,14 +40,14 @@ export default EditStepTwo = props => {
                 }
                 {props.exerciseEditOption !== 'left' &&
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
+                    buttonStyle={styles.buttonStyle}
                     onPress={props.removeExercisesFromWorkout}
                     title="DELETE"
                     backgroundColor={colors.primary.medium}
                 />
                 }
                 <Button 
-                    buttonStyle={{ width: 125, marginLeft: SCREEN_WIDTH * 0.05 }}
+                    buttonStyle={styles.buttonStyle}
                     onPress={() => props.moveEditStep(false)}
                     title="BACK"
                     backgroundColor={colors.secondary.dark}
@@ -58,14 +58,21 @@ export default EditStepTwo = props => {
 }
 
 const styles = StyleSheet.create({
+    buttonStyle: {
+        width: 125,
+        marginLeft: 0,
+        marginRight: 0
+    },
     stepTwoBottom: {
         paddingTop: SCREEN_HEIGHT * 0.025,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: SCREEN_WIDTH * 0.05
     },
     stepTwoScrollView: {
         width: SCREEN_WIDTH * 0.9,
         marginLeft: SCREEN_WIDTH * 0.05,
-        height: SCREEN_HEIGHT * 0.55,
+        maxHeight: SCREEN_HEIGHT * 0.55,
     },
     listContainer: {
         width: SCREEN_WIDTH * 0.9,

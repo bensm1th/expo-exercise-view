@@ -43,11 +43,10 @@ const toggleExerciseCheck = (props, state) => {
     });
     if (exercises.length !== filteredExercises.length) {
         return updatedExercises = filteredExercises;
-    }
-    else {
+    } else {
         return updatedExercises = [...exercises, props];
     }
-}
+};
 
 const toggleSetsView = (props, exercises) => {
     return exercises.map(exercise => {
@@ -57,13 +56,13 @@ const toggleSetsView = (props, exercises) => {
         }
         return exercise;
     });
-}
+};
 
 const deleteSet = (props, exercises) => {
     return exercises.map(exercise => {
         if (exercise.exerciseInfo._id === props.exerciseId) {
             exercise.sets = exercise.sets.filter(set => {
-                return set._id !== props.setId
+                return set._id !== props.setId;
             });
             if (exercise.sets.length === 0) {
                 exercise.setsVisibility = false;
@@ -72,7 +71,7 @@ const deleteSet = (props, exercises) => {
         }
         return exercise;
     });
-}
+};
 const removeDeletedExercises = (exercises, deleteExercises) => {
     return exercises
     .map(exercise => {
@@ -81,16 +80,16 @@ const removeDeletedExercises = (exercises, deleteExercises) => {
                 weight: set.goals.weight.toString(), 
                 reps: set.goals.number.toString(), 
                 _id: set._id 
-            }
+            };
         });
         return { exerciseInfo: exercise.exerciseInfo, sets, setsVisibility: false, setsSaved: false }
     })
     .filter(exercise => {
         return !deleteExercises.some(_id => {
-            return _id === exercise._id
+            return _id === exercise._id;
         });
     });
-}
+};
 const initialState = {
     createForm: {
         name: "",
@@ -101,10 +100,12 @@ const initialState = {
     populatedExercises: [],
     editWorkout: false,
     errorMessage: ""
-}
+};
 
 const setupWorkoutsReducer = (state = initialState, action = {}) => {
-    switch(action.type) {
+    switch (action.type) {
+        case types.CANCEL_WORKOUT_CREATE:
+            return initialState;
         case types.CLEAR_WORKOUT_CREATE:
             return initialState;
         case types.ERROR_WORKOUT_CREATE:
@@ -120,7 +121,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
         case types.EDIT_ADD_EXERCISES:
             
             const { newExercises, deleteExercises, currentWorkout: { name, description, exercises } } = action.payload;            
-            const removeDeleted = removeDeletedExercises(exercises, deleteExercises)
+            const removeDeleted = removeDeletedExercises(exercises, deleteExercises);
             
             const currentExercises = [...newExercises, ...removeDeleted];
 
@@ -130,7 +131,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 createStep: 3,
                 editWorkout: true,
                 createForm: { name, description }
-            }
+            };
         case types.SAVE_WORKOUT:
             return initialState;
         case types.DELETE_SET:
@@ -140,7 +141,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 populatedExercises: [
                     ...deletedSet
                 ]
-            }
+            };
         case types.TOGGLE_SETS_VIEW:
             const toggledSets = toggleSetsView(action.payload, [...state.populatedExercises]);
             return {
@@ -148,7 +149,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 populatedExercises: [
                     ...toggledSets
                 ]
-            }
+            };
         case types.CHANGE_SET_REPS_TEXT:
             const changeReps = changeSetText(action.payload, 'reps', state);
             return {
@@ -156,7 +157,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 populatedExercises: [
                     ...changeReps
                 ]
-            }
+            };
         case types.CHANGE_SET_WEIGHT_TEXT:
             const changeWeight = changeSetText(action.payload, 'weight', state);
             return {
@@ -164,7 +165,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 populatedExercises: [
                     ...changeWeight
                 ]
-            }
+            };
         case types.ADD_SET:
             const addSetToExercise = addSet(action.payload, state);
             return {
@@ -172,7 +173,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 populatedExercises: [
                     ...addSetToExercise
                 ]
-            }
+            };
         case types.FETCH_EXERCISES_BY_ID:
             const exerciseModel = action.payload.map(exercise => {
                 return { exerciseInfo: exercise, sets: []}
@@ -182,7 +183,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 populatedExercises: [
                     ...exerciseModel
                 ]
-            }
+            };
         case types.TOGGLE_EXERCISE_CHECK:
             const toggledExercises = toggleExerciseCheck(action.payload, state);
             return {
@@ -190,7 +191,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                 exercises: [
                     ...toggledExercises
                 ]
-            }
+            };
         case types.CHANGE_WORKOUT_NAME:
             return {
                 ...state,
@@ -198,7 +199,7 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                     ...state.createForm,
                     name: action.payload
                 }
-            }
+            };
         case types.CHANGE_WORKOUT_DESCRIPTION:
             return {
                 ...state,
@@ -206,17 +207,17 @@ const setupWorkoutsReducer = (state = initialState, action = {}) => {
                     ...state.createForm,
                     description: action.payload
                 }
-            }
+            };
         case types.INCREMENT_CREATE_WORKOUT_STEP:
             return {
                 ...state,
                 createStep: state.createStep + 1
-            }
+            };
         case types.DECREMENT_CREATE_WORKOUT_STEP:
             return {
                 ...state,
                 createStep: state.createStep - 1
-            }
+            };
         default:
             return state;
     }

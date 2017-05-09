@@ -52,15 +52,18 @@ class SmallListItem extends Component {
             color: fadeInterpolation
         }
         return this.props.infoText.map(info => {
-            return (
-                <View style={styles.infoItem} key={info.label}>
-                    <Animated.Text style={[styles.moreInfoText, fadeStyle]}>{info.label}: </Animated.Text>
-                    <Animated.Text style={fadeStyle}>{info.text}</Animated.Text> 
-                </View>
-            )});
+            if (info.label !== 'User') {
+                return (
+                    <View style={styles.infoItem} key={info.label}>
+                        <Animated.Text style={[styles.moreInfoText, fadeStyle]}>{info.label}: </Animated.Text>
+                        <Animated.Text style={fadeStyle}>{info.text}</Animated.Text> 
+                    </View>
+                );
+            }
+        });
     }
     render() { 
-        const { onSelect, id, moreInfoId, onMoreInfo, parent, workout } = this.props;
+        const { onSelect, id, moreInfoId, onMoreInfo, parent, workout, userId } = this.props;
         const rotateMoreInterpolation = this.animatedValue.interpolate({
             inputRange: [0, 1],
             outputRange: ['0deg', '180deg']
@@ -88,7 +91,7 @@ class SmallListItem extends Component {
                             <Text style={styles.itemText}>{this.props.name}</Text>
                             <View style={styles.rightIcon}>
                                 <TouchableWithoutFeedback
-                                    onPress={() => this.props.onSelect(onSelectProp)}
+                                    onPress={() => this.props.onSelect(onSelectProp, userId)}
 
                                 >
                                     <View style={styles.moreInfo}>

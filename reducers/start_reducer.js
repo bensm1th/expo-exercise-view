@@ -117,6 +117,8 @@ const initialState = {
 
 export default start_reducer = (state = initialState, action = {}) => {
     switch (action.type) {
+        case types.CANCEL_START_WORKOUT: 
+            return initialState;
         case types.SEND_PAUSE_TIME: {
             return {
                 ...state,
@@ -124,7 +126,7 @@ export default start_reducer = (state = initialState, action = {}) => {
                     ...state.paused,
                     elapsedDuration: action.payload
                 }
-            }
+            };
         }
         case types.FINISH_WORKOUT:
             return initialState;

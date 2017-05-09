@@ -13,14 +13,18 @@ const OpenedSet = props => {
             const open = openedSet._id === set._id;
             const setFinished = finishedSets.some(id => id === set._id);
             let iconName;
+            let size;
             if (open) {
                 iconName = 'expand-less';   
+                size=45;
             }
             if (!open) {
                 iconName = 'expand-more';
+                size=45;
             }
             if (setFinished) {
-                iconName = 'check-circle';
+                iconName = 'check';
+                size=30;
             }
             return (
             <View style={styles.setContainer} key={set._id}>
@@ -30,7 +34,7 @@ const OpenedSet = props => {
                     >
                         <Icon 
                             name={iconName}
-                            size={45}
+                            size={size}
                             color={colors.secondary.dark}
                         />
                     </TouchableOpacity>

@@ -63,7 +63,7 @@ class _DeleteExercise extends Component {
                             />
                         </View>
                         <Button 
-                            buttonStyle={{ width: 100, marginLeft: ScreenWidth * 0.1 }}
+                            buttonStyle={{ width: 100, marginLeft: ScreenWidth * 0.05 }}
                             onPress={this.onBackListVisible}
                             title="BACK"
                             backgroundColor={colors.secondary.dark}
@@ -117,9 +117,9 @@ class _DeleteExercise extends Component {
 
 const styles = StyleSheet.create({
     listContainer: {
-        width: ScreenWidth * 0.8,
-        marginLeft: ScreenWidth * 0.1,
-        height: ScreenHeight * 0.60,
+        width: ScreenWidth * 0.9,
+        marginLeft: ScreenWidth * 0.05,
+        maxHeight: ScreenHeight * 0.60,
         marginBottom: ScreenHeight * 0.05
     },
     directions: {

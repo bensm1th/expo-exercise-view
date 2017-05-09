@@ -15,7 +15,7 @@ import * as Setup from './components/setup';
 import store from './store';
 import colors from './colors';
 
-const SCREEN_HEIGHT = Dimensions.get("window").height;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class App extends React.Component {
   render() {
@@ -24,6 +24,7 @@ class App extends React.Component {
       auth: { screen: AuthScreen },
       main: {
         screen: TabNavigator({
+          home: { screen: HomeScreen },
           setup: { screen: 
             StackNavigator({
             setup: { screen: SetupScreen },
@@ -34,10 +35,9 @@ class App extends React.Component {
               workoutCreate: { screen: Setup.CreateWorkout },
               workoutDelete: { screen: Setup.DeleteWorkout }
           }, 
-            { headerMode: "none" }
-          )},
+            { headerMode: 'none', lazyLoad: true }) 
+          },
           start: { screen: StartScreen },
-          home: { screen: HomeScreen },
           stats: { screen: StatsScreen },
         }, {
           tabBarOptions: {
@@ -50,10 +50,11 @@ class App extends React.Component {
             style: {
               height: SCREEN_HEIGHT * 0.085,
             }
-          }
+          },
+          lazyLoad: true
         })
       }
-    },{
+    }, {
       navigationOptions: {
         tabBar: { visible: false }
       },
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: colors.background.light
   },
 });
 

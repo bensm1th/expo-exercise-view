@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FormLabel, FormInput, Button, Icon, FormValidationMessage } from 'react-native-elements';
-import { Text, View, TouchableOpacity, Dimensions, StyleSheet, ListView, Picker } from 'react-native';
+import { Text, View, Dimensions, StyleSheet, Picker } from 'react-native';
 import ListTitle from '../foundation/listTitle';
 import ExercisesList from '../foundation/listViewExample';
 import * as actions from '../../actions';
@@ -10,7 +10,7 @@ import colors from '../../colors';
 
 let SCREEN_HEIGHT = Dimensions.get("window").height;
 let SCREEN_WIDTH = Dimensions.get("window").width;
-let headerHeight = SCREEN_HEIGHT * .1;
+let headerHeight = SCREEN_HEIGHT * 0.1;
 
 const validateExerciseForm = formProps => {
     const { name, description, type, points } = formProps;
@@ -97,7 +97,7 @@ class _EditExercise extends Component {
                             />
                         </View>
                         <Button 
-                            buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * 0.1 }}
+                            buttonStyle={{ width: 100, marginLeft: SCREEN_WIDTH * 0.05 }}
                             onPress={this.onBackListVisible}
                             title="BACK"
                             backgroundColor={colors.secondary.dark}
@@ -176,9 +176,9 @@ class _EditExercise extends Component {
 
 const styles = StyleSheet.create({
     listContainer: {
-        width: SCREEN_WIDTH * 0.8,
-        marginLeft: SCREEN_WIDTH * 0.1,
-        height: SCREEN_HEIGHT * 0.60,
+        width: SCREEN_WIDTH * 0.9,
+        marginLeft: SCREEN_WIDTH * 0.05,
+        maxHeight: SCREEN_HEIGHT * 0.60,
         marginBottom: SCREEN_HEIGHT * 0.05
     },
     directions: {

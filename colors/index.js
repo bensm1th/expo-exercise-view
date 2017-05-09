@@ -12,7 +12,8 @@ const colors = {
     background: {
         light: '#f7f7f7',
         white: '#ffffff',
-        dark: '#dbdbdb'
+        dark: '#dbdbdb',
+        medium: '#E9E9EF'
     }, 
     border: {
         light: '#e0e0e0'

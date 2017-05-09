@@ -17,13 +17,11 @@ const ChoiceButton = (props) => {
         <View style={styles.choiceButton}>
             <View style={leftContainer}>
                 <TouchableWithoutFeedback 
-                    
                     onPress={() => props.onPress('left')}
                 >
                     <View>
                         <Text style={leftText}>{props.choiceOne}</Text>
                     </View>
-                
                 </TouchableWithoutFeedback>
             </View>
             <View style={rightContainer} >
@@ -34,7 +32,6 @@ const ChoiceButton = (props) => {
                 <View>
                     <Text style={rightText}>{props.choiceTwo}</Text>
                 </View>
-                
                 </TouchableWithoutFeedback>
             </View>
         </View>

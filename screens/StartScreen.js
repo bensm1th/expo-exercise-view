@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Dimensions, UIManager, LayoutAnimation } from 'react-native';
+import { View, Dimensions, UIManager, LayoutAnimation, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 import ListTitle from '../components/foundation/listTitle';
 import EditStepZero from '../components/foundation/editWorkout/EditStepZero';
@@ -29,13 +29,20 @@ class StartScreen extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.fetchWorkouts(this.props.auth.user.id);
+    }
+
     componentWillUpdate() {
         UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
         LayoutAnimation.easeInEaseOut();
     }
 
     onBack = () => this.props.startStepDec();
-    finish = () => this.props.finishWorkout(this.props.start.startedWorkout);
+    finish = () => {
+        const { id } = this.props.auth.user;
+        this.props.finishWorkout(this.props.start.startedWorkout, this.props.navigation.navigate, id);
+    };
     pause = () => this.props.pauseWorkout();
     resume = () => this.props.resumeWorkout();
     renderSets = sets => <Start.StartedSet sets={sets} />;
@@ -85,6 +92,11 @@ class StartScreen extends Component {
             setChangeAcutalText={this.props.setChangeAcutalText} 
         />
     );
+
+    onCancel = () => {
+        this.props.cancelStartWorkout();
+        this.props.navigation.navigate('home');
+    }
     
     render() {
         const { startedWorkout: { name, description }, startStep } = this.props.start;
@@ -99,7 +111,7 @@ class StartScreen extends Component {
             }
         };
         return (
-            <View>
+            <View style={styles.container}>
                 <ListTitle title="Start Workout" />
                 {startStep === 0 &&
                 <EditStepZero
@@ -118,6 +130,7 @@ class StartScreen extends Component {
                     workoutInfo={{ name, description, title: 'Start this workout?'}}
                     buttons={buttons}
                     backgroundColor={colors.background.light}
+                    onCancel={this.onCancel}
                 />   
                 }
                 {startStep === 2 &&
@@ -137,5 +150,12 @@ class StartScreen extends Component {
     }
 }
 
-const mapStateToProps = state => ({ start: state.start });
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: colors.background.medium,
+        height: SCREEN_HEIGHT
+    }
+});
+
+const mapStateToProps = state => ({ start: state.start, auth: state.auth });
 export default connect(mapStateToProps, actions)(StartScreen);

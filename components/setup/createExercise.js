@@ -49,13 +49,14 @@ class _CreateExercise extends Component {
     }
 
     onSave = () => {
+        const { id } = this.props.auth.user;
         const formProps = this.props.setup_exercises.exerciseForm;
         const validate = validateExerciseForm(formProps);
         if (!validate.complete) {
             return this.props.errorMessage(validate.errorMessage);
         }
         this.props.errorMessage('');
-        this.props.exerciseInfoSaved(formProps);
+        this.props.exerciseInfoSaved(formProps, id);
         this.props.navigation.navigate('setup');
     }
 
@@ -79,9 +80,6 @@ class _CreateExercise extends Component {
                     <FormInput
                         value={exerciseDescription}
                         onChangeText={(text) => this.changeText(types.CHANGE_EXERCISE_DESCRIPTION, text)}
-                        multiline={true}
-                        numberOfLines={4}
-                        inputStyle={{ height: 100 }}
                     />
                     <View style={styles.pickerLabels}>
                         <FormLabel>Exercise Type</FormLabel>
@@ -172,9 +170,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    const { setup_exercises } = state;
+    const { setup_exercises, auth } = state;
     return {
-        setup_exercises
+        setup_exercises, auth
     };
 };
 const CreateExercise = connect(mapStateToProps, actions)(_CreateExercise); 
